@@ -1,0 +1,59 @@
+appunti lezione 7
+aprire file 
+file = open(path,'rU') U = eol unified
+
+ricordarsi di fare file.close() alla fine
+
+oppure 
+
+with open(path,'') as f:
+    // istruzioni 
+
+Questo chiude automaticamente il file alla fine
+
+
+per leggere le linee mantenendo il numero linea in cui mi trovo assieme alla riga di testo posso usare l'enumerate
+nb in realtà si può usare enumerate(f,1) esplicitando la volontà di iniziare a contare da 1
+def lines(filename,s):
+	f = open(filename,'rU')
+	linee = []
+	numero_linea = 1
+	for numero,linea in enumerate(f):
+		if linea.find(s) != -1:
+			linee+=[numero+1]  # perché enumerate conta da 0
+	f.close()
+	return linee
+	
+def fwords(filename,enc):
+	with open(filename,'rU') as f:
+		testo = f.read()
+		if enc: # se stringa vuota torna false, se stringa piena torna true
+			testo = testo.decode(enc)
+	return words.words(testo)
+	
+per scrivere del testo in un file che non esiste
+
+
+with open('scritto.txt', 'w') as f:
+	f.write('contenuto del file')
+	
+per accedere a file remoti (pagine)
+
+import urlib2 as ul #posso importare la libreria dandogli un alias
+
+f = ul.urlopen('https://www.python.org')
+page = f.read()
+f.close()
+
+scaricando l'immagine di una pagina ad esempio
+
+f = ul.urlopen('https://www.python.org/static/img/python-logo@2x.png')
+immagine = f.read()
+f.close()
+
+#salvo l'immagine in locale
+with open('python.png','w') as f:
+	f.write(immagine)
+
+
+	
