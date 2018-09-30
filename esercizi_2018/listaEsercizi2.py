@@ -66,7 +66,7 @@ def es3(st1,st2):
                 result_list.append(st1_substring)
     return ' '.join(sorted(result_list))
         
-print(es3('programmazione', 'progettazione'))
+#print(es3('programmazione', 'progettazione'))
     
     
 '''  
@@ -89,9 +89,34 @@ def es4(st, k):
     '''la funzione restituisce la stringa cifrata che si ottiene applicando alla stringa st il codice 
     Cesare con intero k quando l'alfabeto e' quello italiano di 21 lettere
     '''
-    #inserite qui il vostro codice
+    alfabeto_map={"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8,"i":9,"l":10,"m":11,"n":12,"o":13,"p":14,"q":15,"r":16,"s":17,"t":18,"u":19,"v":20,"z":21}
+    result_string =''
+    index = 0
+    if k>21:
+        index=k%21
+    else:
+        index=k
+        
+    for i,char in enumerate(st,1):
+        original_char_index=alfabeto_map.get(char)
+        next_index=original_char_index+index
+        
+        if next_index > 21:
+            next_index=next_index%21
+            
+        for alphabet_char, i in alfabeto_map.items():
+            if i == next_index:
+                result_string += alphabet_char
+                break
+    return result_string
+    
+    
+    
 
-
+#print(es4('america',1))
+#print(es4('america',26))
+#print(es4('zanna',1))
+#print(es4('zanna',200))
 '''
 >>> es4('america',1)
 'bnfsjdb'
@@ -111,31 +136,56 @@ def es4(st, k):
 #################################################
 
 def es5(testo):
-    '''la funzione restituisce  un nuovo testo dove ogni riga e diventata una colonna.
-    Ad esempio per il testo:
-    """fondamenti 
-    di 
-    programmazione"""
-    viene restituito il testo:
-    """
-    fdp
-    oir
-    n o
-    d g
-    a r
-    m a
-    e m
-    n m
-    t a
-    i z
-      i
-      o
-      n
-      e"""
-    '''
-    #inserite qui il vostro codice
+    
+    splitted_words = testo.split('\n')
+    number_of_words = len(splitted_words)
+    
+    #find longest word
+    longest = 0
+    for word in splitted_words:
+        word_length = len(word)
+        if word_length > longest:
+            longest = word_length
+            
+    row_string = ''        
+    for i in range(longest):
+        
+        for j in range(number_of_words):
+            if i < len(splitted_words[j]):
+                row_string+=splitted_words[j][i]
+            else:
+                row_string+=' '
+        row_string += '\n'
+        
+   #print(row_string)
 
-
+test = """fondamenti
+di
+programmazione"""
+es5(test)
+    
+   # '''la funzione restituisce  un nuovo testo dove ogni riga e diventata una colonna.
+   # Ad esempio per il testo:
+   # """fondamenti 
+  #  di 
+  #  programmazione"""
+  #  viene restituito il testo:
+  #  """
+   # fdp
+  #  oir
+  #  n o
+  #  d g
+  #  a r
+  #  m a
+  #  e m
+  #  n m
+  #  t a
+  #  i z
+  #    i
+  #    o
+  #    n
+  #    e"""
+  #  '''
 '''    
 >>> testo1='cane\nbue\ncavallo'
 >>> testo2=es5(testo1)
@@ -185,8 +235,24 @@ def es6(ls, c):
      la funzione restituisce 2 e la lista ls diventa ['Andrea', 'Fabio', 'Francesco', 'Lucio','Luca']
     '''
     # inserisci qui il tuo codice.
-
-
+    count = 0
+    c = c.lower()
+    removed_list = []
+    
+    for word in ls:
+        if c in word.lower():
+            removed_list.append(word)
+            count+=1
+            
+    for word_removed in removed_list:
+        ls.remove(word_removed)
+        
+    
+    return count,ls
+        
+ls=[ 'Angelo', 'Andrea', 'Fabio', 'Francesco', 'Lucio', 'Luca','Ugo']
+c = 'G'
+#print(es6(ls,c))
 
 '''
 >>>lista= [ 'Angelo', 'Andrea', 'Fabio', 'Francesco', 'Lucio','Luca', 'Ugo']    
@@ -217,9 +283,27 @@ def es7(cs, ds):
     Ad esempio:
     '''
     #inserire qui il vostro codice
-
-
-    
+    return_list = []
+    for cs_element in cs:
+        for s in ds:
+            code_length = int(s[0:2])
+            code = s[2:code_length+2]
+            if code == cs_element:
+                return_list.append(int(s[-8:-6]))
+                return_list.append(int(s[-6:-4]))
+                return_list.append(int(s[-4:]))
+                
+                
+    lista_cs = return_list
+    return lista_cs
+                
+#lista_ds=['03BBB01122013', '04001B11092011', '10012345678924081999', '03ABC27042005']
+#lista_cs=['ABC', '001B', '123', '0123456789']
+#print(es7(lista_cs,lista_ds))
+#cs = ['0', 'aa', 'bbb', 'cccc', 'bbb', '0']
+#print(es7(cs,['01a24121999', '03bbb28081944', '02aa04042003', '04cccC23011977', '01025062002']))
+#a = ['A', 'B', 'C', '1', '2', '3', '4', '5']
+#print(es7(a,['01E18101987', '01126111995', '02Aa22052009', '01B27081966', '01531031975']))
 '''
 >>> lista_cs=['ABC', '001B', '123', '0123456789']
 >>> lista_ds=['03BBB01122013', '04001B11092011', '10012345678924081999', '03ABC27042005']
@@ -257,7 +341,30 @@ def es8(insi):
      (i due numeri sono entrambi divisibili per 7).
     '''
     # inserisci qui il tuo codice.
-
+    return_list = []
+    for index, num in enumerate(insi): #ora definisco le coppie
+        for index2, num2 in enumerate(insi,index+1):
+            greatest = max(num,num2)
+            smallest = min(num,num2)
+            divisore_num = []
+            divisore_num2 = []
+            for index3 in range(2,greatest):
+                if num % index3 == 0 and index3 != num:
+                    divisore_num.append(index3)
+                if num2 % index3 == 0 and index3 != num2:
+                    divisore_num2.append(index3)
+                hasCommonDivisore = False
+            for divisore_num_1 in divisore_num:
+                if divisore_num_1 in divisore_num2:
+                    hasCommonDivisore = True
+            if not hasCommonDivisore and num != num2 and [smallest,greatest]  not in return_list:
+                return_list.append([smallest,greatest])
+    
+    return tuple(return_list)
+    
+    
+print(es8({17,2,13,31}))
+print(es8({45,15,30,105} ))
 
 
 '''    

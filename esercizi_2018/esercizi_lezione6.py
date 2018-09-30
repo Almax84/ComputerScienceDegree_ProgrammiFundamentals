@@ -37,8 +37,50 @@ Napoli;15;27
 Firenze;11;20'''
 	column(table, 1)		ritorna		['12', '16', '15', '11']
 """
+
+def column(table,k):
+    list_lines = table.splitlines()
+    lista_colonne = []
+    return_list = []
+    for line in list_lines:
+        lista_colonne.append(line.split(";"))
+    
+    for line_list in lista_colonne:
+        return_list.append(line_list[k])
+        
+    return return_list
+    
+
+
+def digits(t):
+    
+    words_list = t.split(" ")
+    return_list = []
+    for line in words_list:
+        numeric_line = ''
+        for char in line:
+            if char.isdigit():
+                numeric_line+=char
+        if numeric_line != '':
+            return_list.append(numeric_line)
+    return return_list            
+    
+    
+
+
 def countw(t,w):
-    return t.count(w)
+    
+    #remove all non alpha (the comma ruins the following split)
+    new_string = ''
+    for char in t:
+        if char.isalpha() or char == ' ' :
+            new_string += char
+            
+
+    
+    words_list = new_string.split(" ")
+    print(words_list)
+    return words_list.count(w)
 
 
 def firstline(t,s):
@@ -51,13 +93,19 @@ def firstline(t,s):
 
 
 if __name__ == "__main__":
-    t = '''Quant’è bella giovinezza
-che si fugge tuttavia!
-Chi vuol esser lieto, sia:
-del doman non c’è certezza.'''
-    firstline(t, 'non')
-    
-    
-    
+  #  t = '''Quant’è bella giovinezza
+#che si fugge tuttavia!
+#Chi vuol esser lieto, sia:
+#del doman non c’è certezza.'''
+  #  firstline(t, 'non')
+  #  t = 'le cose non sono solo cose, ma anche cosette'
+ #   print(countw(t, 'cose'))
+#    t = 'via Po n.23, tel. 06 7867555 - cell. 345 675665676 (cc 34565)'
+#    print(digits(t))
+    table = '''Milano;12;23
+Roma;16;25
+Napoli;15;27
+Firenze;11;20'''
+    print(column(table, 1))
 
 
