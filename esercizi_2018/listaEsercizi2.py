@@ -159,9 +159,9 @@ def es5(testo):
         
    #print(row_string)
 
-test = """fondamenti
-di
-programmazione"""
+#test = """fondamenti
+#di
+#programmazione"""
 es5(test)
     
    # '''la funzione restituisce  un nuovo testo dove ogni riga e diventata una colonna.
@@ -250,8 +250,8 @@ def es6(ls, c):
     
     return count,ls
         
-ls=[ 'Angelo', 'Andrea', 'Fabio', 'Francesco', 'Lucio', 'Luca','Ugo']
-c = 'G'
+#ls=[ 'Angelo', 'Andrea', 'Fabio', 'Francesco', 'Lucio', 'Luca','Ugo']
+#c = 'G'
 #print(es6(ls,c))
 
 '''
@@ -358,13 +358,13 @@ def es8(insi):
                 if divisore_num_1 in divisore_num2:
                     hasCommonDivisore = True
             if not hasCommonDivisore and num != num2 and [smallest,greatest]  not in return_list:
-                return_list.append([smallest,greatest])
+                return_list.append((smallest,greatest))
     
     return tuple(return_list)
     
     
-print(es8({17,2,13,31}))
-print(es8({45,15,30,105} ))
+#print(es8({17,2,13,31}))
+#print(es8({45,15,30,105} ))
 
 
 '''    
@@ -377,13 +377,48 @@ set()
 #################################################
 
 def es9(la,lb):
-    '''Scrivere una funzione es(la, lb) che prende in input due liste contenenti
-    uno stesso numero di stringhe, modifica le liste confrontando le stringhe che
-    occorrono nella stessa posizione nelle due liste e cancella dalla lista la
-    minore delle due,  se  sono uguali, sono cancellate entrambe.
-    '''
     # inserisci qui il tuo codice.
+    i = 0
+    elements_to_be_removed_from_a = []
+    elements_to_be_removed_from_b = []
+    while i < len(la):
+        str_a = la[i]
+        str_b = lb[i]
+        
+        if str_a > str_b:
+            elements_to_be_removed_from_a.append(str_a)
+        elif str_a < str_b:
+            elements_to_be_removed_from_b.append(str_b)
+        else:
+            elements_to_be_removed_from_a.append(str_a)
+            elements_to_be_removed_from_b.append(str_b)
+            
+        i += 1
+    
+    for index,value in enumerate(elements_to_be_removed_from_a):
+        la.remove(value)
+    
+    for index,value in enumerate(elements_to_be_removed_from_b):
+        lb.remove(value)
+        
 
+
+#a = ['a0', 'b1', 'a2', 'b3', 'a4', 'b5']   
+#b = ['b0', 'a1', 'b2', 'a3', 'b4', 'b5'] 
+#lista1 = ['1', '2', '3', '4', '5', '6']   
+#lista2 = ['4', '5', '6', '1', '2', '3']
+#la = ['orso', 'tigre', 'lupo', 'balena', 'elefante']
+#lb = ['cigno', 'gatto', 'cane', 'oca', 'coniglio']
+
+#es9(lista1,lista2)
+#print(lista1)
+#print(lista2)
+#es9(a,b)      
+#print(a)
+#print(b)  
+#es9(la,lb)
+#print(la)
+#print(lb)    
 
 
 '''
@@ -414,7 +449,8 @@ def es9(la,lb):
 '''
 #################################################
 
-def es10(ls,k):
+def es10_old(ls,k):
+    
     '''
     Si definiscono divisori propri di un numero tutti i suoi divisori tranne l'uno e il numero stesso.
     Scrivere una funzione es(ls,k) che, presa una lista ls di interi  ed un intero 
@@ -429,8 +465,128 @@ def es10(ls,k):
     ATTENZIONE: Se il programma non termina entro 5 secondi il punteggio dell'esercizio e' zero.
    '''
    #inserite qui il vostro codice
+    i = 0
+    lista_numeri_primi = []
+    while i < len(ls):
+        intero_ls = ls[i]
+        lista_divisori_primi = []
+        contatore_divisori_propri = 0
+        for index in range(2,intero_ls):
+            if index % 10000000 ==0:
+                print(intero_ls," at index:",index)
+            if intero_ls % index == 0:
+                contatore_divisori_propri+=1
+                lista_divisori_primi.append(index)
+        if contatore_divisori_propri == 0:
+            lista_numeri_primi.append(intero_ls)
+        if len(lista_divisori_primi) != k:
+            ls.pop(i)
+        else:
+            i+=1
+    return lista_numeri_primi
+        
+def es10(ls,k):
+   #inserite qui il vostro codice
+   i = 0
+   lista_numeri_primi = []
+   while i < len(ls):
+       intero_ls = ls[i]
+       counter_potenza_2=0
+       counter_potenza_3=0
+       counter_potenza_5=0
+       lista_potenza_2 = []
+       lista_potenza_3 = []
+       lista_potenza_5 = [] 
+       last_divisore=0
+       while(intero_ls>1):
+           if isDivisibilePer5(intero_ls):
+               counter_potenza_5+=1
+               lista_potenza_5.append(5**counter_potenza_5)
+               intero_ls = intero_ls//5
+           elif isDivisibilePer3(intero_ls):
+               counter_potenza_3+=1
+               lista_potenza_3.append(3**counter_potenza_3)
+               intero_ls = intero_ls//3
+           elif isDivisibilePer2(intero_ls):
+               counter_potenza_2+=1
+               lista_potenza_2.append(2**counter_potenza_2)
+               intero_ls = intero_ls//2
+           elif isDivisibilePer7(intero_ls):
+               last_divisore=intero_ls = 7
+               intero_ls = intero_ls//7
+           elif intero_ls!=ls[i]:
+               last_divisore=intero_ls
+               intero_ls = intero_ls // intero_ls
+           else:
+               lista_numeri_primi.append(intero_ls)
+               intero_ls=0
+               break
+           
+           
+       print(lista_potenza_2,lista_potenza_3,lista_potenza_5,last_divisore)
+         
+       i+=1    
+        
+       
+        
+    
+
+       
+           
+        
+           
+          
+      #print("2 alla ",counter_potenza_2,"3 alla ", counter_potenza_3, "5 alla ",counter_potenza_5," 7 alla ",counter_potenza_7," per ",last_divisore)
+   
+       
+   return lista_numeri_primi
 
 
+   
+       
+
+
+def isDivisibilePer2(intero):
+    if intero % 2 == 0:
+        return True
+    else:
+        return False
+
+def isDivisibilePer7(intero):
+    if intero % 7 == 0:
+        return True
+    else:
+        return False
+    
+def isDivisibilePer3(intero):
+    intero_str = str(intero)
+    somma = 0
+    for char in intero_str:
+        try:
+            somma+=int(char)
+        except:
+            print(intero," char:",char)
+    
+    if somma % 3 == 0:
+        return True
+    else: 
+        return False
+    
+def isDivisibilePer5(intero):
+    intero_str = str(intero)
+    
+    if int(intero_str[-1]) == 0 or int(intero_str[-1]) == 5:
+        return True
+    else:
+        return False
+    
+
+    
+    
+lista=[340887623,26237927,2491,777923,5311430407,6437635961,82284023]
+print("numeri primi:",es10(lista,4))
+print(lista)
+#print(lista)
 
 
 '''
