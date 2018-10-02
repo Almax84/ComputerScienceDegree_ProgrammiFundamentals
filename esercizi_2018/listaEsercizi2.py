@@ -162,7 +162,7 @@ def es5(testo):
 #test = """fondamenti
 #di
 #programmazione"""
-es5(test)
+#es5(test)
     
    # '''la funzione restituisce  un nuovo testo dove ogni riga e diventata una colonna.
    # Ad esempio per il testo:
@@ -451,19 +451,6 @@ def es9(la,lb):
 
 def es10_old(ls,k):
     
-    '''
-    Si definiscono divisori propri di un numero tutti i suoi divisori tranne l'uno e il numero stesso.
-    Scrivere una funzione es(ls,k) che, presa una lista ls di interi  ed un intero 
-    non negativo k:
-    1) cancella  dalla lista ls gli interi che non hanno esattamente k divisori propri
-    2) restituisce una seconda lista che contiene i soli numeri primi di ls.
-    NOTA: un numero maggiore di 1 e' primo se ha 0 divisori propri.
-
-    ad esempio per ls = [121, 4, 37, 441, 7, 16] 
-    modi(ls,3) restituisce la lista con i numeri primi [37,7] mentre al termine della 
-    funzione si avra' che la lista ls=[16]
-    ATTENZIONE: Se il programma non termina entro 5 secondi il punteggio dell'esercizio e' zero.
-   '''
    #inserite qui il vostro codice
     i = 0
     lista_numeri_primi = []
@@ -472,120 +459,62 @@ def es10_old(ls,k):
         lista_divisori_primi = []
         contatore_divisori_propri = 0
         for index in range(2,intero_ls):
-            if index % 10000000 ==0:
-                print(intero_ls," at index:",index)
             if intero_ls % index == 0:
                 contatore_divisori_propri+=1
                 lista_divisori_primi.append(index)
         if contatore_divisori_propri == 0:
             lista_numeri_primi.append(intero_ls)
+        print(intero_ls, "has divisori", lista_divisori_primi)
         if len(lista_divisori_primi) != k:
             ls.pop(i)
         else:
             i+=1
     return lista_numeri_primi
-        
+
+import math
+    
 def es10(ls,k):
    #inserite qui il vostro codice
+   list_numeri_primi = []
    i = 0
-   lista_numeri_primi = []
-   while i < len(ls):
-       intero_ls = ls[i]
-       counter_potenza_2=0
-       counter_potenza_3=0
-       counter_potenza_5=0
-       lista_potenza_2 = []
-       lista_potenza_3 = []
-       lista_potenza_5 = [] 
-       last_divisore=0
-       while(intero_ls>1):
-           if isDivisibilePer5(intero_ls):
-               counter_potenza_5+=1
-               lista_potenza_5.append(5**counter_potenza_5)
-               intero_ls = intero_ls//5
-           elif isDivisibilePer3(intero_ls):
-               counter_potenza_3+=1
-               lista_potenza_3.append(3**counter_potenza_3)
-               intero_ls = intero_ls//3
-           elif isDivisibilePer2(intero_ls):
-               counter_potenza_2+=1
-               lista_potenza_2.append(2**counter_potenza_2)
-               intero_ls = intero_ls//2
-           elif isDivisibilePer7(intero_ls):
-               last_divisore=intero_ls = 7
-               intero_ls = intero_ls//7
-           elif intero_ls!=ls[i]:
-               last_divisore=intero_ls
-               intero_ls = intero_ls // intero_ls
-           else:
-               lista_numeri_primi.append(intero_ls)
-               intero_ls=0
-               break
+   while i < len(ls) :
+       numero = ls[i]
+       lista_divisori_propri = []
+       radice_quadrata = int(math.sqrt(numero))
+       for index in range(2,radice_quadrata):
+           if numero % index == 0:
+               if numero % index != radice_quadrata:
+                   lista_divisori_propri.append(index)
+                   lista_divisori_propri.append(numero // index)
+               else:
+                   lista_divisori_propri.append(index)
+       #print(numero, "ha i divisori:",sorted(lista_divisori_propri))
+       if len(lista_divisori_propri) != k:
+           ls.remove(numero)
+       else:
+           i+=1
+       if len(lista_divisori_propri) == 0:
+           list_numeri_primi.append(numero)
+   print("NUMERI PRIMI:",sorted(list_numeri_primi))
+   return list_numeri_primi
+            
+                   
            
-           
-       print(lista_potenza_2,lista_potenza_3,lista_potenza_5,last_divisore)
-         
-       i+=1    
-        
-       
-        
-    
-
-       
-           
-        
-           
-          
-      #print("2 alla ",counter_potenza_2,"3 alla ", counter_potenza_3, "5 alla ",counter_potenza_5," 7 alla ",counter_potenza_7," per ",last_divisore)
-   
-       
-   return lista_numeri_primi
+lista=[10000000116, 10000000431, 10000000469, 10000000548, 10000000697, 10000000711, 10000000768, 10000000924]
+es10(lista,16)   
+print(lista)  
 
 
    
        
 
 
-def isDivisibilePer2(intero):
-    if intero % 2 == 0:
-        return True
-    else:
-        return False
-
-def isDivisibilePer7(intero):
-    if intero % 7 == 0:
-        return True
-    else:
-        return False
-    
-def isDivisibilePer3(intero):
-    intero_str = str(intero)
-    somma = 0
-    for char in intero_str:
-        try:
-            somma+=int(char)
-        except:
-            print(intero," char:",char)
-    
-    if somma % 3 == 0:
-        return True
-    else: 
-        return False
-    
-def isDivisibilePer5(intero):
-    intero_str = str(intero)
-    
-    if int(intero_str[-1]) == 0 or int(intero_str[-1]) == 5:
-        return True
-    else:
-        return False
-    
 
     
     
-lista=[340887623,26237927,2491,777923,5311430407,6437635961,82284023]
-print("numeri primi:",es10(lista,4))
-print(lista)
+#lista=[340887623,26237927,2491,777923,5311430407,6437635961,82284023]
+#print("numeri primi",es10(lista,6))
+#print(lista)
 #print(lista)
 
 
