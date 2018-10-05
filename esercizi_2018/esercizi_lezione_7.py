@@ -41,12 +41,43 @@ Usando la list comprehension definite le seguenti funzioni:
 
 ################################################################################
 '''
+def non_divisibili(N,divisori):
+    '''
+     Definite la funzione non_divisibili(N, divisori) che trova tutti i numeri tra 1 e N (compresi)
+   che non sono divisibili per nessuno dei valori presenti nella lista di divisori (interi).
+   Esempio:
+    '''
+    
+    
+    return_list = [i for i in range(1,N+1)]
+    
+    divisori_list =  [n for n in range(1,N+1) for divisore in divisori if n%divisore==0]
+    print("divisori found",divisori_list) 
+    new_list = [divisore for divisore in divisori_list if divisore not in return_list]
+    
+    print(new_list)
+    
+    '''
+    for divisore in divisori_list:
+        if divisore in return_list:
+            return_list.remove(divisore)
+    '''        
+            
+    return return_list
+    
+print(non_divisibili(10, [2, 3]))
+    
+  #  return_list = [  for index,divisore in enumerate(divisori,1)      ]
+    
+
+
+
 # 2)
 
 def potenze_crescenti(lst):
     
     return_list = [lst[index]**index for index in range(len(lst))]
-    print(return_list)
+    #print(return_list)
     return return_list
     
 potenze_crescenti([2,3,4,5,6])  
@@ -58,5 +89,5 @@ def triangolo(intero):
     
     return_list=[[i*j for j,column in enumerate(row,1)] for i,row in enumerate(return_list,1)]
     
-    print(return_list)
+    #print(return_list)
     return return_list        
