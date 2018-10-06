@@ -41,34 +41,68 @@ Usando la list comprehension definite le seguenti funzioni:
 
 ################################################################################
 '''
+def doppio_dado():
+    '''
+    4.  Definite la funzione doppio_dado() che stampa una successione di estrazioni casuali di due dadi a 6 facce 
+    e che conta e torna come risultato quante ne sono state necessarie prima di ottenere un doppio 6.
+    Esempio:
+>>> doppio_dado()
+3 5
+2 2
+1 6
+6 4
+3 1
+5 4
+6 6
+7
+
+    '''
+    import random
+    random.seed(10000000)
+    isTrue = True
+    contatore = 0
+    while isTrue:
+        contatore+=1
+        num1 = random.randint(1,6)
+        num2 = random.randint(1,6)
+        print(num1, " ", num2)
+        if num1 == 6 & num2 == 6:
+            isTrue = False
+    return contatore
+        
+    
+    
+    
+print(doppio_dado())
+
+
+
 def non_divisibili(N,divisori):
     '''
      Definite la funzione non_divisibili(N, divisori) che trova tutti i numeri tra 1 e N (compresi)
    che non sono divisibili per nessuno dei valori presenti nella lista di divisori (interi).
-   Esempio:
+       
+   Si richiede che, dato un N, di trovare tutti i numeri da 1 ad N compresi che diano n % divisore != 0
+   per qualunque divisore in divisori
+   
+   
     '''
     
     
-    return_list = [i for i in range(1,N+1)]
+    #Costruisco la lista da 1 ad N
+
     
+    #Creo una lista contenente tutti i valori di n tali che se divisi per divisore diano resto 0
     divisori_list =  [n for n in range(1,N+1) for divisore in divisori if n%divisore==0]
-    print("divisori found",divisori_list) 
-    new_list = [divisore for divisore in divisori_list if divisore not in return_list]
+
+    #creo una terza lista con tutti i valori da 1 ad N che non siano presenti in divisori_list
+    return [ n for n in range(1,N+1) if n not in divisori_list   ]
+ 
     
-    print(new_list)
+
     
-    '''
-    for divisore in divisori_list:
-        if divisore in return_list:
-            return_list.remove(divisore)
-    '''        
-            
-    return return_list
-    
-print(non_divisibili(10, [2, 3]))
-    
-  #  return_list = [  for index,divisore in enumerate(divisori,1)      ]
-    
+ #print(non_divisibili(10, [2, 3]))
+        
 
 
 
