@@ -132,6 +132,30 @@ Mon Oct 7 17:48:32 2013: second event
 Mon Oct 7 17:49:15 2013: Event n. 3
 Mon Oct 7 17:50:39 2013: New event!
 
+'''
+import time
+import os
+def log_update(filelog,evento):
+    if not os.path.exists(filelog):
+        append_or_write = 'w'
+    else:
+        append_or_write = 'a'
+        
+    with open(filelog, append_or_write) as f:
+        f.write(time.ctime()+' '+evento+'\n')
+        
+#log_update("C:/universita/ComputerScienceDegree_ProgrammiFundamentals/esercizi_2018/log.txt","4 event")
+
+
+def prova_write_lines():
+    file_name = 'log.txt'
+    
+    with open(file_name,'a') as f:
+        f.writelines(["hello\n","this\n","is\n","me\n"])
+
+prova_write_lines()
+''''
+
 
 5. findurl(lista_url, s, k) ritorna in una lista gli URL contenuti nella lista lista_urls tali che le pagine da essi puntate contengano almeno k
    occorrenze della stringa s . Si assume che gli URL in urls siano relativi a pagine HTML e quindi documenti di testo. 
@@ -144,3 +168,19 @@ Mon Oct 7 17:50:39 2013: New event!
 ['http://python.org', 'http://docs.python.org/2.7/index.html']
 
 '''
+import requests
+def findurl(lista_url,s,k):
+    text = ""
+    for url in lista_url:
+        text = requests.get(url).text
+        if not is_s_k_times_in_text(text,s,k):
+            lista_url.remove(url)
+    return lista_url
+
+            
+def is_s_k_times_in_text(text,s,k):
+    count = text.count(s)
+    return  count == k
+    
+urls = ['http://python.org']
+print(findurl(urls, 'Python', 2))
