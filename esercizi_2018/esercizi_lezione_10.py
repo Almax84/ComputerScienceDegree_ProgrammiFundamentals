@@ -118,33 +118,39 @@ mostf('frankenstein.txt', 16)
 
 """
 def mostf(fname,l):
-    result_map = wdict(fname) #mappa contenente parole con loro occorrenze
-    with open(fname,'r', encoding='UTF-8-SIG') as f:
+    with open(fname,'r',encoding='UTF-8-SIG') as f:
         list_of_words = words(f.read().lower())
-        number_of_words = len(list_of_words)
+    
+    
+    set_of_words_of_length_l={word for word in list_of_words if len(word) == l}
+   
+    
+    highest_frequency = 0
+    words_frequency = dict()
+    
+    for word in set_of_words_of_length_l:
+        count = 0
+        max_occurrence = 0
+        for index,w in enumerate(list_of_words):
+            if w == word:
+                count+=1
+                if max_occurrence < count:
+                    max_occurrence = count
+                    if max_occurrence > highest_frequency:
+                        highest_frequency = max_occurrence
+        words_frequency[word] = max_occurrence 
+   
+    return_list = list()
+    
+    for k,v in words_frequency.items():
+        if v == highest_frequency:
+            return_list.append(k)
+        
+        
+    return return_list,highest_frequency
+        
+        
+        
+            
 
-
-
-    words_of_length_l = {k for k,v in result_map.items() if len(k) == l}
-
-    massimo = 0
-    words_of_length_l_map = dict()
-
-    for k in result_map:
-        freq = (result_map[k] / number_of_words) * 100
-        result_map[k] = freq
-        if freq > massimo:
-            massimo = freq
-    print("massima frequenza", massimo)
-    result = set()
-    for k, v in words_of_length_l:
-        if v == massimo:
-            result.add(k)
-
-
-    return result
-
-
-
-
-print(mostf("files/holmes.txt",7))
+print(mostf("files/frankenstein.txt",16))
