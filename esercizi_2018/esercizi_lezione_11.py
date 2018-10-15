@@ -35,8 +35,9 @@ def draw_box_inside_image(colors_array,color,h,w,x,y):
  
     
 
-immagine = draw_rectangle(200,200,rosso)
-draw_box_inside_image(immagine,nero,20,20,100,100)
+#
+#immagine = draw_rectangle(200,200,rosso)
+#draw_box_inside_image(immagine,nero,20,20,100,100)
 
 #image.visd(immagine)
 
@@ -133,23 +134,17 @@ mostra una immagine uguale al file es3-1.png
 def draw_v_line(img,x,y,h,c):
     # cicla tutte le righe a partire da x fino a x + h
       # per ogni riga vai alla colonna y e setta il suo valore a c
-    print("verticale")
-    print("x=", x)
-    print("y=",y)
-    print("h=",h)
-    end = x + h
-    if x + h > len(img):
-        end = len(img)
-    
-    
-    for i in range(x,end):
-        riga = img[i]
-        riga[y] = c
+    for yy in range(y, y+h):
+        if im.inside(img,x, yy):
+            img[yy][x] = c
+        
 
-img = im.create(500,150,(0,0,0))  
-draw_v_line(img, 100, 50,  300, (255, 0, 0) )  
-draw_v_line(img,  50, 100, 700, (0, 0, 255) )
-im.visd(img)
+
+#img = im.create(500,150,(0,0,0))
+#draw_v_line(img, 100, 50,  300, (255, 0, 0) )
+#draw_v_line(img,  50, 100, 700, (0, 0, 255) )
+#im.visd(img)
+#print(img)
       
 
 
@@ -176,17 +171,18 @@ def draw_quad_out(img, x1,y1, x2,y2,c):
     h = y2 - y1
     w = x2 - x1
     
-    #print("altezza ", h)
-    #print("larghezza ", w)
     
-    #draw_v_line(img, x1, y1, h, c)
     draw_v_line(img, x2, y1, h, c)
+    draw_v_line(img, x1, y1, h, c)
     
-    #draw_h_line(img,x1,y1,w,c)
-    #draw_h_line(img,x2,y1,w,c)
-    
+    draw_h_line(img,x1,y1,w,c)
+    draw_h_line(img,x1,y2,w,c)
+    return img
+     
 img = im.create(300,150,(0,0,0))
 draw_quad_out(img,  50,  20, 100,140,(255,128,0))
+im.visd(img)
+draw_quad_out(img, 120, -10, 180, 70, (255,255,255))
 im.visd(img)
     
     
