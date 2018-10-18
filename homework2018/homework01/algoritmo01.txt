@@ -1,0 +1,11 @@
+# Sort the list of votes, so that it will be easier to assess how many students have a higher vote that C
+
+# C is the highest given vote, and the requirement is to return a list of length C+1, where each element is the number of students admitted to the oral exam
+
+    # Scanning through the ordered list of votes, C+1 times, if the current vote is greater or equal to che current iteration index, the number of students admitted to the oral exam will necessarily be the lenght of the list of votes sublist from the j-th index.
+
+    # Given that the iteration index i is then incremented, all the previous votes can be discarded, incrementing in this way the speed of execution by decreasing the list of votes size
+
+
+
+
