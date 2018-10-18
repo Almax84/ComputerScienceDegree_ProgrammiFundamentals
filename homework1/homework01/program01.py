@@ -29,10 +29,14 @@ def es1(voti):
     while i < C+1:
 
         contatore_studenti_ammessi = 0
+        min_value = 0
         for j in range(len(sorted_voti)):
             vt = sorted_voti[j]
             if vt >= i:
                 contatore_studenti_ammessi+=1
+            else:
+                min_value = j
+        sorted_voti = sorted_voti[min_value:]
         i+=1
         
         return_list.append(contatore_studenti_ammessi)
@@ -43,7 +47,6 @@ from random import randint
 voti = [ randint(1,10) for i in range(15) ]
     
 
-print(es1(voti))
-#print(es1([7,5,8,3,7,2,9]))
+print(es1([7,5,8,3,7,2,9]))
 	    
 	
