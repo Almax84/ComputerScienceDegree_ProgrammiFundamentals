@@ -55,14 +55,10 @@ def es1(voti):
     while i < C+1:
 
         contatore_studenti_ammessi = 0
-        min_value = 0
+        min_value = 0 #valore di riferimento -> butto via la coda sinistra dell'array a partire dal valore minore
         for j in range(len(sorted_voti)):
             voto = sorted_voti[j]
-            if voto > i:
-                contatore_studenti_ammessi+=1
-            elif voto == i:
-                # se il voto è esattamente uguale all'indice, essendo la lista ordinata, gli studenti ammessi saranno uguali alla lunghezza della sotto-lista a partire dall'indice dove si trova i
-                
+            if voto >=  i:
                 contatore_studenti_ammessi = len(sorted_voti[j:])
                 break
             else:
