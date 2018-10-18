@@ -18,6 +18,32 @@ NOTA: il timeout previsto per questo esercizio è di 1 secondo per ciascun test
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad esempio editatelo dentro Spyder)
 '''
-
 def es1(voti):
     # inserite qui il vostro codice
+    sorted_voti = sorted(voti, reverse = False)
+    print("voti  sorted: ", sorted_voti)
+    return_list = []
+    
+    i = 0
+    C = sorted_voti[len(sorted_voti)-1]
+    while i < C+1:
+
+        contatore_studenti_ammessi = 0
+        for j in range(len(sorted_voti)):
+            vt = sorted_voti[j]
+            if vt >= i:
+                contatore_studenti_ammessi+=1
+        i+=1
+        
+        return_list.append(contatore_studenti_ammessi)
+            
+    return return_list
+        
+from random import randint
+voti = [ randint(1,10) for i in range(15) ]
+    
+
+print(es1(voti))
+#print(es1([7,5,8,3,7,2,9]))
+	    
+	
