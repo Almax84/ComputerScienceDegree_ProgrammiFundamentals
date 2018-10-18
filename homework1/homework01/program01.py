@@ -21,7 +21,7 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad
 def es1(voti):
     # inserite qui il vostro codice
     sorted_voti = sorted(voti, reverse = False)
-    print("voti  sorted: ", sorted_voti)
+
     return_list = []
     
     i = 0
