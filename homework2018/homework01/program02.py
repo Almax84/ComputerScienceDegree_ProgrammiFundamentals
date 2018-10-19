@@ -23,6 +23,71 @@ Ad esempio per N=6 e accese={2,4} es2(N, accese) restituisce la lista [2,5,6] in
 NOTA: il timeout previsto per questo esercizio è di 1 secondo per ciascun test
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad esempio editatelo dentro Spyder)
+
+dati:
+    #lista di pulsanti da 1 ad N
+    #lista di lampadine da 1 ad N
+    #il pulsante x cambia lo stato (on off) di tutte le lampadine divisore di x
+    #un pulsante può essere premuto una sola volta
+    #i pulsanti vanno premuti in ordine crescente
+    #N = lista pulsanti
+    #accese = insieme delle lampadine al momento accese
+    #bisogna restituire la lista contenente ordinati, i pulsanti da premere affinché
+    tutte le N lampadine risultino accese
+
 '''
 def es2(N, ins):
-    # inserite qui il vostro codice
+    # 0 False
+    # != 0 True
+
+    mappa_lampadine = {}
+    return_set = set()    
+    for i in range(1,N+1) :
+        
+        bool_value = i in ins
+        
+        mappa_lampadine[i] = bool_value
+        
+    
+    
+    for i in range(N,0,-1):
+        for key,value in mappa_lampadine.items():
+            
+            if  mappa_lampadine[i] != True and i % key == 0:
+                
+                mappa_lampadine[key] = not value
+                return_set.add(i)
+                print(i,key,value, mappa_lampadine)
+        
+        mappa_lampadine.pop(i)
+                
+                
+    return sorted(list(return_set))
+               
+  
+    
+    
+ 
+    
+    
+    # risposta [2,5,6] -> saltati i bottoni 1,3,4
+    # [1,2,3,4,5,6]
+    
+'''
+stato iniziale
+      {1: False, 2: True, 3: False, 4: True, 5: False, 6: False}
+6 - > {1: True, 2: False, 3: True, 4: True, 5: False, 6: True}
+
+5 - > {1: False, 2: False, 3: True, 4: True, 5: True, 6: True}
+
+4 -> salto perchè già acceso?
+3 -> salto perchè già acceso?
+
+2 - > {1: True, 2: True, 3: True, 4: True, 5: True, 6: True}
+
+
+    
+'''
+    
+    
+print(es2(6,[2,4]))
