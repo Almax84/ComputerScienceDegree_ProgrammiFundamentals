@@ -70,10 +70,4 @@ def es1(voti):
             
     return return_list
         
-from random import randint
-voti = [ randint(1,10) for i in range(15) ]
-    
-
-print(es1([7,5,8,3,7,2,9]))
-	    
 	
