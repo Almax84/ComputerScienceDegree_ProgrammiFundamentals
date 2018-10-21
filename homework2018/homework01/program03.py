@@ -39,23 +39,75 @@ output:
 '''
 def es3(lista, testo):
     txt_copy = testo
-    lista_di_parole_contenute = []
+    lista_parole_in_testo = find_parole_in_testo(lista,txt_copy)
     
-    for parola in lista:
+    
+    map_of_words_freq = find_freq_map(lista_parole_in_testo,txt_copy)
+    word_highest_freq = word_max_freq(map_of_words_freq)[0]
+    
+    for parola_in_testo in lista_parole_in_testo:
+        if parola_in_testo in lista:
+            lista.remove(parola_in_testo)
+    
+    
+    
+    return lista_parole_in_testo, word_highest_freq    
+    
+
+
+def find_parole_in_testo(lista,txt_copy):
+    lista_di_parole_contenute = []
+    for i  in range(len(lista)):
+        parola = find_word_at_index_zero(lista,txt_copy)
         parola_da_comporre= ''
         start_index = txt_copy.find(parola)
-        if start_index >= 0 :
-            for i in range(start_index, len(testo)):
-                c = testo[i]
-                if c in parola and parola_da_comporre != parola:
-                    parola_da_comporre+=c
-                elif parola_da_comporre == parola:
+        if start_index >= 0 and parola not in lista_di_parole_contenute :
+            
+            found = False
+            while not found:
+                c = txt_copy[start_index]
+                if parola_da_comporre == parola:
                     lista_di_parole_contenute.append(parola)
-                    
-        return lista_di_parole_contenute
+                    found = True
+                    txt_copy = txt_copy.replace(parola,'',1)
+                elif c in parola and parola_da_comporre != parola:
+                    parola_da_comporre+=c
+                    start_index+=1
+    return lista_di_parole_contenute
+
+def find_word_at_index_zero(lista,txt_copy):
+    for parola in lista:
+        if txt_copy.find(parola)==0:
+            return parola
 
 
-print(es3(["io","sono","ciccio","pasticcio"],"pasticciociccioiosonociccioiopasticciosono"))
+
+
+def find_freq_map(lista_parole_in_testo, txt_copy):
+    freq_map = {}
+    for index, parola in enumerate(lista_parole_in_testo):
+        freq_map[parola]=txt_copy.count(parola)
+    return freq_map
+
+def word_max_freq(freq_map):
+    
+    list_of_max_words = []
+    
+    for k,v in freq_map.items():
+        if v == max(freq_map.values()):
+            list_of_max_words.append(k)
+    return sorted(list_of_max_words)
+            
+        
+        
+
+#lista = ['gatto','cane','topo']
+#testo = "topogattotopotopogattogatto"   
+#print(find_word_at_index_zero(lista,testo))
+#print(es3(lista,testo))
+#print(lista)
+
+
                     
             
             
