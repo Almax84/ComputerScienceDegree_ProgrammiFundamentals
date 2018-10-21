@@ -1,7 +1,8 @@
 '''
 Definire una funzione es3(lista, testo) che prende:
 - una lista di parole (nessuna delle quali e' prefisso dell'altra)
-- una stringa di testo. Il testo e' stato ottenuto concatenando alcune delle parole presenti nella lista 'lista'
+- una stringa di testo. Il testo e' stato ottenuto concatenando alcune
+  delle parole presenti nella lista 'lista'
   (una stessa parola puo' comparire piu' volte nella stringa di testo).
 - restituisce una coppia (tupla) formata da:
         - la lista delle parole che, concatenate producono il testo
@@ -22,6 +23,48 @@ Definire una funzione es3(lista, testo) che prende:
 NOTA: il timeout previsto per questo esercizio è di 5 secondi per ciascun test
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad esempio editatelo dentro Spyder)
+
+
+
+input:
+    -lista di parole (nessuda delle quali è prefisso dell'altra)
+    -stringa di testo -> ottenuta concatenando ALCUNE delle parole nella lista
+output:
+    tupla con 2 elementi contenente:
+        1. lista di parole che concatenate producono il testo -> parole ordinate
+        2. la parola con maggior frequenza
+    la lista di input sarà modificata :
+        1. cancellando le parole utilizzate nel testo
+
 '''
 def es3(lista, testo):
-    #inserite qui il vostro codice
+    txt_copy = testo
+    lista_di_parole_contenute = []
+    
+    for parola in lista:
+        parola_da_comporre= ''
+        start_index = txt_copy.find(parola)
+        if start_index >= 0 :
+            for i in range(start_index, len(testo)):
+                c = testo[i]
+                if c in parola and parola_da_comporre != parola:
+                    parola_da_comporre+=c
+                elif parola_da_comporre == parola:
+                    lista_di_parole_contenute.append(parola)
+                    
+        return lista_di_parole_contenute
+
+
+print(es3(["io","sono","ciccio","pasticcio"],"pasticciociccioiosonociccioiopasticciosono"))
+                    
+            
+            
+    
+   
+    
+
+    
+    
+        
+    
+    
