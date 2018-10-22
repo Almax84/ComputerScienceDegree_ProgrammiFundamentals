@@ -58,14 +58,29 @@ def es3(lista, testo):
 def find_parole_in_testo(lista,txt_copy):
     lista_di_parole_contenute = []
     for i  in range(len(lista)):
+       
         parola = find_word_at_index_zero(lista,txt_copy)
         parola_da_comporre= ''
-        start_index = txt_copy.find(parola)
-        if start_index >= 0 and parola not in lista_di_parole_contenute :
+        
+        if parola is not None:
+            start_index = txt_copy.find(parola)
+            
+            
+        if parola is not None and start_index >= 0 and parola not in lista_di_parole_contenute :
+            
+            if parola == 'auTz':
+                print("auTz")
             
             found = False
+            
             while not found:
-                c = txt_copy[start_index]
+                
+                
+                c = ''                
+                
+                if not start_index > len(txt_copy)-1 :
+                    c = txt_copy[start_index]
+                
                 if parola_da_comporre == parola:
                     lista_di_parole_contenute.append(parola)
                     found = True
@@ -73,6 +88,9 @@ def find_parole_in_testo(lista,txt_copy):
                 elif c in parola and parola_da_comporre != parola:
                     parola_da_comporre+=c
                     start_index+=1
+                    
+        elif parola in lista_di_parole_contenute:
+             txt_copy = txt_copy.replace(parola,'',1)
     return lista_di_parole_contenute
 
 def find_word_at_index_zero(lista,txt_copy):
@@ -97,14 +115,38 @@ def word_max_freq(freq_map):
         if v == max(freq_map.values()):
             list_of_max_words.append(k)
     return sorted(list_of_max_words)
-            
-        
-        
+             
+expected = ["Novu", "MbZF", "Sgzb", "cmHN", "QcSp", "mPpt", "tCuR", "vQCm", "EzEe", "gsNp",
+    "qqIu", "bZPa", "snPp", "ozRi", "anOz", "bVau", "NFMB", "lzvg", "tZuI", "ENBR", "iplP", 
+    "HLZD", "orCf", "HMQq", "TNsC", "MLhb", "zUQp", "nzSv", "pZzc", "eNnn", "Resh", "dBSi", 
+    "Zqde", "LqFA", "oBgp", "gMbD", "istE", "cFeD", "UnBu", "TaHt", "RzVG", "vGPm", "mOEC", 
+    "AgPU", "QBPM", "mgGD", "BaPP", "DAFo", "SoMg", "QSnf", "UEub", "MLlg", "QCfH", "VuhA", 
+    "eRQq", "aoPQ", "cefb", "zTIh", "ITbq", "Ahur", "qOZb", "vipd", "pUPL", "GdLC", "hcor", 
+    "auTz", "bqbE", "aUaf", "ItQT", "pGbO", "iSQg", "qDvc", "atrt", "FRsi", "rseH", "Vqrz", 
+    "mhHm", "NESc", "rEFn", "aEAm", "QsPH", "fHfZ", "QsLz", "ZmmN", "ecfi", "PqVO", "FQZg", 
+    "DNiO", "mNpv", "etQe"]
 
-#lista = ['gatto','cane','topo']
-#testo = "topogattotopotopogattogatto"   
+mine = ['Novu', 'MbZF', 'Sgzb', 'cmHN', 'QcSp', 'mPpt', 'tCuR', 'vQCm', 'EzEe', 'gsNp', 'qqIu',
+        'bZPa', 'snPp', 'ozRi', 'anOz', 'bVau', 'NFMB', 'lzvg', 'tZuI', 'ENBR', 'iplP', 'HLZD',
+        'orCf', 'HMQq', 'TNsC', 'MLhb', 'zUQp', 'nzSv', 'pZzc', 'eNnn', 'Resh', 'dBSi', 'Zqde',
+        'LqFA', 'oBgp', 'gMbD', 'istE', 'cFeD', 'UnBu', 'TaHt', 'RzVG', 'vGPm', 'mOEC', 'AgPU',
+        'QBPM', 'mgGD', 'BaPP', 'DAFo', 'SoMg', 'QSnf', 'UEub', 'MLlg', 'QCfH', 'VuhA', 'eRQq',
+        'aoPQ', 'cefb', 'zTIh', 'ITbq', 'Ahur', 'qOZb', 'vipd', 'pUPL', 'GdLC', 'hcor', 'auTz']
+        
+lista =  ["AgPU", "Ahur", "BaPP", "DAFo", "DNiO", "ENBR", "EzEe", "FQZg", "FRsi", "GdLC",
+    "Gptg", "HLZD", "HMQq", "ITbq", "ItQT", "Itgc", "LqFA", "MLhb", "MLlg", "MbZF", "NESc", 
+    "NFMB", "Novu", "PqVO", "QBPM", "QCfH", "QSnf", "QcSp", "QsLz", "QsPH", "Resh", "RzVG", 
+    "Sgzb", "SoMg", "TNsC", "TaHt", "UEub", "UnBu", "Vqrz", "VuhA", "ZmmN", "Zqde", "aEAm", 
+    "aUaf", "anOz", "aoPQ", "atrt", "auTz", "bLcv", "bVau", "bZPa", "bqbE", "cFeD", "cefb", 
+    "cmHN", "dBSi", "eNnn", "eRQq", "ecfi", "eevv", "etQe", "fHfZ", "gMbD", "gsNp", "hcor", 
+    "iAhU", "iSQg", "iplP", "istE", "lzvg", "mNpv", "mOEC", "mPpt", "mUNc", "mgGD", "mhHm", 
+    "mmsO", "nUfq", "nzSv", "oBgp", "orCf", "ozRi", "pGbO", "pUPL", "pZzc", "qDvc", "qOZb", 
+    "qqIu", "rEFn", "rqbr", "rseH", "snPp", "tCuR", "tZuI", "uNMb", "vGPm", "vQCm", "vipd", 
+    "zTIh", "zUQp"]
+testo =  "NovuMbZFSgzbcmHNQcSpmPpttCuRvQCmEzEegsNpqqIubZPasnPpozRianOzbVauNFMBlzvgtZuIENBRiplPHLZDSgzborCfHMQqTNsCMLhbzUQpnzSvpZzcqqIueNnnReshdBSibZPaNFMBZqdeeNnnLqFAoBgpgMbDQcSpdBSiistEcFeDpZzcUnBuTaHtRzVGvGPmmOECAgPUQBPMiplPeNnnmgGDBaPPDAFoorCfRzVGSoMgQSnfNovuUEubMLlglzvgQCfHTNsCVuhAmgGDvQCmSgzbqqIueRQqNFMBlzvgaoPQgMbDcefbzTIhQSnfbVauQSnfUEubITbqDAFomPptvGPmAhurlzvgUnBuqOZbvipdtCuRpUPLMLhbGdLChcorauTzVuhAdBSihcorqOZbaoPQvipdiplPZqdeAgPUeNnnsnPpeRQqanOzVuhAlzvgbqbEaUaftZuIqqIugsNpItQTpGbOQSnfmOECAgPUTaHtozRitCuRtZuIQCfHiSQgcFeDvGPmsnPpVuhANFMBeRQqoBgpqDvciplPQCfHatrtiplPAgPUqOZbbVaumgGDcmHNbqbEaUafoBgpmgGDtZuIvGPmFRsigsNpvGPmRzVGozRipUPLUnBuorCfBaPPcFeDtCuRorCfMbZFozRizUQpbZPaTNsCNovuzTIhGdLCzUQpAhuranOzSoMgrseHcFeDqqIulzvgVqrzMbZFSoMggMbDNFMBENBRTNsCHMQqvGPmmhHmcmHNFRsiaoPQFRsipZzceNnnBaPPNFMBhcorrseHNEScrEFnHLZDbqbEozRirEFnTaHtVqrzQSnfiplPQSnfReshaEAmTNsCFRsiGdLCiSQgpZzcauTzmOECEzEeNFMBVqrzpUPLsnPpmOECTNsCaoPQnzSvQsPHbZPamOECbqbENovufHfZSoMgnzSvaEAmsnPpQsLzSoMgnzSvrseHRzVGpZzcDAFooBgpbqbEZmmNdBSivipdRzVGTNsCQBPMGdLCorCftZuINFMBmgGDeNnnmgGDtZuIMLlgSoMgecfiiplPNEScMLhbzUQpMLhbsnPpeNnnatrtVuhAvQCmbqbEReshItQTsnPpQSnfsnPpqqIuVuhAFRsiITbqQsPHbZPaZqdegsNpHMQqPqVOENBRFQZgBaPPvQCmQcSpqqIuDNiOgsNprseHiplPtCuRnzSveNnnaUafpZzcTaHtnzSvrEFnNovuHMQqQsLzbqbEQsPHgsNpeRQqvQCmNFMBQsPHReshUEubmNpvmgGDbVauQcSpeRQqsnPpSoMgaEAmgsNpmhHmItQTQcSpENBRAhurAgPUfHfZZmmNbVaumgGDUEubQCfHbqbENEScvipdpGbOMbZFDAFoAhurbVauMLlgqDvclzvgFQZgmPptSgzbLqFApUPLVqrzAhurDNiOistEFQZgiplPLqFAENBRTaHtzUQpdBSiHLZDQBPMDAFogsNpozRiLqFAvGPmTaHtqqIuQBPMpZzceRQqbVauaEAmorCfTNsCSoMgpGbOozRiRzVGRzVGFQZgmhHmmhHmNovuanOzcmHNmOECozRiiSQgFQZgaoPQmNpvcFeDistEQCfHsnPpistEcmHNpZzcFRsisnPpTNsCvGPmnzSvtCuRvQCmGdLCSgzbNovuHMQqMbZFFQZgQSnfcmHNENBREzEeozRiHLZDetQehcorauTzHMQqZmmNENBRLqFAistEDNiOeNnnqDvcLqFAbZPavipdrseHeRQqDAFoiplPTNsCHLZDSgzbZqdeVqrzDNiObVauFQZgtZuISoMgZmmNLqFASoMgItQTqOZbVqrzHMQqcmHNRzVGhcormOECQSnfaEAmaUafbZPamgGDfHfZITbqLqFApUPLeRQqiplPmOECtCuRmgGDiSQgistEDAFoUnBuvGPmNEScQCfHauTzbVauiSQgZqdeHMQqcFeDanOzLqFAFRsiENBRVqrzpUPListEZmmNcefbVqrzZmmNaoPQTNsCZqdevGPmvGPmiSQghcorAhuriplPMbZFZmmNtZuIZqdeZqdeFRsieRQqTaHtfHfZecfiatrtmgGDFQZgMLhbEzEeiplPgMbDSgzbRzVGvGPmaUafatrtpGbOauTzbqbEVuhAaUafistEhcorNFMBDAFoMLlgSgzbqqIuQsLzmPptMLhbItQTPqVOzTIhcFeDtZuIoBgpEzEeHMQqlzvgqqIuTNsCsnPpITbqQSnfSoMgFRsiorCfiplPpGbOGdLCQcSppGbONovudBSiBaPPmhHmauTzgMbDrseHUEubQsLzQCfHgsNpReshcmHNeRQqqOZbatrtlzvgQBPMfHfZtCuRGdLCSgzbcFeDQCfHAhurvGPmistEzTIhgMbDGdLCbqbEnzSvmgGDmgGDcmHNENBRaoPQecfiAgPUQBPMVqrzrEFnpGbOAgPUlzvgVqrzvGPmZmmNzUQplzvgpGbOmNpvUEubiplPcFeDlzvgiSQgcFeDorCfmgGDVuhAeRQqVqrzLqFAhcoreNnnmhHmMLhbmNpvzTIhNEScSgzbozRiAhurcmHNpZzcmPptDNiOauTzcefbbqbEUEubpZzcvQCmqDvcBaPPHLZDHLZDAgPUbVauTNsCTNsCauTzozRivGPmfHfZzTIhaUafbVauecfiItQTfHfZaoPQMLlgcefbMLlgBaPPNovuSoMgauTzLqFAmhHmUEubcFeDSoMgUEubcefbrEFnTaHtdBSiaEAmzUQpgMbDQcSpsnPpgMbDbqbEsnPpcmHNHLZDFRsiLqFAQSnfMbZFQsPHtZuIDAFoITbqSgzbMbZFfHfZzUQpHMQqbqbEpUPLtCuRPqVOAgPUHLZDcmHNnzSvEzEemNpvQcSpistEcmHNanOzEzEepUPLITbqmNpvqOZbcefbqDvcSoMgqqIuTaHtNovufHfZrseHEzEeQcSpqOZbpGbOHLZDbVauqDvceRQqUnBuqqIugsNpbZPaItQTfHfZITbqMbZFbVaunzSvQCfHNFMBiSQgSgzbcefbvGPmistEUEubgsNpozRilzvgQcSpvipdoBgpaUafgMbDITbqAhurvQCmtZuIpZzcanOzrseHTNsCFQZglzvgorCfeNnnVqrzvipdHMQqQsPHTaHtTNsCrseHRzVGcFeDMLlgLqFASgzbQBPMcFeDmOECorCfFQZgistEMbZFcFeDTNsCTaHtfHfZVuhATNsCgMbDQcSpgsNpauTzetQeReshaUafNovuvipdPqVOmgGDrEFneRQqistEMbZFFQZghcorZqdeiplPrEFnMLhbpGbOvipdQcSpZmmNoBgpgsNpfHfZaEAmLqFAMLhbSgzbQsLzHLZDozRiistEEzEemPptNovuqqIuItQTQsLzmPptQCfHhcormPptpZzcVuhAcmHNZqdeAgPUzUQpBaPPVuhAnzSvQsLzvGPmQsLzTaHtqqIuorCfaUafTNsCtCuRiSQgBaPPaEAmanOzMLhbItQTSgzbzTIhMLlgqqIuENBRanOzGdLCHLZDtCuRITbqVqrzZmmNRzVGTNsCiplPEzEeatrtDAFoMLhbbqbEauTztCuRozRirEFnReshHMQqqOZbaEAmTaHtAhurZqdeItQTaoPQpGbOtCuRLqFATNsCbqbEHLZDqOZboBgptCuRiplPetQemPptcefbistEbZPaVqrzQsLzorCfVqrzmNpvMLhbEzEeItQTNovuReshQcSpdBSiTaHtlzvgBaPPSgzbistETNsCiplPSoMgetQeLqFAbqbErseHITbqvGPmauTzFRsipUPLlzvgatrtlzvgmOECtCuRhcorqqIumgGDDAFooBgpVuhAeRQqqqIuLqFAMbZFGdLCmgGDMLlgqOZbQcSpfHfZzTIhaEAmatrtUnBuNEScMbZFeNnnbqbEMLlgTNsCUnBuqDvcqqIuozRiAhuristEAhur"
 #print(find_word_at_index_zero(lista,testo))
-#print(es3(lista,testo))
+print(es3(lista,testo))
+#print(lista)
 #print(lista)
 
 
