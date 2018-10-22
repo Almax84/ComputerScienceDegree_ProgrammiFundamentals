@@ -57,8 +57,8 @@ def es3(lista, testo):
 
 def find_parole_in_testo(lista,txt_copy):
     lista_di_parole_contenute = []
-    for i  in range(len(lista)):
-       
+    while len(txt_copy) > 0:
+               
         parola = find_word_at_index_zero(lista,txt_copy)
         parola_da_comporre= ''
         
@@ -68,9 +68,7 @@ def find_parole_in_testo(lista,txt_copy):
             
         if parola is not None and start_index >= 0 and parola not in lista_di_parole_contenute :
             
-            if parola == 'auTz':
-                print("auTz")
-            
+
             found = False
             
             while not found:
@@ -84,13 +82,15 @@ def find_parole_in_testo(lista,txt_copy):
                 if parola_da_comporre == parola:
                     lista_di_parole_contenute.append(parola)
                     found = True
-                    txt_copy = txt_copy.replace(parola,'',1)
+                    txt_copy = txt_copy.replace(parola,'')
                 elif c in parola and parola_da_comporre != parola:
                     parola_da_comporre+=c
                     start_index+=1
                     
         elif parola in lista_di_parole_contenute:
-             txt_copy = txt_copy.replace(parola,'',1)
+             txt_copy = txt_copy.replace(parola,'')
+        #print(len(txt_copy))
+        
     return lista_di_parole_contenute
 
 def find_word_at_index_zero(lista,txt_copy):
@@ -115,7 +115,7 @@ def word_max_freq(freq_map):
         if v == max(freq_map.values()):
             list_of_max_words.append(k)
     return sorted(list_of_max_words)
-             
+           
 expected = ["Novu", "MbZF", "Sgzb", "cmHN", "QcSp", "mPpt", "tCuR", "vQCm", "EzEe", "gsNp",
     "qqIu", "bZPa", "snPp", "ozRi", "anOz", "bVau", "NFMB", "lzvg", "tZuI", "ENBR", "iplP", 
     "HLZD", "orCf", "HMQq", "TNsC", "MLhb", "zUQp", "nzSv", "pZzc", "eNnn", "Resh", "dBSi", 
@@ -145,10 +145,9 @@ lista =  ["AgPU", "Ahur", "BaPP", "DAFo", "DNiO", "ENBR", "EzEe", "FQZg", "FRsi"
     "zTIh", "zUQp"]
 testo =  "NovuMbZFSgzbcmHNQcSpmPpttCuRvQCmEzEegsNpqqIubZPasnPpozRianOzbVauNFMBlzvgtZuIENBRiplPHLZDSgzborCfHMQqTNsCMLhbzUQpnzSvpZzcqqIueNnnReshdBSibZPaNFMBZqdeeNnnLqFAoBgpgMbDQcSpdBSiistEcFeDpZzcUnBuTaHtRzVGvGPmmOECAgPUQBPMiplPeNnnmgGDBaPPDAFoorCfRzVGSoMgQSnfNovuUEubMLlglzvgQCfHTNsCVuhAmgGDvQCmSgzbqqIueRQqNFMBlzvgaoPQgMbDcefbzTIhQSnfbVauQSnfUEubITbqDAFomPptvGPmAhurlzvgUnBuqOZbvipdtCuRpUPLMLhbGdLChcorauTzVuhAdBSihcorqOZbaoPQvipdiplPZqdeAgPUeNnnsnPpeRQqanOzVuhAlzvgbqbEaUaftZuIqqIugsNpItQTpGbOQSnfmOECAgPUTaHtozRitCuRtZuIQCfHiSQgcFeDvGPmsnPpVuhANFMBeRQqoBgpqDvciplPQCfHatrtiplPAgPUqOZbbVaumgGDcmHNbqbEaUafoBgpmgGDtZuIvGPmFRsigsNpvGPmRzVGozRipUPLUnBuorCfBaPPcFeDtCuRorCfMbZFozRizUQpbZPaTNsCNovuzTIhGdLCzUQpAhuranOzSoMgrseHcFeDqqIulzvgVqrzMbZFSoMggMbDNFMBENBRTNsCHMQqvGPmmhHmcmHNFRsiaoPQFRsipZzceNnnBaPPNFMBhcorrseHNEScrEFnHLZDbqbEozRirEFnTaHtVqrzQSnfiplPQSnfReshaEAmTNsCFRsiGdLCiSQgpZzcauTzmOECEzEeNFMBVqrzpUPLsnPpmOECTNsCaoPQnzSvQsPHbZPamOECbqbENovufHfZSoMgnzSvaEAmsnPpQsLzSoMgnzSvrseHRzVGpZzcDAFooBgpbqbEZmmNdBSivipdRzVGTNsCQBPMGdLCorCftZuINFMBmgGDeNnnmgGDtZuIMLlgSoMgecfiiplPNEScMLhbzUQpMLhbsnPpeNnnatrtVuhAvQCmbqbEReshItQTsnPpQSnfsnPpqqIuVuhAFRsiITbqQsPHbZPaZqdegsNpHMQqPqVOENBRFQZgBaPPvQCmQcSpqqIuDNiOgsNprseHiplPtCuRnzSveNnnaUafpZzcTaHtnzSvrEFnNovuHMQqQsLzbqbEQsPHgsNpeRQqvQCmNFMBQsPHReshUEubmNpvmgGDbVauQcSpeRQqsnPpSoMgaEAmgsNpmhHmItQTQcSpENBRAhurAgPUfHfZZmmNbVaumgGDUEubQCfHbqbENEScvipdpGbOMbZFDAFoAhurbVauMLlgqDvclzvgFQZgmPptSgzbLqFApUPLVqrzAhurDNiOistEFQZgiplPLqFAENBRTaHtzUQpdBSiHLZDQBPMDAFogsNpozRiLqFAvGPmTaHtqqIuQBPMpZzceRQqbVauaEAmorCfTNsCSoMgpGbOozRiRzVGRzVGFQZgmhHmmhHmNovuanOzcmHNmOECozRiiSQgFQZgaoPQmNpvcFeDistEQCfHsnPpistEcmHNpZzcFRsisnPpTNsCvGPmnzSvtCuRvQCmGdLCSgzbNovuHMQqMbZFFQZgQSnfcmHNENBREzEeozRiHLZDetQehcorauTzHMQqZmmNENBRLqFAistEDNiOeNnnqDvcLqFAbZPavipdrseHeRQqDAFoiplPTNsCHLZDSgzbZqdeVqrzDNiObVauFQZgtZuISoMgZmmNLqFASoMgItQTqOZbVqrzHMQqcmHNRzVGhcormOECQSnfaEAmaUafbZPamgGDfHfZITbqLqFApUPLeRQqiplPmOECtCuRmgGDiSQgistEDAFoUnBuvGPmNEScQCfHauTzbVauiSQgZqdeHMQqcFeDanOzLqFAFRsiENBRVqrzpUPListEZmmNcefbVqrzZmmNaoPQTNsCZqdevGPmvGPmiSQghcorAhuriplPMbZFZmmNtZuIZqdeZqdeFRsieRQqTaHtfHfZecfiatrtmgGDFQZgMLhbEzEeiplPgMbDSgzbRzVGvGPmaUafatrtpGbOauTzbqbEVuhAaUafistEhcorNFMBDAFoMLlgSgzbqqIuQsLzmPptMLhbItQTPqVOzTIhcFeDtZuIoBgpEzEeHMQqlzvgqqIuTNsCsnPpITbqQSnfSoMgFRsiorCfiplPpGbOGdLCQcSppGbONovudBSiBaPPmhHmauTzgMbDrseHUEubQsLzQCfHgsNpReshcmHNeRQqqOZbatrtlzvgQBPMfHfZtCuRGdLCSgzbcFeDQCfHAhurvGPmistEzTIhgMbDGdLCbqbEnzSvmgGDmgGDcmHNENBRaoPQecfiAgPUQBPMVqrzrEFnpGbOAgPUlzvgVqrzvGPmZmmNzUQplzvgpGbOmNpvUEubiplPcFeDlzvgiSQgcFeDorCfmgGDVuhAeRQqVqrzLqFAhcoreNnnmhHmMLhbmNpvzTIhNEScSgzbozRiAhurcmHNpZzcmPptDNiOauTzcefbbqbEUEubpZzcvQCmqDvcBaPPHLZDHLZDAgPUbVauTNsCTNsCauTzozRivGPmfHfZzTIhaUafbVauecfiItQTfHfZaoPQMLlgcefbMLlgBaPPNovuSoMgauTzLqFAmhHmUEubcFeDSoMgUEubcefbrEFnTaHtdBSiaEAmzUQpgMbDQcSpsnPpgMbDbqbEsnPpcmHNHLZDFRsiLqFAQSnfMbZFQsPHtZuIDAFoITbqSgzbMbZFfHfZzUQpHMQqbqbEpUPLtCuRPqVOAgPUHLZDcmHNnzSvEzEemNpvQcSpistEcmHNanOzEzEepUPLITbqmNpvqOZbcefbqDvcSoMgqqIuTaHtNovufHfZrseHEzEeQcSpqOZbpGbOHLZDbVauqDvceRQqUnBuqqIugsNpbZPaItQTfHfZITbqMbZFbVaunzSvQCfHNFMBiSQgSgzbcefbvGPmistEUEubgsNpozRilzvgQcSpvipdoBgpaUafgMbDITbqAhurvQCmtZuIpZzcanOzrseHTNsCFQZglzvgorCfeNnnVqrzvipdHMQqQsPHTaHtTNsCrseHRzVGcFeDMLlgLqFASgzbQBPMcFeDmOECorCfFQZgistEMbZFcFeDTNsCTaHtfHfZVuhATNsCgMbDQcSpgsNpauTzetQeReshaUafNovuvipdPqVOmgGDrEFneRQqistEMbZFFQZghcorZqdeiplPrEFnMLhbpGbOvipdQcSpZmmNoBgpgsNpfHfZaEAmLqFAMLhbSgzbQsLzHLZDozRiistEEzEemPptNovuqqIuItQTQsLzmPptQCfHhcormPptpZzcVuhAcmHNZqdeAgPUzUQpBaPPVuhAnzSvQsLzvGPmQsLzTaHtqqIuorCfaUafTNsCtCuRiSQgBaPPaEAmanOzMLhbItQTSgzbzTIhMLlgqqIuENBRanOzGdLCHLZDtCuRITbqVqrzZmmNRzVGTNsCiplPEzEeatrtDAFoMLhbbqbEauTztCuRozRirEFnReshHMQqqOZbaEAmTaHtAhurZqdeItQTaoPQpGbOtCuRLqFATNsCbqbEHLZDqOZboBgptCuRiplPetQemPptcefbistEbZPaVqrzQsLzorCfVqrzmNpvMLhbEzEeItQTNovuReshQcSpdBSiTaHtlzvgBaPPSgzbistETNsCiplPSoMgetQeLqFAbqbErseHITbqvGPmauTzFRsipUPLlzvgatrtlzvgmOECtCuRhcorqqIumgGDDAFooBgpVuhAeRQqqqIuLqFAMbZFGdLCmgGDMLlgqOZbQcSpfHfZzTIhaEAmatrtUnBuNEScMbZFeNnnbqbEMLlgTNsCUnBuqDvcqqIuozRiAhuristEAhur"
 #print(find_word_at_index_zero(lista,testo))
-print(es3(lista,testo))
+#print(es3(lista,testo*10006))
 #print(lista)
 #print(lista)
-
 
                     
             
