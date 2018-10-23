@@ -1,0 +1,41 @@
+# Objective: given a list of words, and a string of text, whereby the text is the result of the concatenation of the words contained in the list, return a tuple, containing
+  the list of the words which concatenated result in the text sorted by order of apparition in the text, and the word with the highest frequency
+  Remove from the list of words all the words used in the text string.
+  
+  
+  # Algorithm:
+  
+	# Find all the words in the text string:
+		
+		# Define a new list which will contain all  the the words present both in the input list and in the text
+		
+		# While the length of the text string is greater than zero:
+		
+			# Find the first word in the text  also present in the list, starting from index 0
+			
+			# If none of the words in the list have index 0 in the text string, remove it from the text string, otherwise..
+		
+			# If the found word is not null, get its index (which will be 0)
+		
+			# If the index is greater or equal to zero, and the word is not already in the result list of words : Loop the text string:
+
+				# Extract chars from the text string until a local word is composed and found also in the input list:
+		
+					# Fetch the char in the text at the current index, if the index is of legal value
+
+					# Compose the local word char by char 
+			
+					# If the local word (composed from the string) is equal to the first word in the text previously found:
+				
+						# Add it to the return list of words
+				
+						# Remove the word from the text string in order to make it shorter and eventually exit from the loop
+		
+		# Remove all the words in the input list also used in the text
+				
+					
+		
+		# Find the frequency of each word by defining a dictionary with the key being the word, and the value being the count. Extract the max value.
+		
+		# Return the tuple of the previous steps
+		

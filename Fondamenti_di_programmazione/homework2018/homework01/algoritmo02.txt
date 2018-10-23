@@ -1,0 +1,30 @@
+# Objective : Given a number N of lightbulbs, correspondingly N buttons which switch the state of the lightbulb (on/off), and a list of turned on lightbulbs
+  determine the order of buttons to be pressed so that all the lightbulbs will be turned on, knowing that:
+   - the generic button x switches the state of the lightbulb
+   - the generic button x swithces the state of the lightbulbs whose id is divisible by x
+   
+   
+   # Algorithm:
+   
+		# Cast the input list of turned on lightbulbs as a set
+		
+		# Loop from 0 to N in reversed order (N, N-1, N-2,...0)
+		
+			# Find all the divisors of the current index i defined in a set
+				# to do this efficiently, loop from 1 to sqrt(i) (included)
+					# if the modulo of i and the current index is zero
+						# add the current index, and the division of i by the current index as divisors
+				# return the list of divisors
+			
+			# If the lightbulb at the current position is not already turned on (i.e. not present in the list of already turned on lightbulbs)
+			
+				# Define the list of currently turned on lightbulbs as a set containing all the elements of already turned on lightbulbs, all the elements of the list of divisors
+				  excluding the common ones ( xor). This is because if an element x is present in the list of already turned lightbulbs, but x is also a divisor, the lightbulb will 
+				  be switched off
+				
+				# Add the button x in the list of buttons to be pressed
+				  
+				  
+		# Sort the list of buttons to be pressed and return it
+			
+   
