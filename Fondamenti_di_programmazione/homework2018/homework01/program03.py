@@ -62,36 +62,19 @@ def find_parole_in_testo(lista,txt_copy):
     while len(txt_copy) > 0:
                
         parola = find_word_at_index_zero(lista,txt_copy)
-        parola_da_comporre= ''
+        
         
         if parola is not None:
             start_index = txt_copy.find(parola)
             
             
         if parola is not None and start_index >= 0 and parola not in lista_di_parole_contenute :
+            lista_di_parole_contenute.append(parola)
+            txt_copy = txt_copy.replace(parola,'')
             
-
-            found = False
-            
-            while not found:
-                
-                
-                c = ''                
-                
-                if not start_index > len(txt_copy)-1 :
-                    c = txt_copy[start_index]
-                
-                if parola_da_comporre == parola:
-                    lista_di_parole_contenute.append(parola)
-                    found = True
-                    txt_copy = txt_copy.replace(parola,'')
-                elif c in parola and parola_da_comporre != parola:
-                    parola_da_comporre+=c
-                    start_index+=1
-                    
         elif parola in lista_di_parole_contenute:
              txt_copy = txt_copy.replace(parola,'')
-        #print(len(txt_copy))
+        
         
     return lista_di_parole_contenute
 

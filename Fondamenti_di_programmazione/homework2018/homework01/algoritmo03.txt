@@ -17,23 +17,13 @@
 		
 			# If the found word is not null, get its index (which will be 0)
 		
-			# If the index is greater or equal to zero, and the word is not already in the result list of words : Loop the text string:
+			# If the index is greater or equal to zero, and the word is not already in the result list of words : 
 
-				# Extract chars from the text string until a local word is composed and found also in the input list:
-		
-					# Fetch the char in the text at the current index, if the index is of legal value
-
-					# Compose the local word char by char 
-			
-					# If the local word (composed from the string) is equal to the first word in the text previously found:
-				
 						# Add it to the return list of words
 				
 						# Remove the word from the text string in order to make it shorter and eventually exit from the loop
 		
 		# Remove all the words in the input list also used in the text
-				
-					
 		
 		# Find the frequency of each word by defining a dictionary with the key being the word, and the value being the count. Extract the max value.
 		
