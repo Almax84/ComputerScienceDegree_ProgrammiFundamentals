@@ -59,16 +59,12 @@ def es3(lista, testo):
 
 def find_parole_in_testo(lista,txt_copy):
     lista_di_parole_contenute = []
-    while len(txt_copy) > 0:
+    for parola in lista:
                
         parola = find_word_at_index_zero(lista,txt_copy)
         
-        
-        if parola is not None:
-            start_index = txt_copy.find(parola)
             
-            
-        if parola is not None and start_index >= 0 and parola not in lista_di_parole_contenute :
+        if parola is not None and parola not in lista_di_parole_contenute :
             lista_di_parole_contenute.append(parola)
             txt_copy = txt_copy.replace(parola,'')
             
