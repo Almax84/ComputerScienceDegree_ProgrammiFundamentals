@@ -44,20 +44,14 @@ def es3(lista, testo):
     
     word_highest_freq = find_freq_max(lista_parole_in_testo,txt_copy)[0]
     
-    
-    for parola_in_testo in lista_parole_in_testo:
-        if parola_in_testo in lista:
-            lista.remove(parola_in_testo)
-    
-    
-    
+        
     return lista_parole_in_testo, word_highest_freq    
     
 
 
 def find_parole_in_testo(lista,txt_copy):
     lista_di_parole_contenute = []
-    for parola in lista:
+    while len(txt_copy)>0:
                
         parola = find_word_at_index_zero(lista,txt_copy)
         
@@ -68,6 +62,9 @@ def find_parole_in_testo(lista,txt_copy):
             
         elif parola in lista_di_parole_contenute:
              txt_copy = txt_copy.replace(parola,'')
+             
+        if parola in lista:
+            lista.remove(parola)
         
         
     return lista_di_parole_contenute

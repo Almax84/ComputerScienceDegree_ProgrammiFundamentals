@@ -17,13 +17,13 @@
 		
 			# If the found word is not null, get its index (which will be 0)
 		
-			# If the index is greater or equal to zero, and the word is not already in the result list of words : 
+			# If the word is not already in the result list of words : 
 
 						# Add it to the return list of words
 				
 						# Remove the word from the text string in order to make it shorter and eventually exit from the loop
 		
-		# Remove all the words in the input list also used in the text
+                		# If the word is in the input list, remove it
 		
 		# Find the frequency of each word and return the one with the highest value, giving priority to the one with alphabetical precedence
 		
