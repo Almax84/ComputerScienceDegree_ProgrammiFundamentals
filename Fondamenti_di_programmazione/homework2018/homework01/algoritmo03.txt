@@ -25,7 +25,7 @@
 		
 		# Remove all the words in the input list also used in the text
 		
-		# Find the frequency of each word by defining a dictionary with the key being the word, and the value being the count. Extract the max value.
+		# Find the frequency of each word and return the one with the highest value, giving priority to the one with alphabetical precedence
 		
 		# Return the tuple of the previous steps
 		

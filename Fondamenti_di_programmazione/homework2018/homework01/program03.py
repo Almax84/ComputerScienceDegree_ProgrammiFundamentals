@@ -42,9 +42,7 @@ def es3(lista, testo):
     lista_parole_in_testo = find_parole_in_testo(lista,txt_copy)
     
     
-    map_of_words_freq = find_freq_map(lista_parole_in_testo,txt_copy)
-    word_highest_freq = word_max_freq(map_of_words_freq)[0]
-    
+    word_highest_freq = find_freq_max(lista_parole_in_testo,txt_copy)[0]
     
     
     for parola_in_testo in lista_parole_in_testo:
@@ -82,20 +80,20 @@ def find_word_at_index_zero(lista,txt_copy):
 
 
 
-def find_freq_map(lista_parole_in_testo, txt_copy):
-    freq_map = {}
-    for index, parola in enumerate(lista_parole_in_testo):
-        freq_map[parola]=txt_copy.count(parola)
-    return freq_map
-
-def word_max_freq(freq_map):
-    
+def find_freq_max(lista_parole_in_testo, txt_copy):
     list_of_max_words = []
-    
-    for k,v in freq_map.items():
-        if v == max(freq_map.values()):
-            list_of_max_words.append(k)
+    max_val = 0;
+    for  parola in lista_parole_in_testo:
+        parola_count = txt_copy.count(parola)
+        if parola_count > max_val:
+            list_of_max_words.clear()
+            list_of_max_words.append(parola)
+            max_val = parola_count
+        elif parola_count == max_val:
+            list_of_max_words.append(parola)
+            
     return sorted(list_of_max_words)
+
            
 
                     
