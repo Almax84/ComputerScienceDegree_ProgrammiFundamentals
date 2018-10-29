@@ -38,12 +38,14 @@ output:
 
 '''
 def es3(lista, testo):
+    
+    
     txt_copy = testo
-    lista_parole_in_testo = find_parole_in_testo(lista,txt_copy)
-    
-    
-    word_highest_freq = find_freq_max(lista_parole_in_testo,txt_copy)[0]
-    
+    lista_parole_in_testo, list_of_max_words = find_parole_in_testo(lista,txt_copy)
+    word_highest_freq = ''
+
+    if len(list_of_max_words)>0:
+        word_highest_freq = list_of_max_words[0]
         
     return lista_parole_in_testo, word_highest_freq    
     
@@ -51,12 +53,28 @@ def es3(lista, testo):
 
 def find_parole_in_testo(lista,txt_copy):
     lista_di_parole_contenute = []
+    list_of_max_words = []
+    max_val = 0;
+    
     while len(txt_copy)>0:
                
         parola = find_word_at_index_zero(lista,txt_copy)
+        
+         
+        if parola is None:
+            break
+        
+        
+        parola_count = txt_copy.count(parola)
+        if parola_count > max_val:
+            list_of_max_words.clear()
+            list_of_max_words.append(parola)
+            max_val = parola_count
+        elif parola_count == max_val:
+            list_of_max_words.append(parola)
 
-
-        if parola is not None and parola not in lista_di_parole_contenute :
+        
+        if parola not in lista_di_parole_contenute :
             lista_di_parole_contenute.append(parola)
             txt_copy = txt_copy.replace(parola,'')
             
@@ -67,8 +85,8 @@ def find_parole_in_testo(lista,txt_copy):
             lista.remove(parola)
 
         
-        
-    return lista_di_parole_contenute
+    list_of_max_words.sort()
+    return lista_di_parole_contenute,list_of_max_words
 
 def find_word_at_index_zero(lista,txt_copy):
     for parola in lista:
@@ -76,26 +94,6 @@ def find_word_at_index_zero(lista,txt_copy):
             return parola
 
 
-
-
-def find_freq_max(lista_parole_in_testo, txt_copy):
-    list_of_max_words = []
-    max_val = 0;
-    for  parola in lista_parole_in_testo:
-        parola_count = txt_copy.count(parola)
-        if parola_count > max_val:
-            list_of_max_words.clear()
-            list_of_max_words.append(parola)
-            max_val = parola_count
-        elif parola_count == max_val:
-            list_of_max_words.append(parola)
-            
-    return sorted(list_of_max_words)
-
-           
-
-                    
-            
             
     
    
