@@ -63,7 +63,7 @@ def find_parole_in_testo(lista,testo):
         if parola not in lista_di_parole_contenute:
             lista_di_parole_contenute.append(parola)
             testo = testo.replace(parola, '')
-            
+
              
         if parola in lista:
             lista.remove(parola)
@@ -74,11 +74,10 @@ def find_parole_in_testo(lista,testo):
 
 def get_max_freq_word(max_val, max_word, parola, testo):
     parola_count = testo.count(parola)
-    if parola_count > max_val:
+    if parola_count > max_val or (parola_count == max_val and parola < max_word):
         max_word = parola
         max_val = parola_count
-    elif parola_count == max_val and parola < max_word:
-        max_word = parola
+
     return max_word, max_val
 
 
