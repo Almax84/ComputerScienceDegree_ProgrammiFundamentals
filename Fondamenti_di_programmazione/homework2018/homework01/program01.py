@@ -14,6 +14,10 @@ ATTENZIONE: la lista ls dei voti al termine della funzione NON DEVE risultare mo
 Ad esempio per voti=[7,5,8,3,7,2,9] la funzione es2 restituisce la lista
 [7, 7, 7, 6, 5, 5, 4, 4, 2, 1]
 
+voti=[7,5,8,3,7,2,9]
+voto = 7
+
+
 i = 
 4
 
@@ -71,3 +75,30 @@ def es1(voti):
         return_list.append(contatore_studenti_ammessi)
             
     return return_list
+
+def es1_bkp(voti):
+
+    return_list = []
+    max_voto = max(voti)
+    min_voto = min(voti)
+
+    for soglia in range(max_voto+1):
+        temp_list = []
+        contatore = 0
+
+        for j, voto in enumerate(voti):
+            if soglia <= min_voto:
+                temp_list = voti
+                contatore = len(voti)
+                break
+            
+            if voto >= soglia:
+                contatore+=1
+                temp_list.append(voto)
+                
+        voti = temp_list
+        return_list.append(contatore)
+    return return_list
+
+voti=[7,5,8,3,7,2,9]
+print(es1(voti))
