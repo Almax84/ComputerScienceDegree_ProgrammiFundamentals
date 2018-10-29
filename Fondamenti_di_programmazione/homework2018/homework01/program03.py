@@ -39,56 +39,54 @@ output:
 '''
 def es3(lista, testo):
 
-    lista_parole_in_testo, list_of_max_words = find_parole_in_testo(lista,testo)
-    word_highest_freq = ''
+    lista_parole_in_testo, word_highest_freq = find_parole_in_testo(lista, testo)
 
-    if len(list_of_max_words)>0:
-        word_highest_freq = list_of_max_words[0]
-        
     return lista_parole_in_testo, word_highest_freq    
     
 
 
 def find_parole_in_testo(lista,testo):
     lista_di_parole_contenute = []
-    list_of_max_words = []
     max_val = 0;
+    max_word = ''
     
     while len(testo)>0:
                
-        parola = find_word_at_index_zero(lista,testo)
+        parola = find_word_at_index_zero(lista, testo)
         
          
         if parola is None:
             break
-        
-        
-        parola_count = testo.count(parola)
-        if parola_count > max_val:
-            list_of_max_words.clear()
-            list_of_max_words.append(parola)
-            max_val = parola_count
-        elif parola_count == max_val:
-            list_of_max_words.append(parola)
 
-        
-        if parola not in lista_di_parole_contenute :
+        max_word, max_val = get_max_freq_word(max_val, max_word, parola, testo)
+
+        if parola not in lista_di_parole_contenute:
             lista_di_parole_contenute.append(parola)
-            testo = testo.replace(parola,'')
+            testo = testo.replace(parola, '')
             
         elif parola in lista_di_parole_contenute:
-             testo = testo.replace(parola,'')
+             testo = testo.replace(parola, '')
              
         if parola in lista:
             lista.remove(parola)
 
         
-    list_of_max_words.sort()
-    return lista_di_parole_contenute,list_of_max_words
+    return lista_di_parole_contenute, max_word
 
-def find_word_at_index_zero(lista,testo):
+
+def get_max_freq_word(max_val, max_word, parola, testo):
+    parola_count = testo.count(parola)
+    if parola_count > max_val:
+        max_word = parola
+        max_val = parola_count
+    elif parola_count == max_val and parola < max_word:
+        max_word = parola
+    return max_word, max_val
+
+
+def find_word_at_index_zero(lista, testo):
     for parola in lista:
-        if testo.find(parola)==0:
+        if testo.find(parola)== 0:
             return parola
 
 
