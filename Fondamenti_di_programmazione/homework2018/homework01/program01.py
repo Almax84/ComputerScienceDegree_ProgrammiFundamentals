@@ -17,32 +17,6 @@ Ad esempio per voti=[7,5,8,3,7,2,9] la funzione es2 restituisce la lista
 voti=[7,5,8,3,7,2,9]
 voto = 7
 
-
-i = 
-4
-
-voti = [2,3,5,7,7,8,9]
-i = 0
-7
-i = 1
-7
-i = 2
-7
-i = 3
-6
-i = 4
-5
-i = 5
-5
-i = 6
-4
-i = 7
-4
-i = 8
-2
-i = 9
-1
-
 NOTA: il timeout previsto per questo esercizio è di 1 secondo per ciascun test
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad esempio editatelo dentro Spyder)
@@ -59,11 +33,9 @@ def es1(voti):
     # i ->  voto di riferimento, nonché indice della lista di ritorno
     # voto -> voto singolo studente
     while i < voto_massimo_assegnato+1:
-
         contatore_studenti_ammessi = 0
         min_value = 0 #valore di riferimento -> butto via la coda sinistra dell'array a partire dal valore minore
         for j, voto in enumerate(sorted_voti):
-            voto = sorted_voti[j]
             if voto >= i:
                 contatore_studenti_ammessi = len(sorted_voti[j:])
                 break
@@ -76,29 +48,3 @@ def es1(voti):
             
     return return_list
 
-def es1_bkp(voti):
-
-    return_list = []
-    max_voto = max(voti)
-    min_voto = min(voti)
-
-    for soglia in range(max_voto+1):
-        temp_list = []
-        contatore = 0
-
-        for j, voto in enumerate(voti):
-            if soglia <= min_voto:
-                temp_list = voti
-                contatore = len(voti)
-                break
-            
-            if voto >= soglia:
-                contatore+=1
-                temp_list.append(voto)
-                
-        voti = temp_list
-        return_list.append(contatore)
-    return return_list
-
-voti=[7,5,8,3,7,2,9]
-print(es1(voti))
