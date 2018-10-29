@@ -64,8 +64,6 @@ def find_parole_in_testo(lista,testo):
             lista_di_parole_contenute.append(parola)
             testo = testo.replace(parola, '')
             
-        elif parola in lista_di_parole_contenute:
-             testo = testo.replace(parola, '')
              
         if parola in lista:
             lista.remove(parola)
