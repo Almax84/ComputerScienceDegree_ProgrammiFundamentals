@@ -38,10 +38,8 @@ output:
 
 '''
 def es3(lista, testo):
-    
-    
-    txt_copy = testo
-    lista_parole_in_testo, list_of_max_words = find_parole_in_testo(lista,txt_copy)
+
+    lista_parole_in_testo, list_of_max_words = find_parole_in_testo(lista,testo)
     word_highest_freq = ''
 
     if len(list_of_max_words)>0:
@@ -51,21 +49,21 @@ def es3(lista, testo):
     
 
 
-def find_parole_in_testo(lista,txt_copy):
+def find_parole_in_testo(lista,testo):
     lista_di_parole_contenute = []
     list_of_max_words = []
     max_val = 0;
     
-    while len(txt_copy)>0:
+    while len(testo)>0:
                
-        parola = find_word_at_index_zero(lista,txt_copy)
+        parola = find_word_at_index_zero(lista,testo)
         
          
         if parola is None:
             break
         
         
-        parola_count = txt_copy.count(parola)
+        parola_count = testo.count(parola)
         if parola_count > max_val:
             list_of_max_words.clear()
             list_of_max_words.append(parola)
@@ -76,10 +74,10 @@ def find_parole_in_testo(lista,txt_copy):
         
         if parola not in lista_di_parole_contenute :
             lista_di_parole_contenute.append(parola)
-            txt_copy = txt_copy.replace(parola,'')
+            testo = testo.replace(parola,'')
             
         elif parola in lista_di_parole_contenute:
-             txt_copy = txt_copy.replace(parola,'')
+             testo = testo.replace(parola,'')
              
         if parola in lista:
             lista.remove(parola)
@@ -88,9 +86,9 @@ def find_parole_in_testo(lista,txt_copy):
     list_of_max_words.sort()
     return lista_di_parole_contenute,list_of_max_words
 
-def find_word_at_index_zero(lista,txt_copy):
+def find_word_at_index_zero(lista,testo):
     for parola in lista:
-        if txt_copy.find(parola)==0:
+        if testo.find(parola)==0:
             return parola
 
 
