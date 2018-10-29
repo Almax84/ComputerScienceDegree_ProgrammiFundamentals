@@ -43,31 +43,31 @@ NOTA: il timeout previsto per questo esercizio è di 1 secondo per ciascun test
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad esempio editatelo dentro Spyder)
 '''
+
+
 def es1(voti):
     # inserite qui il vostro codice
-    sorted_voti = sorted(voti, reverse = False)
+    sorted_voti = sorted(voti)
 
     return_list = []
     i = 0
-    C = sorted_voti[len(sorted_voti)-1]
+    voto_massimo_assegnato = sorted_voti[len(sorted_voti)-1]
     # i ->  voto di riferimento, nonché indice della lista di ritorno
     # voto -> voto singolo studente
-    while i < C+1:
+    while i < voto_massimo_assegnato+1:
 
         contatore_studenti_ammessi = 0
         min_value = 0 #valore di riferimento -> butto via la coda sinistra dell'array a partire dal valore minore
-        for j in range(len(sorted_voti)):
+        for j, voto in enumerate(sorted_voti):
             voto = sorted_voti[j]
-            if voto >=  i:
+            if voto >= i:
                 contatore_studenti_ammessi = len(sorted_voti[j:])
                 break
             else:
                 min_value = j
         sorted_voti = sorted_voti[min_value:]
-        i+=1
+        i += 1
         
         return_list.append(contatore_studenti_ammessi)
             
     return return_list
-        
-	
