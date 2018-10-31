@@ -24,27 +24,20 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 (ad
 
 
 def es1(voti):
-    # inserite qui il vostro codice
     sorted_voti = sorted(voti)
 
     return_list = []
-    i = 0
     voto_massimo_assegnato = sorted_voti[len(sorted_voti)-1]
     # i ->  voto di riferimento, nonché indice della lista di ritorno
     # voto -> voto singolo studente
-    while i < voto_massimo_assegnato+1:
-        contatore_studenti_ammessi = 0
-        min_value = 0 #valore di riferimento -> butto via la coda sinistra dell'array a partire dal valore minore
+    for i in range(voto_massimo_assegnato+1):
         for j, voto in enumerate(sorted_voti):
             if voto >= i:
-                contatore_studenti_ammessi = len(sorted_voti[j:])
+                return_list.append(len(sorted_voti[j:]))
+                sorted_voti = sorted_voti[j:]
                 break
-            else:
-                min_value = j
-        sorted_voti = sorted_voti[min_value:]
-        i += 1
-        
-        return_list.append(contatore_studenti_ammessi)
+
+
             
     return return_list
 

@@ -14,4 +14,4 @@
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-*.pyc
+homework2018/homework01/__pycache__/*.pyc
