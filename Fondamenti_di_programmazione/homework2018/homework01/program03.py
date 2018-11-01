@@ -64,9 +64,6 @@ def find_parole_in_testo(lista,testo):
             lista_di_parole_contenute.append(parola)
             testo = testo.replace(parola, '')
 
-             
-        if parola in lista:
-            lista.remove(parola)
 
         
     return lista_di_parole_contenute, max_word
@@ -82,9 +79,13 @@ def get_max_freq_word(max_val, max_word, parola, testo):
 
 
 def find_word_at_index_zero(lista, testo):
-    for parola in lista:
-        if testo.find(parola)== 0:
+    parola = ''
+    for c in testo:
+        parola+=c
+        if parola in lista:
+            lista.remove(parola)
             return parola
+
 
 
             
