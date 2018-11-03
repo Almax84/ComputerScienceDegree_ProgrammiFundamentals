@@ -52,13 +52,10 @@ def find_parole_in_testo(lista,testo):
     
     while len(testo)>0:
                
-        parola = find_word_at_index_zero(lista, testo)
-        
-         
-        if parola is None:
-            break
+        parola, count_parola = find_word_at_index_zero(lista, testo)
 
-        max_word, max_val = get_max_freq_word(max_val, max_word, parola, testo)
+
+        max_word, max_val = get_max_freq_word(max_val, max_word, parola, testo, count_parola)
 
         if parola not in lista_di_parole_contenute:
             lista_di_parole_contenute.append(parola)
@@ -69,11 +66,10 @@ def find_parole_in_testo(lista,testo):
     return lista_di_parole_contenute, max_word
 
 
-def get_max_freq_word(max_val, max_word, parola, testo):
-    parola_count = testo.count(parola)
-    if parola_count > max_val or (parola_count == max_val and parola < max_word):
+def get_max_freq_word(max_val, max_word, parola, testo, count_parola):
+    if count_parola > max_val or (count_parola == max_val and parola < max_word):
         max_word = parola
-        max_val = parola_count
+        max_val = count_parola
 
     return max_word, max_val
 
@@ -83,8 +79,9 @@ def find_word_at_index_zero(lista, testo):
     for c in testo:
         parola+=c
         if parola in lista:
+            count_parola = testo.count(parola)
             lista.remove(parola)
-            return parola
+            return parola, count_parola
 
 
 
