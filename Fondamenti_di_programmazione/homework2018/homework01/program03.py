@@ -52,7 +52,7 @@ def find_parole_in_testo(lista,testo):
     
     while len(testo)>0:
                
-        parola, count_parola = find_word_at_index_zero(lista, testo)
+        parola, count_parola = find_word(lista, testo)
 
 
         max_word, max_val = get_max_freq_word(max_val, max_word, parola, testo, count_parola)
@@ -74,7 +74,7 @@ def get_max_freq_word(max_val, max_word, parola, testo, count_parola):
     return max_word, max_val
 
 
-def find_word_at_index_zero(lista, testo):
+def find_word(lista, testo):
     parola = ''
     for c in testo:
         parola+=c
