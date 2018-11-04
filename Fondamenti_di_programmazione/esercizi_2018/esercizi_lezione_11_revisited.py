@@ -169,7 +169,7 @@ def draw_quad_out(img,x1,y1,x2,y2,c):
     
     print("draw h y2",y2)
     draw_h_line(img,x1,h,w,c)
-
+'''
 import image as im
 img = im.create(300,150,(0,0,0))
 draw_quad_out(img, 50,20,100,140,(255,128,0))
@@ -179,10 +179,13 @@ im.visd(img)
 draw_quad_out(img,140,40,320,120,(80,80,255))
 im.visd(img)
 '''
+'''
 ################################################################################
 
-5. draw_grid(img, s, c) disegna sull'immagine img una griglia di linee orizzontali e verticali di colore c
-   separate da s pixels le une dalle altre. Questo significa che se s è zero, le linee sono adiacenti. 
+5. draw_grid(img, s, c) disegna sull'immagine img una griglia di linee orizzontali e verticali
+   di colore c
+   separate da s pixels le une dalle altre.
+   Questo significa che se s è zero, le linee sono adiacenti. 
    Esempi
 >>> img = im.create(200, 100, (200,200,200))
 >>> draw_grid(img, 2, (0,0,0))
@@ -202,3 +205,27 @@ mostra una immagine uguale al file es5-2.png
 
 ################################################################################
 '''
+
+
+import image as im
+def draw_grid(img,s,c):
+    
+    for i in range(0,len(img),s):
+        riga = img[i]
+        draw_h_line(img,0,i,len(riga),c)
+    
+    riga_generica = img[0]
+    for j in range(0,len(riga_generica),s):
+        draw_v_line(img,j,0,len(img),c)
+    
+    
+    
+        #for j in range(len(riga)):
+        #    riga[j] = c
+        
+
+img = im.create(200,100,(200,200,200))
+draw_grid(img, 2, (0,0,0))
+im.visd(img)    
+
+
