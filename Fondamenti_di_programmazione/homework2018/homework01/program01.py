@@ -31,13 +31,12 @@ def es1(voti):
     # i ->  voto di riferimento, nonché indice della lista di ritorno
     # voto -> voto singolo studente
     for i in range(voto_massimo_assegnato+1):
-        for j, voto in enumerate(sorted_voti):
-            if voto >= i:
-                return_list.append(len(sorted_voti[j:]))
-                sorted_voti = sorted_voti[j:]
-                break
-
-
-            
+        try:
+            vote_index = sorted_voti.index(i)
+            return_list.append(len(sorted_voti[vote_index:]))
+            sorted_voti = sorted_voti[vote_index+1:]
+        except:
+            return_list.append(len(sorted_voti))
+        
     return return_list
 
