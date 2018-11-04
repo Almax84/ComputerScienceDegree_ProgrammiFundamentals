@@ -13,5 +13,9 @@
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
+.idea/*.xml
+Fondamenti_di_programmazione/.idea/**
+Fondamenti_di_programmazione/esercizi_2018/__pycache__/**
+Fondamenti_di_programmazione/homework2018/homework01/__pycache__/**
 
-*.pyc
+homework2018/homework01/__pycache__/*.pyc

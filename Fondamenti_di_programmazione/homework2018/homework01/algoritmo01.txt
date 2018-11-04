@@ -8,7 +8,7 @@
         # Define C as the last (thus highest) value in the ordered list
         
         # As it is requested that the list of votes be not modified, in order to have shorter iterations as the program is executed
-		 it will be used a copy of the sorted votes list, from which to remove the unnecessary elements
+		   # it will be used a copy of the sorted votes list, from which to remove the unnecessary elements
 
         # Loop through the ordered list of votes C+1 times (from 0 to C)
 		
@@ -18,7 +18,7 @@
             
 					# if the current vote is greater or equal to che current iteration index (set previously as 0<i<C+1), the number of students admitted to the oral exam will be the length of the sublist of the list of votes, from the current local index to the end.
 					
-					# if it is not, then set the current j-th index as the possible minimum value from which to discard smaller votes ( potentially from 0 to j ) 
+				  # remove the leftmost elements from the iteration index
                     
 				# Given that the outer iteration index  is then incremented,and the list ordered, all the votes smaller than i can be discarded from the previously determined minimum value
   					  

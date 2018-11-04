@@ -38,64 +38,53 @@ output:
 
 '''
 def es3(lista, testo):
-    txt_copy = testo
-    lista_parole_in_testo = find_parole_in_testo(lista,txt_copy)
-    
-    
-    word_highest_freq = find_freq_max(lista_parole_in_testo,txt_copy)[0]
-    
-        
+
+    lista_parole_in_testo, word_highest_freq = find_parole_in_testo(lista, testo)
+
     return lista_parole_in_testo, word_highest_freq    
     
 
 
-def find_parole_in_testo(lista,txt_copy):
+def find_parole_in_testo(lista,testo):
     lista_di_parole_contenute = []
-    while len(txt_copy)>0:
-               
-        parola = find_word_at_index_zero(lista,txt_copy)
-
-
-        if parola is not None and parola not in lista_di_parole_contenute :
-            lista_di_parole_contenute.append(parola)
-            txt_copy = txt_copy.replace(parola,'')
-            
-        elif parola in lista_di_parole_contenute:
-             txt_copy = txt_copy.replace(parola,'')
-             
-        if parola in lista:
-            lista.remove(parola)
-
-        
-        
-    return lista_di_parole_contenute
-
-def find_word_at_index_zero(lista,txt_copy):
-    for parola in lista:
-        if txt_copy.find(parola)==0:
-            return parola
-
-
-
-
-def find_freq_max(lista_parole_in_testo, txt_copy):
-    list_of_max_words = []
     max_val = 0;
-    for  parola in lista_parole_in_testo:
-        parola_count = txt_copy.count(parola)
-        if parola_count > max_val:
-            list_of_max_words.clear()
-            list_of_max_words.append(parola)
-            max_val = parola_count
-        elif parola_count == max_val:
-            list_of_max_words.append(parola)
-            
-    return sorted(list_of_max_words)
+    max_word = ''
+    
+    while len(testo)>0:
+               
+        parola, count_parola = find_word(lista, testo)
 
-           
 
-                    
-            
+        max_word, max_val = get_max_freq_word(max_val, max_word, parola, testo, count_parola)
+
+        if parola not in lista_di_parole_contenute:
+            lista_di_parole_contenute.append(parola)
+            testo = testo.replace(parola, '')
+
+
+        
+    return lista_di_parole_contenute, max_word
+
+
+def get_max_freq_word(max_val, max_word, parola, testo, count_parola):
+    if count_parola > max_val or (count_parola == max_val and parola < max_word):
+        max_word = parola
+        max_val = count_parola
+
+    return max_word, max_val
+
+
+def find_word(lista, testo):
+    parola = ''
+    for c in testo:
+        parola+=c
+        if parola in lista:
+            count_parola = testo.count(parola)
+            lista.remove(parola)
+            return parola, count_parola
+
+
+
             
     
    

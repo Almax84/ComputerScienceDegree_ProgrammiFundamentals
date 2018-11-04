@@ -13,9 +13,7 @@
 		
 			# Find the first word in the text  also present in the list, starting from index 0
 			
-			# If none of the words in the list have index 0 in the text string, remove it from the text string, otherwise..
-		
-			# If the found word is not null, get its index (which will be 0)
+			# Find the word's frequency, and if higher than the previous one dub it as candidate for the word with the highest frequency
 		
 			# If the word is not already in the result list of words : 
 
@@ -26,8 +24,6 @@
 		
                 		    # If the word is in the input list, remove it
 
-		
-		# Find the frequency of each word and return the one with the highest value, giving priority to the one with alphabetical precedence
 		
 		# Return the tuple of the previous steps
 		
