@@ -27,7 +27,7 @@ def es1(voti):
     sorted_voti = sorted(voti)
 
     return_list = []
-    voto_massimo_assegnato = sorted_voti[len(sorted_voti)-1]
+    voto_massimo_assegnato = sorted_voti[-1]
     # i ->  voto di riferimento, nonché indice della lista di ritorno
     # voto -> voto singolo studente
     for i in range(voto_massimo_assegnato+1):
@@ -39,4 +39,5 @@ def es1(voti):
             return_list.append(len(sorted_voti))
         
     return return_list
-
+voti=[7,5,8,3,7,2,9]
+print(es1(voti))
