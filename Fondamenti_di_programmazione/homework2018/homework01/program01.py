@@ -33,8 +33,8 @@ def es1(voti):
     for i in range(voto_massimo_assegnato+1):
         try:
             vote_index = sorted_voti.index(i)
-            return_list.append(len(sorted_voti[vote_index:]))
             sorted_voti = sorted_voti[vote_index+1:]
+            return_list.append(len(sorted_voti)+1)
         except:
             return_list.append(len(sorted_voti))
         
