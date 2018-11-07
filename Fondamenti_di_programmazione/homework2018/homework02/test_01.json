@@ -1,0 +1,30 @@
+{
+    "Tisana" : {
+        "filename" : "cp1_Tisana.txt", 
+	"expected" : "CAMOMILLA"
+	},
+    "Animali" : {
+        "filename" : "cp2_Animali.txt", 
+	"expected" : "PANTERA"
+       	}, 
+    "Sport" : {
+        "filename" : "cp3_Sport.txt", 
+	"expected" : "CALCIO"
+    },
+    "pio4Mestieri" : {
+        "filename" : "cp4_Mestieri.txt", 
+	"expected" : "ARCHEOLOGO"
+   	}, 
+    "Colori" : {
+        "filename" : "cp5_Colori.txt", 
+	"expected" : "SANGUEBLU"
+       	}, 
+    "Pensiero" : {
+        "filename" : "cp6_Pensiero.txt",
+        "expected" : "lartequandoeveraelapiucompletarappresentazionedelleesperienzeumane"
+	},
+    "100_places" : {
+        "filename" : "cp7_100_places_to_go.txt",
+        "expected" : "BKXLLPLKJTWYVLLRMQQVMBQMZQLJTTRLJLRYLPMQYTRNLNLPZQLMBRVJZRQMJRYWTDRRVZBDRRTTZPJYLLBMGRLYYRLYPGQVXZJQYNKZBRNDXRTDDTYDTLLNYGQNDZMMMQBRTMQMKXKTRPNRPNMBTMTZNNGMMYTYLBNTYDMKBKVQYRDNTGBXBDMJJYDLBGKBKQZMLZXTPRRVZRDDRDNTQTTYXBLKGZWNZVVDVMDMLWZNLYBYTDKTDNTZDNNZXMXYYMMXGTVQNNDZVJZMQXBLQY"
+	}
+}

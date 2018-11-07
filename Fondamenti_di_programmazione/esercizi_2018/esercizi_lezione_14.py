@@ -126,4 +126,94 @@ def palazzo_coperto(lista):
 
     
 
-print(palazzo_coperto(lista)) 
+#print(palazzo_coperto(lista)) 
+
+'''
+4. Si scriva la funzione palazzi_scoperti(lista) che torna la lista dei soli palazzi non coperti
+   neanche parzialmente dagli altri 
+   (se vengono disegnati nell'ordine dato senza riordinarli).
+   Esempio:
+       tupla ( coordinata_x, colore, altezza )
+   oroginale   
+ lista =
+     [(216, (54, 234, 22), 106),
+		 (740, (94, 236, 163), 71),
+		 (21, (49, 140, 100), 717),
+		 (137, (204, 5, 140), 717),
+		 (922, (15, 244, 140), 569),
+		 (52, (2, 98, 163), 514),
+		 (961, (138, 58, 166), 605),
+		 (396, (116, 149, 25), 448),
+		 (586, (129, 196, 183), 467),
+		 (347, (218, 229, 143), 253)]
+>>> palazzi_scoperti(lista)
+[(740, (94, 236, 163), 71),
+ (52, (2, 98, 163), 514),
+ (961, (138, 58, 166), 605),
+ (586, (129, 196, 183), 467),
+ (347, (218, 229, 143), 253)]
+'''
+def palazzi_scoperti_old(lista):
+    scoperti = []
+    for i, P1 in enumerate(lista):
+        x1, _, _ = P1
+        for P2 in lista[i+1:]:
+            x2, _, _ = P2
+            if abs(x1-x2) < 100:
+                break
+        else:
+            scoperti.append(P1)		# P1 è ok solo se NON siamo usciti dal ciclo più interno con un break
+    return scoperti
+
+
+def palazzi_scoperti(lista):            
+    scoperti = [P1 for i, P1 in enumerate(lista)
+                        if all(map(lambda P2 : abs(P1[0]-P2[0])>=100  ,lista[i+1:]))]
+        
+        
+        
+    return scoperti
+        
+           
+        
+        
+
+
+lista =  [(216, (54, 234, 22), 106),
+		 (740, (94, 236, 163), 71),
+		 (21, (49, 140, 100), 717),
+		 (137, (204, 5, 140), 717),
+		 (922, (15, 244, 140), 569),
+		 (52, (2, 98, 163), 514),
+		 (961, (138, 58, 166), 605),
+		 (396, (116, 149, 25), 448),
+		 (586, (129, 196, 183), 467),
+		 (347, (218, 229, 143), 253)]
+
+
+print(palazzi_scoperti(lista))
+
+'''
+5. Definire usando l'istruzione yield un iteratore quadrati_cubi(L) che, data la lista L genera i quadrati ed i cubi degli 
+   elementi, alternati.
+   Esempio:
+>>> lista = [1, 2, 3, 4, 5]
+>>> list(quadrati_cubi(lista))
+[1, 1, 4, 8, 9, 27, 16, 64, 25, 125 ]
+'''
+
+
+def quadrati_cubi(L):
+    for el in L:
+        yield el**2
+        yield el**3
+        
+def quadrati_cubi_comprehension(L):
+
+    return ( el**potenza for el in L for potenza in [2,3])
+    
+print(list(quadrati_cubi([1,2,3,4,5])))
+print(list(quadrati_cubi_comprehension([1,2,3,4,5])))
+    
+
+
