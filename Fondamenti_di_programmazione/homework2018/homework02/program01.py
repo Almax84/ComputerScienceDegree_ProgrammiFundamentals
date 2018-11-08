@@ -118,6 +118,16 @@ def es1(ftesto):
         
         diagramma = list(map(lambda el: el.split("\t"),list(filter(lambda line : '\t' in line ,testo))))
         lista_parole = list(filter(lambda line : '\t' not in line and len(line)>0, testo))
+        diagramma_upper = list(map(lambda x : list(map(lambda word: word.upper() ,x)), diagramma))
+        lista_parole_upper = map( lambda x : x.upper(), lista_parole  )
+        #controllo parole su righe da dx e sx
+        for riga in diagramma_upper:
+            stringa_diagramma = ''
+            for char in riga:
+                stringa_diagramma+=char
+                print(stringa_diagramma)
+                if stringa_diagramma in lista_parole_upper or stringa_diagramma[::-1] in lista_parole_upper:
+                    print(stringa_diagramma)
 
             
     print(diagramma)
