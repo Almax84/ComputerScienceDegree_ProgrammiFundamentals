@@ -75,6 +75,11 @@ T	G	T	E	K	C	I	R	C	T
 U	U	O	M	S	I	D	O	P	R
 A	P	A	L	L	A	V	O	L	O
 
+diagonale superiore (contiene la diagonale principale)
+
+diagonale inferiore
+
+
 
 
 ALPINISMO
