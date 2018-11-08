@@ -112,25 +112,69 @@ def es1(ftesto):
     '''Implementare la funzione qui'''
     diagramma = []
     lista_parole = []
+    lista_coordinate = []
     with open(ftesto,'r', encoding='utf-8') as file:
         testo = file.read().splitlines()
         
         
         diagramma = list(map(lambda el: el.split("\t"),list(filter(lambda line : '\t' in line ,testo))))
         lista_parole = list(filter(lambda line : '\t' not in line and len(line)>0, testo))
-        diagramma_upper = list(map(lambda x : list(map(lambda word: word.upper() ,x)), diagramma))
-        lista_parole_upper = map( lambda x : x.upper(), lista_parole  )
+        diagramma_upper = list(map(lambda x : ''.join( list(map(lambda word: word.upper() ,x)) ), diagramma))
+        lista_parole_upper = list(map( lambda x : x.upper(), lista_parole  ))
+        
+        #print(diagramma_upper)
+      
         #controllo parole su righe da dx e sx
-        for riga in diagramma_upper:
-            stringa_diagramma = ''
-            for char in riga:
-                stringa_diagramma+=char
-                print(stringa_diagramma)
-                if stringa_diagramma in lista_parole_upper or stringa_diagramma[::-1] in lista_parole_upper:
-                    print(stringa_diagramma)
+        for i,riga_diagramma in enumerate(diagramma_upper):
+            for parola in lista_parole_upper:
+                parola_reversed = parola[::-1]
+                if parola in riga_diagramma:
+                    indice_riga = riga_diagramma.find(parola)
+                    #print(parola, " in ", riga_diagramma, " index: ", indice_riga)
+                    coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
+                    lista_coordinate+=coordinate_parola
+                    #print(coordinate_parola)
+                elif  parola_reversed in riga_diagramma:
+                    indice_riga = riga_diagramma.find(parola_reversed)
+                    #print(parola_reversed, " in ", riga_diagramma, " index: ", riga_diagramma.find(parola_reversed))
+                    coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
+                    lista_coordinate+=coordinate_parola
+
+        lista_colonne = find_colonne(diagramma_upper)   
 
             
-    print(diagramma)
-    print(lista_parole)
+        #controllo parole su colonne alto verso basso e viceversa
+        #print(lista_colonne)
+        
+        for j, colonna_diagramma in enumerate(lista_colonne):
+            
+            for parola in lista_parole_upper:
+                parola_reversed = parola[::-1]
+                if parola in colonna_diagramma:
+                    indice_colonna = colonna_diagramma.find(parola)
+                    #print(parola, " in ", colonna_diagramma, " index: ", indice_colonna)
+                    coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola)+indice_colonna)]
+                    lista_coordinate+=coordinate_parola
+                    #print(coordinate_parola)
+                if parola_reversed in colonna_diagramma:
+                    indice_colonna = colonna_diagramma.find(parola_reversed)
+                    #print(parola_reversed, " in ", colonna_diagramma, " index: ", indice_colonna)
+                    coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola_reversed)+indice_colonna)]
+                    lista_coordinate+=coordinate_parola
+                    #print(coordinate_parola)
+        print(lista_coordinate)
+
+def find_colonne(diagramma_upper):
+        lista_colonne = []
+        for j in range(len(diagramma_upper[0])):
+            colonna = []
+            colonna_string = ''
+            for i in range(len(diagramma_upper)):
+                colonna.append(diagramma_upper[i][j])
+                colonna_string = ''.join(colonna)
+            lista_colonne.append(colonna_string)
+        return lista_colonne
+            
+
 
 es1("C:/universita/ComputerScienceDegree_ProgrammiFundamentals/Fondamenti_di_programmazione/homework2018\homework02/cp3_Sport.txt")
