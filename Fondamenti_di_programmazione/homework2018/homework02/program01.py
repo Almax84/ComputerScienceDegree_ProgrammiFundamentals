@@ -167,7 +167,88 @@ def es1(ftesto):
                     coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola_reversed)+indice_colonna)]
                     lista_coordinate+=coordinate_parola
                     #print(coordinate_parola)
-        print(lista_coordinate)
+                    
+                    
+
+'''
+diagonali:
+    11 12 13 14
+    21 22 23 24
+    31 32 33 34
+    41 42 43 44
+    51 52 53 54
+    
+ /
+11 
+12 21
+13 22 31
+14 23 32 41
+24 33 42 51
+34 43 52
+44 53
+54
+
+ci sono k+1 elementi
+H = 5
+W = 4
+
+H + W - 2 iterazioni (comprese)
+
+
+
+k = 0
+00
+k = 1
+01 10
+k=2
+02 11 20
+k=3
+03 12 21 30
+k=4
+13 22 31 40
+k=5
+23 32 41
+k=6
+33 42
+k=7
+43
+
+    
+da basso a sx a in alto a dx
+
+i
+
+'''
+def find_diagonal_back_slash(diagramma_upper):
+    h = len(diagramma_upper)
+    w = len(diagramma_upper[0])
+    return_list = []
+    
+    for k in range(h+w-1):
+       
+        if k == 0:
+            print("k=",k)
+            i = 0
+            j = 0
+            print(i," ", j)
+        elif k < w:
+            print("k=",k)
+            for l in range(k+1):
+                i = l
+                j = k-l
+                print(i," ", j)
+        else:
+            print("k=",k, " w=",w)
+            for l in range(k-w+1,k+1):
+                i = l
+                j = k-l
+                if i>w or j>h:
+                    break
+                
+                print(i," ", j)
+            
+find_diagonal_back_slash([[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]])            
+
 
 def find_colonne(diagramma_upper):
         lista_colonne = []
