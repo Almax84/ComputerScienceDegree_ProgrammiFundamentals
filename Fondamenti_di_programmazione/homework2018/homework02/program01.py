@@ -36,75 +36,47 @@ diagonali:
     anti diagonale da dx a sx 
     
     
-    d. p secondaria
-    
-    
-11 12 13 14
-21 22 23 24
-31 32 33 34
-41 42 43 44
 
-anti diagonale principale
-41 32 23 14 
-i = len(righe)-1
-j =  1+0  incrementato fino a len(righe) (len colonne?)
-
-
-seconda - a-d secondaa
-42 33 24
-43 34
-44
-
-i = len(righe) -1
-j = 1+ 1 fino a che j = len(colonne)
+    0   1   2   3   4   5   6   7   8   9
+0   C	O	I	H	C	C	E	P	S	B
+1   I	N	O	I	Z	I	R	F	I	A
+2   E	D	E	N	T	I	A	G	A	C
+3   T	E	C	A	S	C	O	R	O	C
+4   N	O	H	P	M	D	U	I	N	O
+5   E	S	A	E	I	T	L	N	I	N
+6   N	P	N	N	N	G	A	O	D	C
+7   A	A	I	I	A	O	C	I	N	I
+8   M	Z	T	T	I	M	C	Z	A	A
+9   R	Z	E	T	I	O	A	O	V	T
+10   E	O	R	E	L	L	S	L	A	U
+11   P	L	A	P	I	E	G	A	L	R
+12   M	A	N	I	C	U	R	E	R	E
 
 
-
-
-O	M	S	I	N	I	P	L	A	P
-M	C	A	P	E	L	O	T	A	A
-S	O	I	C	N	A	L	M	L	L
-I	C	B	A	S	E	B	A	L	L
-L	I	C	S	T	P	N	R	I	A
-I	O	I	I	O	U	A	C	P	C
-B	T	C	L	O	L	O	I	P	A
-O	A	O	T	L	A	S	A	I	N
-M	L	O	Y	A	S	R	O	C	E
-O	I	S	C	H	E	R	M	A	S
-T	G	T	E	K	C	I	R	C	T
-U	U	O	M	S	I	D	O	P	R
-A	P	A	L	L	A	V	O	L	O
-
-diagonale superiore (contiene la diagonale principale)
-
-diagonale inferiore
-
-
-
-
-ALPINISMO
-ATLETICA
-AUTOMOBILISMO
-BASEBALL
-CORSA
-CRICKET
-IPPICA
-LANCIO
-MARCIA
-NUOTO
-PALLACANESTRO
-PALLAVOLO
-PELOTA
-PODISMO
-POLO
-PUGILATO
-RALLY
-SALTO
-SCHERMA
-SCI
+ACCONCIATURE
+BIGODINI
+CASCO
+DENTI
+FRIZIONI
+LACCA
+LAVANDINO
+LOZIONI
+MANICURE
+ONDE
+PERMANENTE
+PETTINE
+PHON
+PIEGA
+RASOI
+RETINA
+SPAZZOLA
+SPECCHIO
+TAGLIO
+TINTURA
 
 
 ''' 
+
 
 
 def es1(ftesto):
@@ -117,12 +89,9 @@ def es1(ftesto):
         
         
         diagramma_n = list(map(lambda el: el.split("\t"),list(filter(lambda line : '\t' in line ,testo))))
-        lista_parole_n = list(filter(lambda line : '\t' not in line and len(line)>0, testo))
-        diagramma = list(map(lambda x : ''.join( list(map(lambda word: word.upper() ,x)) ), diagramma_n))
-        lista_parole = list(map( lambda x : x.upper(), lista_parole_n  ))
-        
-        #print(diagramma)
-        #print(lista_parole)
+        lista_parole = list(filter(lambda line : '\t' not in line and len(line)>0, testo))
+        diagramma = list(map(lambda x : ''.join( list(map(lambda word: word ,x)) ), diagramma_n))
+        #lista_parole = list(map( lambda x : x.upper(), lista_parole_n  ))
         
                 #controllo parole su righe da dx e sx
         for i,riga_diagramma in enumerate(diagramma):
@@ -130,176 +99,131 @@ def es1(ftesto):
                 parola_reversed = parola[::-1]
                 if parola in riga_diagramma:
                     indice_riga = riga_diagramma.find(parola)
-                    #print(parola, " in ", riga_diagramma, " index: ", indice_riga)
                     coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
                     lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
                 elif  parola_reversed in riga_diagramma:
                     indice_riga = riga_diagramma.find(parola_reversed)
-                    #print(parola_reversed, " in ", riga_diagramma, " index: ", riga_diagramma.find(parola_reversed))
                     coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
                     lista_coordinate+=coordinate_parola
 
         lista_colonne = find_colonne(diagramma)   
 
             
-        #controllo parole su colonne alto verso basso e viceversa
-        #print(lista_colonne)
-        
+        # controllo parola su colonna
         for j, colonna_diagramma in enumerate(lista_colonne):
             
             for parola in lista_parole:
                 parola_reversed = parola[::-1]
                 if parola in colonna_diagramma:
                     indice_colonna = colonna_diagramma.find(parola)
-                    #print(parola, " in ", colonna_diagramma, " index: ", indice_colonna)
                     coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola)+indice_colonna)]
                     lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
                 if parola_reversed in colonna_diagramma:
                     indice_colonna = colonna_diagramma.find(parola_reversed)
-                    #print(parola_reversed, " in ", colonna_diagramma, " index: ", indice_colonna)
                     coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola_reversed)+indice_colonna)]
                     lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
                     
-        find_diagonal_back_slash(diagramma,lista_parole)        
+        lista_coordinate+=find_diagonal_forward_slash(diagramma,lista_parole, True)
+        lista_coordinate+=find_diagonal_forward_slash(diagramma,lista_parole, False)
+
+        diagramma_by_char = [list(riga) for riga in diagramma ]
+        #print(diagramma_by_char)
+        #print(lista_coordinate)
+        return_string = ''
+        for i,stringa_riga in enumerate(diagramma_by_char):
+            for j, char in enumerate(stringa_riga):
+                if tuple((i,j)) not in lista_coordinate:
+                    #print("coordinate non in lista coordinate ", i," ",j, char)
+                    return_string+= char
+        return return_string
     
-        
-
-
-
-
-
-def es1_bkp(ftesto):
-    '''Implementare la funzione qui'''
-    diagramma = []
-    lista_parole = []
-    lista_coordinate = []
-    with open(ftesto,'r', encoding='utf-8') as file:
-        testo = file.read().splitlines()
-        
-        
-        diagramma = list(map(lambda el: el.split("\t"),list(filter(lambda line : '\t' in line ,testo))))
-        lista_parole = list(filter(lambda line : '\t' not in line and len(line)>0, testo))
-        diagramma_upper = list(map(lambda x : ''.join( list(map(lambda word: word.upper() ,x)) ), diagramma))
-        lista_parole_upper = list(map( lambda x : x.upper(), lista_parole  ))
-        
-        #print(diagramma_upper)
-      
-        #controllo parole su righe da dx e sx
-        for i,riga_diagramma in enumerate(diagramma_upper):
-            for parola in lista_parole_upper:
-                parola_reversed = parola[::-1]
-                if parola in riga_diagramma:
-                    indice_riga = riga_diagramma.find(parola)
-                    #print(parola, " in ", riga_diagramma, " index: ", indice_riga)
-                    coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
-                    lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
-                elif  parola_reversed in riga_diagramma:
-                    indice_riga = riga_diagramma.find(parola_reversed)
-                    #print(parola_reversed, " in ", riga_diagramma, " index: ", riga_diagramma.find(parola_reversed))
-                    coordinate_parola = [(i,j) for j in range(indice_riga, len(parola)+indice_riga)]
-                    lista_coordinate+=coordinate_parola
-
-        lista_colonne = find_colonne(diagramma_upper)   
-
-            
-        #controllo parole su colonne alto verso basso e viceversa
-        #print(lista_colonne)
-        
-        for j, colonna_diagramma in enumerate(lista_colonne):
-            
-            for parola in lista_parole_upper:
-                parola_reversed = parola[::-1]
-                if parola in colonna_diagramma:
-                    indice_colonna = colonna_diagramma.find(parola)
-                    #print(parola, " in ", colonna_diagramma, " index: ", indice_colonna)
-                    coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola)+indice_colonna)]
-                    lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
-                if parola_reversed in colonna_diagramma:
-                    indice_colonna = colonna_diagramma.find(parola_reversed)
-                    #print(parola_reversed, " in ", colonna_diagramma, " index: ", indice_colonna)
-                    coordinate_parola = [(i,j) for i in range(indice_colonna, len(parola_reversed)+indice_colonna)]
-                    lista_coordinate+=coordinate_parola
-                    #print(coordinate_parola)
-
-                    
+    
 
 #da alto a sinistra in giu
-def find_diagonal_back_slash(diagramma,lista_parole):
+def find_diagonal_forward_slash(diagramma,lista_parole, forward):
     h = len(diagramma)
     w = len(diagramma[0])
     range_list = []
     
+    verso = 0
+    verso_fatt_molt = 1
+    if not forward:
+        verso = h - 1 
+        verso_fatt_molt = -1
+    
     
     for k in range(h+w-1):
-        print("==============================")
         if k == 0:
-            #print("k=",k)
-            i = 0
+            i = 0 + verso
             j = 0
-            print(i," ", j)
         elif k < w:
-            #print("k=",k)
             diagonal_word = ''
             temp_list = []
             for l in range(k+1):
-                i = l
+                i = verso + l * verso_fatt_molt
                 j = k-l
-                print(i," ", j)
-                temp_list.append(tuple((i,j)))
-                diagonal_word+=diagramma[i][j]
-            #print( diagonal_word)
+                try:
+                    temp_list.append(tuple((i,j)))
+                    diagonal_word+=diagramma[i][j]
+                except:
+                    #print(i,j)
+                    pass
+            #print(diagonal_word)
             word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
             if word_in_list:
-                #print("found: ", diagonal_word)
-                #print("diagonal index range: ", temp_list)
-                #print("word index range: ", temp_list)
-                range_list.append(indexes)
+                #print("trovata:", diagonal_word)
+                range_list += [xy for xy in indexes]
             
-                
+                            
         else:
-            #print("k=",k, " w=",w)
             diagonal_word = ''
             temp_list = []
             for l in range(k-w+1,k+1):
-                i = l
+                i = verso + l * verso_fatt_molt
                 j = k-l
-                if i>w or j>h:
-                    break
-                temp_list.append(tuple((i,j)))
-                diagonal_word+=diagramma[i][j]
-                print(i, " ", j)
-            #print( diagonal_word)
+                try:
+                    if i < 0 or j < 0:
+                        break
+                    
+                    temp_list.append(tuple((i,j)))
+                    diagonal_word+=diagramma[i][j]
+                except:
+                    pass
+                
+                
+            #print(diagonal_word)
             word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
             if word_in_list:
-                #print("found: ", diagonal_word)
-                #print("diagonal index range: ", temp_list)
-                #print("word index range: ", temp_list)
-                range_list.append(indexes)
+                #print("trovata:", diagonal_word, " ", indexes)
+                range_list += [xy for xy in indexes]
+                
+            #print(range_list)
+    return range_list
+        
 
                 
 def is_word_in_list(diagonal_string, list_words,index_list):
+        #print("is word in list: ",diagonal_string)
+        word_index = []
+        found = False
         for w in list_words:
-            diagonal_reversed = diagonal_string[::-1]
+            #diagonal_reversed = diagonal_string[::-1]
+            word_reversed = w[::-1]
             if w in diagonal_string :
                 word_start_index = diagonal_string.index(w)
-                word_index = index_list[word_start_index:word_start_index+len(w)]
-                return True, word_index
-            elif w in  diagonal_reversed :
-                word_start_index = diagonal_string.index(diagonal_reversed)
-                word_index = index_list[word_start_index:word_start_index+len(w)]
-                return True,word_index
-                
-        return False, []
-
-
-
-
-#find_diagonal_back_slash([[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]])            
+                word_index += index_list[word_start_index:word_start_index+len(w)]
+                #return True, word_index
+                found = True
+            elif word_reversed in  diagonal_string :
+                word_start_index = diagonal_string.index(word_reversed)
+                #print("index_list ",index_list)
+                word_index += index_list[word_start_index:word_start_index+len(w)]
+                #word_index= [x[::-1] for _,x in enumerate(index_list[word_start_index:word_start_index+len(w)]) ]
+                #print("indexes for word: ", w, " ", word_index)
+                #return True,word_index
+                found = True
+        return found, word_index       
+        #return False, []
 
 
 def find_colonne(diagramma_upper):
@@ -314,4 +238,4 @@ def find_colonne(diagramma_upper):
         return lista_colonne
             
 
-es1("C:/universita/ComputerScienceDegree_ProgrammiFundamentals/Fondamenti_di_programmazione/homework2018\homework02/cp3_Sport.txt")
+#print(es1("cp1_Tisana.txt"))
