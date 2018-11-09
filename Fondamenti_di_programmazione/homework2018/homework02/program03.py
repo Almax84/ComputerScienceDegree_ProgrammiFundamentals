@@ -11,7 +11,7 @@ Se il robottino si trova nel quadratino di coordinate (x,y):
 -  l'intero +A positivo indica uno spostamento in verticale fino al quadrato (x,y+|A|)
 -  l'intero -A negativo indica uno spostamento in orizzontale della griglia fino al quadrato (x+|A|,y)
 Una sequenza di interi (positivi o negativi) indica dunque un percorso del robottino.
-Ad esempio se il robottino e' nel quadrato (1,1), la sequenza 5,-2,-2,2,4 lo porta nel quadrato (9,8). 
+Ad esempio se il robottino e' nel quadrato (1,1), la sequenza 5,-2,-2,2,-4 lo porta nel quadrato (9,8). 
 
 Ci vengono forniti un insieme I di quadrati della griglia indicati dalle loro coordinate (x,y)
 e due percorsi di due robottini, che partono entrambi dal quadrato (1,1) e terminano in uno stesso quadrato.

@@ -12,7 +12,7 @@ Come esempio si veda il file "fp1.txt".
   
 Per ognuna delle parole estrapolate si vogliono ora ricavare le seguenti informazioni: 
 I1) Il numero totale di occorrenze della parola nei post,
-I2) l'insieme  degli identificativi dei post in cui la parola compare,
+I2) il numero di post in cui la parola compare,
 I3) la coppia (occorrenze, post) dove nella seconda coordinata si ha l'identificativo del post 
 in cui la parola e' comparsa piu' spesso e nella prima il numero di volte che vi e' comparsa,
 (nel caso di  diversi post con pari numero massimo di occorrenze della parola va considerato 
@@ -31,13 +31,13 @@ La tabella va restituita sotto forma di lista di dizionari dove
 ciascun dizionario ha 4 chiavi: 'parola', 'I1','I2' e 'I3' e ad ogni chiave e'
 associata la relativa informazione attinente la parola.
 Ad esempio per il file di testo fp1.txt la funzione restituira' la lista:
-[{'I1': 6, 'I2': {'30', '1', '21'}, 'I3': (3, '30'), 'parola': 'hw1'},
- {'I1': 3, 'I2': {'30', '1'},       'I3': (2, '30'), 'parola': 'python'},
- {'I1': 2, 'I2': {'1'},             'I3': (2,  '1'), 'parola': 'hw2'},
- {'I1': 1, 'I2': {'21'},            'I3': (1, '21'), 'parola': '30'},
- {'I1': 1, 'I2': {'30'},            'I3': (1, '30'), 'parola': 'monti'},
- {'I1': 1, 'I2': {'1'},             'I3': (1,  '1'), 'parola': 'spognardi'},
- {'I1': 1, 'I2': {'21'},            'I3': (1, '21'), 'parola': 'sterbini'}
+[{'I1': 6, 'I2': 3, 'I3': (3, '30'), 'parola': 'hw1'},
+ {'I1': 3, 'I2': 2, 'I3': (2, '30'), 'parola': 'python'},
+ {'I1': 2, 'I2': 1, 'I3': (2,  '1'), 'parola': 'hw2'},
+ {'I1': 1, 'I2': 1, 'I3': (1, '21'), 'parola': '30'},
+ {'I1': 1, 'I2': 1, 'I3': (1, '30'), 'parola': 'monti'},
+ {'I1': 1, 'I2': 1, 'I3': (1,  '1'), 'parola': 'spognardi'},
+ {'I1': 1, 'I2': 1, 'I3': (1, '21'), 'parola': 'sterbini'}
  ]
 
 NOTA: il timeout previsto per questo esercizio è di XXX secondi per ciascun test.
