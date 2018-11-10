@@ -3,8 +3,10 @@ I messaggi scambiati all'interno di un forum sono stati sottoposti ad uno studio
 Dai  vari post  sono state estrapolate parole significative e questi dati sono stati poi
 raccolti in un  file di testo.
 Nel file, l'inizio di ciascun post e' marcato da una linea che contiene  la stringa
-"<POST>" e un intero utilizzato come identificativo del post (che nel seguito dovete lasciare come stringa).
-la stringa e l'identificativo possono essere preceduti e seguiti da un numero arbitrario (anche 0) di spazi.
+"<POST>" e un intero utilizzato come identificativo del post (che nel seguito dovete 
+lasciare come stringa).
+la stringa e l'identificativo possono essere preceduti e seguiti da un numero arbitrario (anche 0)
+ di spazi.
 Le parole estrapolate  dal  post sono  nelle linee successive (zero  o piu' parole per 
 linea) fino alla linea che marca il prossimo post 
 o la fine del file.
@@ -49,5 +51,9 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
         
 
 def es2(fposts):
-    '''Implementare la funzione qui'''
+    with open(fposts, 'r', encoding='utf-8') as file:
+        splitted_text = file.read().splitlines()
+        splitted_text = list(filter(lambda x : x != '',list(map(lambda x: x.strip(" "), splitted_text))))
+        print(splitted_text)
 
+es2("fp1.txt")
