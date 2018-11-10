@@ -52,8 +52,18 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 
 def es2(fposts):
     with open(fposts, 'r', encoding='utf-8') as file:
-        splitted_text = file.read().splitlines()
-        splitted_text = list(filter(lambda x : x != '',list(map(lambda x: x.strip(" "), splitted_text))))
-        print(splitted_text)
+        splitted_text =' '.join(file.read().splitlines())
+        posts = list(map(lambda x: x.strip(' '),list(filter(lambda x: x != '',splitted_text.split("<post>")))))
+        #splitted_text = list(filter(lambda x : x != '',list(map(lambda x: x.strip(" "), splitted_text))))
+        
+        return_list = []
+        
+        for post in posts:
+            words_in_post = post.split(" ")
+            print(words_in_post)
+            
+    
+        
+        print(posts)
 
 es2("fp1.txt")
