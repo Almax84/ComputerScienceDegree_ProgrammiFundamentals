@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov 10 13:13:57 2018
+
+@author: david
+"""
+
+1 - open the input text file 
+ 1a ) use filter and map functions to fetch the words diagram
+ 1b ) use the filter and map functions to fetch the list of words
+ 
+2 - fetch all rows of the diagram as string and for each of them 
+    see if there is a word included in both directions. 
+    Save all the indexes of the chars of the found words
+    
+3 - fetch all columns of the diagram as string and for each of them 
+    see if there is a word included in both directions. 
+    Save all the indexes of the chars of the found words
+    
+4 - fetch all the diagonals of the diagram as string and for each of them 
+    see if there is a word included in both directions. 
+    The diagonals will be found starting from the top left corner and moving southward
+    and starting from the bottom left corner  and moving northward
+    Save all the indexes of the chars of the found words
+
+5 - build a string composed of all the chars in the diagrams whose indexes is not included
+    in the list of indexes found in the previous points
