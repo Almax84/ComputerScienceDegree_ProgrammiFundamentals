@@ -7,9 +7,13 @@ def es2(fposts):
 
         # get list of words
         words = set()
+        post_dict = dict()
         for post in posts:
-            words_post =  {x for x in post.split(" ")[1:] if x != ''}
-            words |= words_post
+            post_splitted = post.split(" ")
+            post_id = post_splitted[0]
+            words_post = [x for x in post_splitted[1:] if x != '']
+            post_dict[post_id] = words_post
+            words |= set(words_post)
 
 
         max_dict = dict()
@@ -21,12 +25,11 @@ def es2(fposts):
             word_max_occurrence_in_post = 0
 
             posts_parola = 0
+            for id_post, splitted_post_no_id in post_dict.items():
 
-            for post in posts:
-
-                splitted_post = post.split(" ")
-                id_post = splitted_post[0]
-                splitted_post_no_id = [x for x in splitted_post[1:] if x != '']
+                # splitted_post = post.split(" ")
+                # id_post = splitted_post[0]
+                # splitted_post_no_id = [x for x in splitted_post[1:] if x != '']
                 word_count = splitted_post_no_id.count(word)
                 occorrenze_parola_in_tutti_i_post += word_count
                 if word in splitted_post_no_id:
