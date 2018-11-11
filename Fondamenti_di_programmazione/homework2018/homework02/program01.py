@@ -164,8 +164,11 @@ def find_colonne(diagramma_upper):
             colonna = []
             colonna_string = ''
             for i in range(len(diagramma_upper)):
-                colonna.append(diagramma_upper[i][j])
-                colonna_string = ''.join(colonna)
+                try:
+                    colonna.append(diagramma_upper[i][j])
+                    colonna_string = ''.join(colonna)
+                except:
+                    pass
             lista_colonne.append(colonna_string)
         return lista_colonne
             
