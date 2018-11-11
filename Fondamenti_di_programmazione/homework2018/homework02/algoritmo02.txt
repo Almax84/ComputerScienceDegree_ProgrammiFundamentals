@@ -1,1 +1,26 @@
-algoritmo02 TO BE DONE
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov 10 13:13:57 2018
+
+@author: david
+"""
+
+1 - open the input text file 
+ 1a ) use filter and map functions to get a list of posts
+ 1b ) loop throught the posts and build a map where: the key is the post id
+      and the values are the words in the post
+ 2b ) in the same loop build a set of words
+ 
+2 - For every word contained in the set:
+    
+    
+    2a) loop through the map of posts
+        2aa) find the occurrence of a word in every single post and add it to a temp
+            variable to find the total amount of occurrences in the posts
+        2ab) find the number of posts where the word occurs
+        2ac) find the frequency of the word in the post and if higher than the previous one update a temp variable
+    3) build a dict containing the infos found in the previous loop, i.e. I1, I2, I3
+    4) add the dict to the list to be returned a the end
+    
+4) sort the list throught a custom key logic
+    

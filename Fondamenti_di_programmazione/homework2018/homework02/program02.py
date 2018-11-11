@@ -11,10 +11,10 @@ def es2(fposts):
         for post in posts:
             post_splitted = post.split(" ")
             post_id = post_splitted[0]
+            #words_post = list(filter( lambda x : x != '',post_splitted[1:]))
             words_post = [x for x in post_splitted[1:] if x != '']
             post_dict[post_id] = words_post
             words |= set(words_post)
-
 
         max_dict = dict()
 
@@ -24,25 +24,24 @@ def es2(fposts):
 
             word_max_occurrence_in_post = 0
 
-            posts_parola = 0
+            posts_contenenti_parola = 0
             for id_post, splitted_post_no_id in post_dict.items():
 
-                # splitted_post = post.split(" ")
-                # id_post = splitted_post[0]
-                # splitted_post_no_id = [x for x in splitted_post[1:] if x != '']
-                word_count = splitted_post_no_id.count(word)
-                occorrenze_parola_in_tutti_i_post += word_count
-                if word in splitted_post_no_id:
-                    posts_parola += 1
 
-                if word_count > word_max_occurrence_in_post:
-                    max_dict[word] = [word_count, id_post]
-                    word_max_occurrence_in_post = word_count
-                elif word_count == word_max_occurrence_in_post and max_dict.get(word) is not None and id_post < \
+                if word in splitted_post_no_id:
+                    posts_contenenti_parola += 1
+                    word_count = splitted_post_no_id.count(word)
+                    occorrenze_parola_in_tutti_i_post += word_count
+                else:
+                    continue
+
+                if word_count > word_max_occurrence_in_post or word_count == word_max_occurrence_in_post and max_dict.get(
+                        word) is not None and id_post < \
                         max_dict.get(word)[1]:
                     max_dict[word] = [word_count, id_post]
+                    word_max_occurrence_in_post = word_count
 
-            word_dict = {"parola": word, "I1": occorrenze_parola_in_tutti_i_post, "I2": posts_parola,
+            word_dict = {"parola": word, "I1": occorrenze_parola_in_tutti_i_post, "I2": posts_contenenti_parola,
                          "I3": tuple((max_dict.get(word)[0], max_dict.get(word)[1]))}
             return_list.append(word_dict)
 
@@ -50,8 +49,6 @@ def es2(fposts):
     return return_list
 
 
-
 def sort_logic(k):
     return (-k['I1'], k['parola'], -int(k['I3'][1]),)
 
-#print(es2("fp1.txt"))
