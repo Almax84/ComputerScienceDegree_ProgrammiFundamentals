@@ -6,61 +6,70 @@ def es1(ftesto):
         diagramma_n = list(map(lambda el: el.split("\t"), list(filter(lambda line: '\t' in line, testo))))
         lista_parole = list(filter(lambda line: '\t' not in line and len(line) > 0, testo))
         diagramma = list(map(lambda x: ''.join(list(map(lambda word: word, x))), diagramma_n))
-        diagramma_to_remove_items = diagramma.copy()
 
         # controllo parole su righe da dx e sx
-        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole,diagramma_to_remove_items)
+        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole)
 
         # controllo parola su colonna
         lista_colonne = find_colonne(diagramma)
-        lista_coordinate = find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole, diagramma_to_remove_items)
+        lista_coordinate = find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole)
 
         # cerco nelle diagonali ed anti diagonali
-        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, True,diagramma_to_remove_items)
-        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, False,diagramma_to_remove_items)
+        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, True)
+        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, False)
 
 
         return_string = ''
-        for i, stringa_riga in enumerate(diagramma_n):
-            for j, char in enumerate(stringa_riga):
-                if tuple((i, j)) not in lista_coordinate:
-                    return_string += char
+        coordinate = coordinate_i_j(diagramma_n)
+        for coordinata in coordinate:
+            if coordinata[1] not in lista_coordinate:
+                return_string += coordinata[0]
 
         return return_string
 
 
-def find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole, diagramma_to_remove_items):
+def coordinate_i_j(diagramma_n):
+        for i, stringa_riga in enumerate(diagramma_n):
+            for j, char in enumerate(stringa_riga):
+                yield char, tuple((i, j))
+
+def find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole):
     for j, colonna_diagramma in enumerate(lista_colonne):
         for parola in lista_parole:
-            parola_reversed = parola[::-1]
+
             if parola in colonna_diagramma:
                 indice_colonna = colonna_diagramma.find(parola)
                 coordinate_parola = [(i, j) for i in range(indice_colonna, len(parola) + indice_colonna)]
                 lista_coordinate += coordinate_parola
-            elif parola_reversed in colonna_diagramma:
-                indice_colonna = colonna_diagramma.find(parola_reversed)
-                coordinate_parola = [(i, j) for i in range(indice_colonna, len(parola_reversed) + indice_colonna)]
-                lista_coordinate += coordinate_parola
+            else:
+                parola_reversed = parola[::-1]
+
+                if parola_reversed in colonna_diagramma:
+                    indice_colonna = colonna_diagramma.find(parola_reversed)
+                    coordinate_parola = [(i, j) for i in range(indice_colonna, len(parola_reversed) + indice_colonna)]
+                    lista_coordinate += coordinate_parola
     return lista_coordinate
 
 
-def find_parole_in_righe(diagramma, lista_coordinate, lista_parole, diagramma_to_remove_items):
+def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
     for i, riga_diagramma in enumerate(diagramma):
         for parola in lista_parole:
-            parola_reversed = parola[::-1]
+
             if parola in riga_diagramma:
                 indice_riga = riga_diagramma.find(parola)
                 coordinate_parola = [(i, j) for j in range(indice_riga, len(parola) + indice_riga)]
                 lista_coordinate += coordinate_parola
-            elif parola_reversed in riga_diagramma:
-                indice_riga = riga_diagramma.find(parola_reversed)
-                coordinate_parola = [(i, j) for j in range(indice_riga, len(parola) + indice_riga)]
-                lista_coordinate += coordinate_parola
+            else:
+                parola_reversed = parola[::-1]
+                if parola_reversed in riga_diagramma:
+                    indice_riga = riga_diagramma.find(parola_reversed)
+                    coordinate_parola = [(i, j) for j in range(indice_riga, len(parola) + indice_riga)]
+                    lista_coordinate += coordinate_parola
     return lista_coordinate
 
 
 # da alto a sinistra in giu
-def find_diagonal_forward_slash(diagramma, lista_parole, forward, diagramma_to_remove_items):
+def find_diagonal_forward_slash(diagramma, lista_parole, forward):
     h = len(diagramma)
     w = len(diagramma[0])
     range_list = []
@@ -111,26 +120,29 @@ def is_word_in_list(diagonal_string, list_words, index_list):
     word_index = []
     found = False
     for w in list_words:
-        word_reversed = w[::-1]
+
+        lenght_word = len(w)
         if w in diagonal_string:
             word_start_index = diagonal_string.index(w)
-            word_index += index_list[word_start_index:word_start_index + len(w)]
-            # return True, word_index
+            word_index += index_list[word_start_index:word_start_index + lenght_word]
             found = True
-        elif word_reversed in diagonal_string:
-            word_start_index = diagonal_string.index(word_reversed)
-            # print("index_list ",index_list)
-            word_index += index_list[word_start_index:word_start_index + len(w)]
-            found = True
+        else:
+            word_reversed = w[::-1]
+            if word_reversed in diagonal_string:
+                word_start_index = diagonal_string.index(word_reversed)
+                word_index += index_list[word_start_index:word_start_index + lenght_word]
+                found = True
     return found, word_index
 
 
 def find_colonne(diagramma_upper):
     lista_colonne = []
-    for j in range(len(diagramma_upper[0])):
+    n_colonne = len(diagramma_upper[0])
+    n_righe = len(diagramma_upper)
+    for j in range(n_colonne):
         colonna = []
         colonna_string = ''
-        for i in range(len(diagramma_upper)):
+        for i in range(n_righe):
             try:
                 colonna.append(diagramma_upper[i][j])
                 colonna_string = ''.join(colonna)
@@ -140,4 +152,4 @@ def find_colonne(diagramma_upper):
     return lista_colonne
 
 
-print(es1("cp5_Colori.txt"))
+#print(es1("cp5_Colori.txt"))
