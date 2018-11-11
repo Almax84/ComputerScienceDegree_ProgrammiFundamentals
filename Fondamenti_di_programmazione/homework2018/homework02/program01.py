@@ -23,19 +23,10 @@ def es1(ftesto):
 
         diagramma_by_char = [list(riga) for riga in diagramma ]
 
-        '''
-        #print(diagramma_by_char)
-        #print(lista_coordinate)
-        return_string = ''.join([char for i, stringa_riga in enumerate(diagramma_by_char)
-                                    for j, char in enumerate(stringa_riga)
-                                        if tuple((i,j)) not in lista_coordinate])
-        '''
-    
         return_string = ''
         for i,stringa_riga in enumerate(diagramma_by_char):
             for j, char in enumerate(stringa_riga):
                 if tuple((i,j)) not in lista_coordinate:
-                    #print("coordinate non in lista coordinate ", i," ",j, char)
                     return_string += char
 
         return return_string
@@ -85,10 +76,7 @@ def find_diagonal_forward_slash(diagramma,lista_parole, forward):
     
     
     for k in range(h+w-1):
-        if k == 0:
-            i = 0 + verso
-            j = 0
-        elif k < w:
+        if k < w:
             diagonal_word = ''
             temp_list = []
             for l in range(k+1):
@@ -98,12 +86,9 @@ def find_diagonal_forward_slash(diagramma,lista_parole, forward):
                     temp_list.append(tuple((i,j)))
                     diagonal_word+=diagramma[i][j]
                 except:
-                    #print(i,j)
                     pass
-            #print(diagonal_word)
             word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
             if word_in_list:
-                #print("trovata:", diagonal_word)
                 range_list += [xy for xy in indexes]
             
                             
@@ -114,34 +99,26 @@ def find_diagonal_forward_slash(diagramma,lista_parole, forward):
                 i = verso + l * verso_fatt_molt
                 j = k-l
                 try:
-                    if i < 0 or j < 0:
-                        break
-                    
                     temp_list.append(tuple((i,j)))
-                    diagonal_word+=diagramma[i][j]
+                    diagonal_word += diagramma[i][j]
                 except:
                     pass
                 
                 
-            #print(diagonal_word)
             word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
             if word_in_list:
-                #print("trovata:", diagonal_word, " ", indexes)
                 range_list += [xy for xy in indexes]
                 
-            #print(range_list)
     return range_list
         
 
                 
 def is_word_in_list(diagonal_string, list_words,index_list):
-        #print("is word in list: ",diagonal_string)
         word_index = []
         found = False
         for w in list_words:
-            #diagonal_reversed = diagonal_string[::-1]
             word_reversed = w[::-1]
-            if w in diagonal_string :
+            if w in diagonal_string:
                 word_start_index = diagonal_string.index(w)
                 word_index += index_list[word_start_index:word_start_index+len(w)]
                 #return True, word_index
@@ -150,12 +127,8 @@ def is_word_in_list(diagonal_string, list_words,index_list):
                 word_start_index = diagonal_string.index(word_reversed)
                 #print("index_list ",index_list)
                 word_index += index_list[word_start_index:word_start_index+len(w)]
-                #word_index= [x[::-1] for _,x in enumerate(index_list[word_start_index:word_start_index+len(w)]) ]
-                #print("indexes for word: ", w, " ", word_index)
-                #return True,word_index
                 found = True
         return found, word_index       
-        #return False, []
 
 
 def find_colonne(diagramma_upper):
@@ -172,5 +145,3 @@ def find_colonne(diagramma_upper):
             lista_colonne.append(colonna_string)
         return lista_colonne
             
-
-#print(es1("cp1_Tisana.txt"))
