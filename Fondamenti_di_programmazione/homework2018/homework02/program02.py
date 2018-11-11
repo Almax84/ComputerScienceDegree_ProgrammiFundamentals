@@ -21,7 +21,7 @@ def es2(fposts):
             occorrenze_parola_in_tutti_i_post = 0
 
             word_max_occurrence_in_post = 0
-            word_occurrence_by_post = []
+
             posts_contenenti_parola = 0
             max_dict = dict()
             for id_post, splitted_post_no_id in post_dict.items():
@@ -31,15 +31,23 @@ def es2(fposts):
                     posts_contenenti_parola += 1
                     word_count = splitted_post_no_id.count(word)
                     occorrenze_parola_in_tutti_i_post += word_count
-                    word_occurrence_by_post.append(tuple((word_count, id_post)))
                 else:
                     continue
 
 
 
-            t = max(word_occurrence_by_post, key=lambda tupl: (tupl[0], -int(tupl[1])))
+                if word_count > word_max_occurrence_in_post or word_count == word_max_occurrence_in_post and max_dict.get(
+                        word) is not None and id_post < \
+                        max_dict.get(word)[1]:
+                    max_dict[word] = [word_count, id_post]
+                    word_max_occurrence_in_post = word_count
+
+
+
+
+
             word_dict = {"parola": word, "I1": occorrenze_parola_in_tutti_i_post, "I2": posts_contenenti_parola,
-                         "I3": t}
+                         "I3": tuple((max_dict.get(word)[0], max_dict.get(word)[1]))}
 
 
             return_list.append(word_dict)
@@ -51,4 +59,4 @@ def es2(fposts):
 def sort_logic(k):
     return (-k['I1'], k['parola'], -int(k['I3'][1]),)
 
-print(es2("fp3.txt"))
+print(es2("fp1.txt"))
