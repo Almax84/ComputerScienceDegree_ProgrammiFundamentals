@@ -52,18 +52,85 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 
 def es2(fposts):
     with open(fposts, 'r', encoding='utf-8') as file:
+        return_list = []
+        
         splitted_text =' '.join(file.read().splitlines())
         posts = list(map(lambda x: x.strip(' '),list(filter(lambda x: x != '',splitted_text.split("<post>")))))
-        #splitted_text = list(filter(lambda x : x != '',list(map(lambda x: x.strip(" "), splitted_text))))
         
-        return_list = []
+        posts_as_string = list( map(lambda x : ''.join(x[1:]), posts    )   )
+        
+        analyzed_words = set() # metti qui le parole analizzate per evitare di rifarlo successivamente
+        
+        max_dict = dict()
         
         for post in posts:
             words_in_post = post.split(" ")
-            print(words_in_post)
+            id_post = words_in_post[0]
+            
+            for i in range(1,len(words_in_post)):
+               word = words_in_post[i]
+               
+               if word == '' or word in analyzed_words:
+                   continue
+               
+               occorrenze_parola_in_tutti_i_post = 0
+               
+               word_max_occurrence_in_post = 0
+               
+               if word  and word != ' ' and word != '':
+                   analyzed_words.add(word)
+                   posts_parola = 0
+                   for post_as_string in posts_as_string:
+                       word_count = post_as_string.count(word)
+                       occorrenze_parola_in_tutti_i_post+=word_count
+                       if word in post_as_string:
+                           posts_parola+=1
+                                          
+                       if word_count  > word_max_occurrence_in_post:
+                           max_dict[word] = [word_count,id_post ]
+                           word_max_occurrence_in_post = word_count
+                       elif word_count == word_max_occurrence_in_post and max_dict.get(word) is not None and max_dict.get(word)[1] < id_post:
+                           max_dict[word] = [word_count,id_post ]
+                    
+            
+               word_dict = {"parola":word,"I1":occorrenze_parola_in_tutti_i_post,"I2":posts_parola,"I3":tuple((max_dict.get(word)[0],max_dict.get(word)[1]))}
+               return_list.append(word_dict)
+                
+                           
+        return_list = sorted(return_list, key=lambda k : (k['I1'], k['I3'][1], k['parola'] ), reverse = True )       
+                       
+                      
+                       
+                   #print(occorrenze_parola, " per parola", word, " numero post in cui appare: " , posts_parola)
             
     
-        
-        print(posts)
+        return return_list
+        #print(posts)
 
-es2("fp1.txt")
+'''
+Le righe della colonna devono essere ordinate rispetto all'informazione I1) decrescente, a parita' 
+del valore I1 vanno ordinate rispetto  alla cardinalita' decrescente dell'insieme degli itentificativi 
+ed a parita', rispetto all'ordine lessicografico delle parole. 
+'''
+def sort_logic(k):
+    
+    
+    '''
+    key = lambda x: (len(x[0]), x[0], x[1])
+
+This works because tuples (and lists) are compared by looking at each element in turn until a difference is found.
+ So when you want 
+to sort on multiple criteria in order of preference, just stick each criterion into an element of a tuple, in the same order.
+    '''
+    
+    occorrenze = k['I1']
+    numero_posts_dove_compare_parola = k['I2']
+    id_post = k['I3'][1]  
+    parola = k['parola']
+    return tuple(-k['I1'], k['I2'], k['parola'] )
+    
+    
+
+
+#print(es2("fp1.txt"))
+print(es2("fp1.txt"))
