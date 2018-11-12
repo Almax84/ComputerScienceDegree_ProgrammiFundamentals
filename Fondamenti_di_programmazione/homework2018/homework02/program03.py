@@ -78,9 +78,8 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8
 def es3(fmappa):
 
     with open(fmappa, 'r', encoding='utf-8') as file:
-        file_lines = file.read().splitlines()
+        file_lines = file.read().strip().splitlines()
         print(file_lines)
-
 
 
 
@@ -88,28 +87,74 @@ def es3(fmappa):
         percorso_secondo_robottino = []
         insieme_I = []
 
+        percorso_primo_robottino = get_percorso_robottino(file_lines, percorso_primo_robottino)
+        percorso_secondo_robottino = get_percorso_robottino(file_lines, percorso_secondo_robottino)
+
+        tuples_string = ''.join(file_lines).strip()
+
+        get_tuple_list(insieme_I, tuples_string)
 
 
-        get_percorsi(file_lines, 0, percorso_primo_robottino)
-
-        get_percorsi(file_lines, 0, percorso_secondo_robottino)
-
-        get_percorsi(file_lines, 0, insieme_I)
-
-        print(percorso_primo_robottino)
-        print(percorso_secondo_robottino)
-        print(insieme_I)
+        print("insieme I",insieme_I)
+        print("primo robottino p1", percorso_primo_robottino)
+        print("secondo robottino p2", percorso_secondo_robottino)
 
 
-def get_percorsi(file_lines, i, target_list):
+        #'intero +A positivo indica uno spostamento in verticale fino al quadrato (x,y+|A|)
+
+        #'intero -A negativo indica uno spostamento in orizzontale della griglia fino al quadrato (x+|A|,y)
+
+        get_spostamento_robottino(percorso_primo_robottino)
+        get_spostamento_robottino(percorso_secondo_robottino)
+
+        '''
+        Nota che un quadrato (x,y) e' nella zona circoscritta se i due robottini  
+        attraversano la colonna x della griglia e i quadrati di quella colonna attraversati
+        dai due robottini  sono rispettivamente (x,y1) ed (x,y2) con y1>y>y2).
+        la risposta e' 4 perche' gli unici quadrati che ricadono nella zona circoscritta sono
+        {(3, 4), (6, 6), (7, 6), (8, 5)}
+        '''
+
+
+def get_spostamento_robottino(percorso_primo_robottino):
+    x = 1
+    y = 1
+    lista_spostamenti_robottino = []
+    for spostamento in percorso_primo_robottino:
+        if spostamento > 0:
+            y += spostamento
+            lista_spostamenti_robottino.append(tuple((x, y)))
+        elif spostamento < 0:
+            x += spostamento * -1
+            lista_spostamenti_robottino.append(tuple((x, y)))
+    return  lista_spostamenti_robottino
+
+
+def get_tuple_list(insieme_I, tuples_string):
+    while len(tuples_string) > 0:
+        first_par_index = tuples_string.find("(")
+        second_par_index = tuples_string.find(")")
+        tuple = tuples_string[first_par_index:second_par_index + 1]
+        try:
+            insieme_I.append(eval(tuple)) # se voglio una lista di tuple
+            #insieme_I.append(tuple)
+            tuples_string = tuples_string[second_par_index + 2:]
+        except:
+            print("could not eval: ", tuple)
+
+
+def get_percorso_robottino(file_lines, percorso_rotottino):
+    i = 0
     while i < len(file_lines):
         line = file_lines[i]
-        if line != '':
-            target_list.append(line)
+        if line != '' or len(percorso_rotottino) == 0:
+            percorso_rotottino += list(map(lambda x: int(x), line.split()))
             file_lines.pop(i)
-        elif len(target_list) > 0:
+            i -= 1
+        else:
             break
         i += 1
+    return percorso_rotottino
 
 
 es3("mp1.txt")
