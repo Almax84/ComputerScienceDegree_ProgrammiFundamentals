@@ -73,7 +73,43 @@ NOTA: il timeout previsto per questo esercizio è di XXX secondi per ciascun tes
 
 ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 
 (ad esempio editatelo dentro Spyder)'''
-        
+
 
 def es3(fmappa):
-    '''Implementare la funzione qui'''
+
+    with open(fmappa, 'r', encoding='utf-8') as file:
+        file_lines = file.read().splitlines()
+        print(file_lines)
+
+
+
+
+        percorso_primo_robottino = []
+        percorso_secondo_robottino = []
+        insieme_I = []
+
+
+
+        get_percorsi(file_lines, 0, percorso_primo_robottino)
+
+        get_percorsi(file_lines, 0, percorso_secondo_robottino)
+
+        get_percorsi(file_lines, 0, insieme_I)
+
+        print(percorso_primo_robottino)
+        print(percorso_secondo_robottino)
+        print(insieme_I)
+
+
+def get_percorsi(file_lines, i, target_list):
+    while i < len(file_lines):
+        line = file_lines[i]
+        if line != '':
+            target_list.append(line)
+            file_lines.pop(i)
+        elif len(target_list) > 0:
+            break
+        i += 1
+
+
+es3("mp1.txt")
