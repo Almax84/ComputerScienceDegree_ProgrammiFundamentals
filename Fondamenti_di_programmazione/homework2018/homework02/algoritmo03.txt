@@ -1,0 +1,20 @@
+#TODO!
+
+1 - Read the file as text and split the lines
+
+2 - fetch the course of p1 and p2 as a list es [1,-2,3,-5...]
+
+3 -  get dictionary of the x's and y's of the set I = the KEY will be the column x, and the VALUES will be a list of all the y's on that column (x)
+
+4 -  get the dictionaries of ALL the x's and y's touched by p1 and p2 = the KEY will be the column x, and the VALUES will be a list of all the y's on that column (x)
+
+5 - for every x present in I get the list of y's and loop through them
+   
+   5a) if the x is not present in either p1 or p2 skip the loop (continue)
+   5b) if the x is present in p1 or p2 get all the y's
+   5c) loop through the y's of p2
+     5ca) if the current y of p2 is greater than the current y of I 
+	 5cb)  loop through the y's of p1:  if the y of p1 is smaller than the current y of I then
+	 5cc) increment the counter
+	 
+6 - return the counter
