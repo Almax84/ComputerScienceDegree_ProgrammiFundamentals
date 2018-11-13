@@ -76,36 +76,54 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8
 
 
 def es3(fmappa):
-
     with open(fmappa, 'r', encoding='utf-8') as file:
         file_lines = file.read().strip().splitlines()
         print(file_lines)
 
-
-
-        percorso_primo_robottino = []
-        percorso_secondo_robottino = []
+        p1 = []
+        p2 = []
         insieme_I = []
 
-        percorso_primo_robottino = get_percorso_robottino(file_lines, percorso_primo_robottino)
-        percorso_secondo_robottino = get_percorso_robottino(file_lines, percorso_secondo_robottino)
+        p1 = get_percorso_robottino(file_lines, p1)
+        p2 = get_percorso_robottino(file_lines, p2)
 
         tuples_string = ''.join(file_lines).strip()
 
         get_tuple_list(insieme_I, tuples_string)
 
+        print("insieme I", insieme_I)
+        print("primo robottino p1", p1)
+        print("secondo robottino p2", p2)
 
-        print("insieme I",insieme_I)
-        print("primo robottino p1", percorso_primo_robottino)
-        print("secondo robottino p2", percorso_secondo_robottino)
+        # 'intero +A positivo indica uno spostamento in verticale fino al quadrato (x,y+|A|)
 
+        # 'intero -A negativo indica uno spostamento in orizzontale della griglia fino al quadrato (x+|A|,y)
 
-        #'intero +A positivo indica uno spostamento in verticale fino al quadrato (x,y+|A|)
+        spostamento_p1 = [(1,1)]+get_spostamento_robottino(p1)
+        print("spostamento p1", spostamento_p1)
+        spostamento_p2 = [(1,1)]+get_spostamento_robottino(p2)
+        print("spostamento p2", spostamento_p2)
 
-        #'intero -A negativo indica uno spostamento in orizzontale della griglia fino al quadrato (x+|A|,y)
+        print(spostamento_p2[-1], spostamento_p1[-1])
 
-        get_spostamento_robottino(percorso_primo_robottino)
-        get_spostamento_robottino(percorso_secondo_robottino)
+        contatore_circoscritti = 0
+
+        for tuple_i in insieme_I:
+            x, y = tuple_i  # es 3,4 dovrebbe essere preso
+            # crea funzione, colonna_attraversata(x, p1, p2)
+            for p_p1 in spostamento_p1:
+                x1, y1 = p_p1
+                if x1 == x and y1 > y:
+                    for p_p2 in spostamento_p2:
+                        x2, y2 = p_p2
+                        if x2 == x and y2 < y:
+                            contatore_circoscritti += 1
+                            # print("found!: p1:", p1, " p2:", p2, "tupleI", tuple_i)
+
+        return contatore_circoscritti
+
+        # restituisce booleano e la tupla contenente la colonna
+        # se si, crea funzione compreso(y, p1, p2) che ritorna il contatore
 
         '''
         Nota che un quadrato (x,y) e' nella zona circoscritta se i due robottini  
@@ -122,12 +140,15 @@ def get_spostamento_robottino(percorso_primo_robottino):
     lista_spostamenti_robottino = []
     for spostamento in percorso_primo_robottino:
         if spostamento > 0:
-            y += spostamento
-            lista_spostamenti_robottino.append(tuple((x, y)))
+            for i in range(1, spostamento + 1):
+                y += 1
+                lista_spostamenti_robottino.append(tuple((x, y)))
         elif spostamento < 0:
-            x += spostamento * -1
-            lista_spostamenti_robottino.append(tuple((x, y)))
-    return  lista_spostamenti_robottino
+            spostamento = spostamento * -1
+            for i in range(1, spostamento + 1):
+                x += 1
+                lista_spostamenti_robottino.append(tuple((x, y)))
+    return lista_spostamenti_robottino
 
 
 def get_tuple_list(insieme_I, tuples_string):
@@ -136,11 +157,12 @@ def get_tuple_list(insieme_I, tuples_string):
         second_par_index = tuples_string.find(")")
         tuple = tuples_string[first_par_index:second_par_index + 1]
         try:
-            insieme_I.append(eval(tuple)) # se voglio una lista di tuple
-            #insieme_I.append(tuple)
+            insieme_I.append(eval(tuple))  # se voglio una lista di tuple
+            # insieme_I.append(tuple)
             tuples_string = tuples_string[second_par_index + 2:]
         except:
             print("could not eval: ", tuple)
+            break
 
 
 def get_percorso_robottino(file_lines, percorso_rotottino):
@@ -157,4 +179,4 @@ def get_percorso_robottino(file_lines, percorso_rotottino):
     return percorso_rotottino
 
 
-es3("mp1.txt")
+print(es3("mp5.txt"))
