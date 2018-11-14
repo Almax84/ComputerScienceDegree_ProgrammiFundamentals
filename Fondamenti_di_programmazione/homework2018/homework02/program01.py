@@ -70,61 +70,29 @@ def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
 
 # da alto a sinistra in giu
 def find_diagonal_forward_slash(diagramma, lista_parole, forward):
-    h = len(diagramma)
-    w = len(diagramma[0])
+    return_list = diags_mio(diagramma)
     range_list = []
 
-    verso = 0
-    verso_fatt_molt = 1
-    n = 1
-    if not forward:
-        verso = h - 1
-        verso_fatt_molt = -1
-
-    for k in range(h + w - 1):
-        if k < w:
-            diagonal_word = ''
-            temp_list = []
-            for l in range(k + 1):
-                i = verso + l * verso_fatt_molt
-                j = k - l
-                try:
-                    temp_list.append(tuple((i, j)))
-                    diagonal_word += diagramma[i][j]
-                except:
-                    pass
-            word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
-            if word_in_list:
-                range_list += [xy for xy in indexes]
-
-
-        else:
-            diagonal_word = ''
-            temp_list = []
-            for l in range(k - w + 1, k + 1 - n):
-                i = verso + l * verso_fatt_molt
-                if i == h:
-                    break
-                j = k - l
-                if j == w:
-                    break
-                try:
-                    temp_list.append(tuple((i, j)))
-                    diagonal_word += diagramma[i][j]
-                except Exception as e:
-                    print("find diagonale: (i,j)", i, j, "  ", e)
-
-            word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
-            n+=1
-            if word_in_list:
-                range_list += [xy for xy in indexes]
-
+    for sub in return_list:
+        diagonal_word = ''
+        temp_list = []
+        for tupl in sub:
+            i,j = tupl
+            temp_list.append(tupl)
+            diagonal_word+=diagramma[i][j]
+        word_in_list , indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
+        if word_in_list:
+            range_list += [xy for xy in indexes]
     return range_list
 
 
 def is_word_in_list(diagonal_string, list_words, index_list):
     word_index = []
     found = False
+
+    if len(diagonal_string)<=1:
+        return False, None
+
     for w in list_words:
 
         lenght_word = len(w)
@@ -153,87 +121,14 @@ def find_colonne(diagramma_upper):
                 colonna.append(diagramma_upper[i][j])
                 colonna_string = ''.join(colonna)
             except Exception as e:
-                print("find colonne: (i,j)",i,j, "  ",e)
+                pass
         lista_colonne.append(colonna_string)
     return lista_colonne
 
-mat = [[1,2,3,4,5,6,7,8,9,10,1,1,1,1,1],
-       [11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-       [11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
-[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1]
 
 
-       ]
 
 
-'''
-1   2   3   4  5 
-6   7   8   9  10 
-11  12  13  14  15
-16  17  18  19  20
-
-
-'''
-
-
-# da alto a sinistra in giu
-def find_diagonal_forward_slash_p(diagramma,forward):
-    h = len(diagramma)
-    w = len(diagramma[0])
-    range_list = []
-    diagonal_list = []
-    verso = 0
-    verso_fatt_molt = 1
-    if not forward:
-        verso = h - 1
-        verso_fatt_molt = -1
-        n = 1
-    for k in range(h + w - 1):
-        if k < w:
-            diagonal_word = ''
-            temp_list = []
-            for l in range(k + 1):
-                i = verso + l * verso_fatt_molt
-                j = k - l
-                try:
-                    temp_list.append(diagramma[i][j])
-                    #diagonal_word += diagramma[i][j]
-                except:
-                    pass
-            diagonal_list.append(temp_list)
-            #word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
-            #if word_in_list:
-            #    range_list += [xy for xy in indexes]
-
-
-        else:
-            diagonal_word = ''
-            temp_list = []
-            for l in range(k - w + 1, k + 1 - n):
-                i = verso + l * verso_fatt_molt
-                j = k - l
-                try:
-                    temp_list.append(diagramma[i][j])
-                    #diagonal_word += diagramma[i][j]
-                except Exception as e:
-                    print("find diagonale: (i,j)", i, j, "  ", e)
-            diagonal_list.append(temp_list)
-            n +=1
-            #word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
-            #if word_in_list:
-            #    range_list += [xy for xy in indexes]
-
-    return diagonal_list
 
 
 
@@ -248,6 +143,48 @@ def diags(mat):
     for sy in range(1, width):
         yield list(diag(0, sy))
 
+
+def diags_mio(mat):
+    width, height = len(mat[0]), len(mat)
+    return_list = []
+    for j in range(width):
+       # print("J =", j)
+
+        # "/"
+        i_list_fw = [i for i in range(j+1)]
+        j_list_fw = [n for n in reversed(range(j+1))]
+        list1 = list(zip(i_list_fw, j_list_fw))
+        # print("forward:" , list1)
+        return_list.append(list1)
+        # "\"
+        i_list_bk = [i for i in reversed(range(height))]
+        j_list_bk = [n for n in reversed(range(j+1))]
+        list2 = list(zip(i_list_bk, j_list_bk))
+        return_list.append(list2)
+        # print("backward:", list2)
+
+    for i in range(height):
+        #print("I = ", i)
+
+        i_list_fw = [i for i in range(i, height)]
+        j_list_fw = [n for n in reversed(range(width))]
+        list3 = list(zip(i_list_fw, j_list_fw))
+        return_list.append(list3)
+        # print(list3)
+
+        i_list_bk = [i for i in reversed(range(i+1))]
+        j_list_bk = [n for n in reversed(range(width))]
+        list4 = list(zip(i_list_bk, j_list_bk))
+        # print("backward", list4)
+        return_list.append(list4)
+
+
+    return return_list
+
+
+
+#mat = [[1,2,3,4,5],[5,6,7,8,5],[9,10,11,12,5],[13,14,15,16,5],[13,14,15,16,5],[13,14,15,16,5]]
+#print(diags_mio(mat))
 #print(list(diags(mat)))
 #print(find_diagonal_forward_slash_p(mat,False))
-#print(es1("cp6_Pensiero.txt"))
+print(es1("cp1_Tisana.txt"))
