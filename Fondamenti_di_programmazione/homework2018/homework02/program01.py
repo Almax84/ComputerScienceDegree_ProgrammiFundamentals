@@ -1,3 +1,11 @@
+#NOTA!
+'''
+
+PREVEDI LA POSSIBILITà CHE SU UNA RIGA LA STESSA PAROLA SIA PRESENTE PIù DI UNA VOLTA!!!!
+ora con quello che ho fatto funzoina solo se è presente una volta
+'''
+
+
 def es1(ftesto):
     lista_coordinate = []
     with open(ftesto, 'r', encoding='utf-8') as file:
