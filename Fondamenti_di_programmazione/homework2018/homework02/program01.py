@@ -76,6 +76,7 @@ def find_diagonal_forward_slash(diagramma, lista_parole, forward):
 
     verso = 0
     verso_fatt_molt = 1
+    n = 1
     if not forward:
         verso = h - 1
         verso_fatt_molt = -1
@@ -100,16 +101,21 @@ def find_diagonal_forward_slash(diagramma, lista_parole, forward):
         else:
             diagonal_word = ''
             temp_list = []
-            for l in range(k - w + 1, k + 1):
+            for l in range(k - w + 1, k + 1 - n):
                 i = verso + l * verso_fatt_molt
+                if i == h:
+                    break
                 j = k - l
+                if j == w:
+                    break
                 try:
                     temp_list.append(tuple((i, j)))
                     diagonal_word += diagramma[i][j]
-                except:
-                    pass
+                except Exception as e:
+                    print("find diagonale: (i,j)", i, j, "  ", e)
 
             word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
+            n+=1
             if word_in_list:
                 range_list += [xy for xy in indexes]
 
@@ -146,10 +152,102 @@ def find_colonne(diagramma_upper):
             try:
                 colonna.append(diagramma_upper[i][j])
                 colonna_string = ''.join(colonna)
-            except:
-                pass
+            except Exception as e:
+                print("find colonne: (i,j)",i,j, "  ",e)
         lista_colonne.append(colonna_string)
     return lista_colonne
 
+mat = [[1,2,3,4,5,6,7,8,9,10,1,1,1,1,1],
+       [11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+       [11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1],
+[11,12,13,14,15,16,17,18,19,20,1,1,1,1,1]
 
-#print(es1("cp5_Colori.txt"))
+
+       ]
+
+
+'''
+1   2   3   4  5 
+6   7   8   9  10 
+11  12  13  14  15
+16  17  18  19  20
+
+
+'''
+
+
+# da alto a sinistra in giu
+def find_diagonal_forward_slash_p(diagramma,forward):
+    h = len(diagramma)
+    w = len(diagramma[0])
+    range_list = []
+    diagonal_list = []
+    verso = 0
+    verso_fatt_molt = 1
+    if not forward:
+        verso = h - 1
+        verso_fatt_molt = -1
+        n = 1
+    for k in range(h + w - 1):
+        if k < w:
+            diagonal_word = ''
+            temp_list = []
+            for l in range(k + 1):
+                i = verso + l * verso_fatt_molt
+                j = k - l
+                try:
+                    temp_list.append(diagramma[i][j])
+                    #diagonal_word += diagramma[i][j]
+                except:
+                    pass
+            diagonal_list.append(temp_list)
+            #word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
+            #if word_in_list:
+            #    range_list += [xy for xy in indexes]
+
+
+        else:
+            diagonal_word = ''
+            temp_list = []
+            for l in range(k - w + 1, k + 1 - n):
+                i = verso + l * verso_fatt_molt
+                j = k - l
+                try:
+                    temp_list.append(diagramma[i][j])
+                    #diagonal_word += diagramma[i][j]
+                except Exception as e:
+                    print("find diagonale: (i,j)", i, j, "  ", e)
+            diagonal_list.append(temp_list)
+            n +=1
+            #word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
+            #if word_in_list:
+            #    range_list += [xy for xy in indexes]
+
+    return diagonal_list
+
+
+
+
+def diags(mat):
+    width, height = len(mat[0]), len(mat)
+    def diag(sx, sy):
+        for x, y in zip(range(sx, height), range(sy, width)):
+            yield mat[x][y]
+    for sx in range(height):
+        yield list(diag(sx, 0))
+    for sy in range(1, width):
+        yield list(diag(0, sy))
+
+#print(list(diags(mat)))
+#print(find_diagonal_forward_slash_p(mat,False))
+#print(es1("cp6_Pensiero.txt"))

@@ -43,8 +43,9 @@ def get_results(e):
         if os.path.exists(tests_json):
             with open(tests_json) as f:
                 tests = json.load(f)
-            result['passed']   = tests['report']['summary'].get('passed',0)
-            result['numtests'] = tests['report']['summary']['num_tests']
+            result['passed']    = tests['report']['summary'].get('passed',0)
+            result['numtests']  = tests['report']['summary']['num_tests']
+            result['numtests'] -= tests['report']['summary'].get('skipped',0)
             print('\t', e, 'passed', result['passed'], 'numtests', result['numtests'])
             passed = result['passed'] == result['numtests']
         else:

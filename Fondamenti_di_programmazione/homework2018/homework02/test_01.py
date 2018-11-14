@@ -15,6 +15,7 @@ class Test(testlib.TestCase):
             - cruci:    indirizzo del file di testo con il crucipuzzle
             - expected: stringa risultante attesa
         '''
+        self.maxDiff = None
         result   = program.es1(cruci)
         self.assertNotEqual( result, None, "La funzione non torna nessun risultato")
         self.check(type(result), str,     None, "il risultato non e' una stringa")
@@ -22,8 +23,11 @@ class Test(testlib.TestCase):
         return 1
 
     @file_data('test_01.json')
-    def test_from_json(self, filename, expected):
-        return self.do_test(filename, expected)
+    def test_from_json(self, filename, expected, enabled):
+        if enabled:
+            return self.do_test(filename, expected)
+        else:
+            raise unittest.SkipTest("Test disabled")
 
 if __name__ == '__main__':
     Test.main()

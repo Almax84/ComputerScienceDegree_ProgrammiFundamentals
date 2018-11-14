@@ -59,4 +59,4 @@ def es2(fposts):
 def sort_logic(k):
     return (-k['I1'], k['parola'], -int(k['I3'][1]),)
 
-print(es2("fp1.txt"))
+#print(es2("fp1.txt"))
