@@ -45,34 +45,51 @@ def find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole):
     for j, colonna_diagramma in enumerate(lista_colonne):
         for parola in lista_parole:
 
-            if parola in colonna_diagramma:
-                indice_colonna = colonna_diagramma.find(parola)
-                coordinate_parola = [(i, j) for i in range(indice_colonna, len(parola) + indice_colonna)]
-                lista_coordinate += coordinate_parola
+            end_index_first_word = 0
+            count = colonna_diagramma.count(parola)
+            if count > 0:
+                lista_coordinate = find_in_i_j(colonna_diagramma, count, end_index_first_word, j, lista_coordinate,
+                                               parola)
+
             else:
                 parola_reversed = parola[::-1]
+                count = colonna_diagramma.count(parola_reversed)
+                lista_coordinate = find_in_i_j(colonna_diagramma, count, end_index_first_word, j, lista_coordinate,
+                                               parola_reversed)
 
-                if parola_reversed in colonna_diagramma:
-                    indice_colonna = colonna_diagramma.find(parola_reversed)
-                    coordinate_parola = [(i, j) for i in range(indice_colonna, len(parola_reversed) + indice_colonna)]
-                    lista_coordinate += coordinate_parola
+    return lista_coordinate
+
+
+def find_in_i_j(colonna_diagramma, count, end_index_first_word, j, lista_coordinate, parola_reversed):
+    if count > 0:
+        for n in range(count):
+            word_start_index = colonna_diagramma.index(parola_reversed, n + end_index_first_word)
+            end_index_first_word = word_start_index + len(parola_reversed)
+            coordinate_parola = [(i, j) for i in range(word_start_index, len(parola_reversed) + word_start_index)]
+            lista_coordinate += coordinate_parola
     return lista_coordinate
 
 
 def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
     for i, riga_diagramma in enumerate(diagramma):
+
         for parola in lista_parole:
 
             if parola in riga_diagramma:
                 indice_riga = riga_diagramma.find(parola)
                 coordinate_parola = [(i, j) for j in range(indice_riga, len(parola) + indice_riga)]
                 lista_coordinate += coordinate_parola
+                count = riga_diagramma.count(parola)
+                find_in_i_j
+
             else:
                 parola_reversed = parola[::-1]
                 if parola_reversed in riga_diagramma:
                     indice_riga = riga_diagramma.find(parola_reversed)
                     coordinate_parola = [(i, j) for j in range(indice_riga, len(parola) + indice_riga)]
                     lista_coordinate += coordinate_parola
+                    count = riga_diagramma.count(parola)
+
     return lista_coordinate
 
 
@@ -87,7 +104,10 @@ def find_diagonal_forward_slash(diagramma, lista_parole, forward):
         for tupl in sub:
             i,j = tupl
             temp_list.append(tupl)
-            diagonal_word+=diagramma[i][j]
+            try:
+                diagonal_word+=diagramma[i][j]
+            except:
+                pass
         word_in_list , indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
         if word_in_list:
             range_list += [xy for xy in indexes]
@@ -104,16 +124,28 @@ def is_word_in_list(diagonal_string, list_words, index_list):
     for w in list_words:
 
         lenght_word = len(w)
-        if w in diagonal_string:
-            word_start_index = diagonal_string.index(w)
-            word_index += index_list[word_start_index:word_start_index + lenght_word]
-            found = True
+        count = diagonal_string.count(w)
+        if count > 0:
+            found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w,
+                                                            word_index)
+
         else:
             word_reversed = w[::-1]
-            if word_reversed in diagonal_string:
-                word_start_index = diagonal_string.index(word_reversed)
-                word_index += index_list[word_start_index:word_start_index + lenght_word]
-                found = True
+            count = diagonal_string.count(word_reversed)
+            if count > 0:
+                found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word,
+                                                                word_reversed,
+                                                                word_index)
+    return found, word_index
+
+
+def find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w, word_index):
+    end_index_first_word = 0
+    for n in range(count):
+        word_start_index = diagonal_string.index(w, n + end_index_first_word)
+        end_index_first_word = word_start_index + lenght_word
+        word_index += index_list[word_start_index:end_index_first_word]
+        found = True
     return found, word_index
 
 
@@ -195,4 +227,4 @@ def diags_mio(mat):
 #print(diags_mio(mat))
 #print(list(diags(mat)))
 #print(find_diagonal_forward_slash_p(mat,False))
-print(es1("cp1_Tisana.txt"))
+print(es1("cp6_Pensiero.txt"))
