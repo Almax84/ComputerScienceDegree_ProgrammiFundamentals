@@ -1,10 +1,3 @@
-# NOTA!
-'''
-
-PREVEDI LA POSSIBILITà CHE SU UNA RIGA LA STESSA PAROLA SIA PRESENTE PIù DI UNA VOLTA!!!!
-ora con quello che ho fatto funzoina solo se è presente una volta
-'''
-
 
 def es1(ftesto):
     lista_coordinate = []
@@ -15,10 +8,8 @@ def es1(ftesto):
         lista_parole = list(filter(lambda line: '\t' not in line and len(line) > 0, testo))
         diagramma = list(map(lambda x: ''.join(list(map(lambda word: word, x))), diagramma_n))
 
-        len_parola_piu_corta = len(min(lista_parole, key=len))
-
         # controllo parole su righe da dx e sx
-        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole, len_parola_piu_corta)
+        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole)
 
         # controllo parola su colonna
         lista_colonne = find_colonne(diagramma)
@@ -71,7 +62,7 @@ def find_in_i_j(stringa, count, m, lista_coordinate, parola, isColonna):
     return lista_coordinate
 
 
-def find_parole_in_righe(diagramma, lista_coordinate, lista_parole, len_parola_piu_corta):
+def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
     for i, riga_diagramma in enumerate(diagramma):
 
         for parola in lista_parole:
@@ -119,15 +110,13 @@ def is_word_in_list(diagonal_string, list_words, index_list):
 
         lenght_word = len(w)
         count = diagonal_string.count(w)
-        if count > 0:
-            found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w,
+
+        found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w,
                                                             word_index)
 
-        else:
-            word_reversed = w[::-1]
-            count = diagonal_string.count(word_reversed)
-            if count > 0:
-                found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word,
+        word_reversed = w[::-1]
+        count = diagonal_string.count(word_reversed)
+        found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word,
                                                                 word_reversed,
                                                                 word_index)
     return found, word_index
