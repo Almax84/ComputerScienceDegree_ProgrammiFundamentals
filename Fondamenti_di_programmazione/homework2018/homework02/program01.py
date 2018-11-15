@@ -15,16 +15,18 @@ def es1(ftesto):
         lista_parole = list(filter(lambda line: '\t' not in line and len(line) > 0, testo))
         diagramma = list(map(lambda x: ''.join(list(map(lambda word: word, x))), diagramma_n))
 
+        len_parola_piu_corta = len(min(lista_parole, key=len))
+
         # controllo parole su righe da dx e sx
-        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole)
+        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole, len_parola_piu_corta)
 
         # controllo parola su colonna
         lista_colonne = find_colonne(diagramma)
         lista_coordinate = find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole)
 
         # cerco nelle diagonali ed anti diagonali
-        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, True)
-        lista_coordinate += find_diagonal_forward_slash(diagramma, lista_parole, False)
+        lista_coordinate += search_diagonally(diagramma, lista_parole)
+        lista_coordinate += search_diagonally(diagramma, lista_parole)
 
         return_string = ''
         coordinate = coordinate_i_j(diagramma_n)
@@ -69,7 +71,7 @@ def find_in_i_j(stringa, count, m, lista_coordinate, parola, isColonna):
     return lista_coordinate
 
 
-def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
+def find_parole_in_righe(diagramma, lista_coordinate, lista_parole, len_parola_piu_corta):
     for i, riga_diagramma in enumerate(diagramma):
 
         for parola in lista_parole:
@@ -86,7 +88,7 @@ def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
 
 
 # da alto a sinistra in giu
-def find_diagonal_forward_slash(diagramma, lista_parole, forward):
+def search_diagonally(diagramma, lista_parole):
     return_list = get_diagonals_indexes(diagramma)
     range_list = []
 
@@ -163,7 +165,6 @@ def get_diagonals_indexes(mat):
     width, height = len(mat[0]), len(mat)
     return_list = []
     for j in range(width):
-        # print("J =", j)
 
         # "/"
         i_list_fw = [i for i in range(j + 1)]
