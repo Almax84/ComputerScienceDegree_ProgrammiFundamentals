@@ -14,8 +14,8 @@ def es3(fmappa):
         p2 = get_percorso_robottino(file_lines, p2)
 
 
-        spostamento_p1 = get_spostamento_robottino(p1)
-        spostamento_p2 = get_spostamento_robottino(p2)
+        spostamento_p1 = get_spostamento_robottino(p1,insieme_I)
+        spostamento_p2 = get_spostamento_robottino(p2,insieme_I)
 
 
         contatore_circoscritti = 0
@@ -30,15 +30,12 @@ def es3(fmappa):
                 if y in y2_list or y in y1_list:
                     continue
 
-                #eventualmente eliminare questi due controlli
-                y1_minori = list(filter(lambda y1: y1 < y, y1_list))
-                y2_maggiori = list(filter(lambda y2: y2 > y, y2_list))
-
                 y1_maggiori = list(filter(lambda y1: y1 > y, y1_list))
                 y2_minori = list(filter(lambda y2: y2 < y, y2_list))
 
-                if (len(y1_minori)>0 and len(y2_maggiori)>0) or (len(y1_maggiori)>0 and len(y2_minori)>0):
+                if len(y1_maggiori) > 0 and len(y2_minori) > 0:
                     contatore_circoscritti+=1
+
 
 
 
@@ -46,7 +43,7 @@ def es3(fmappa):
 
 
 
-def get_spostamento_robottino(percorso_primo_robottino):
+def get_spostamento_robottino(percorso_primo_robottino,insieme_I):
     x = 1
     y = 1
     mappa_spostamenti_robottino = {1:[1]}  # key will be column x, value list of y
