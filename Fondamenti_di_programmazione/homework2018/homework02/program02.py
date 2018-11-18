@@ -7,14 +7,7 @@ def es2(fposts):
 
 
         # get list of words
-        words = set()
-        post_dict = dict()
-        for post in posts:
-            post_splitted = post.split(" ")
-            post_id = post_splitted[0]
-            words_post = [x for x in post_splitted[1:] if x != '']
-            post_dict[post_id] = words_post
-            words |= set(words_post)
+        post_dict, words = get_post_dict_and_words(posts)
 
         for word in words:
 
@@ -54,6 +47,18 @@ def es2(fposts):
 
     return_list = sorted(return_list, key=sort_logic)
     return return_list
+
+
+def get_post_dict_and_words(posts):
+    words = set()
+    post_dict = dict()
+    for post in posts:
+        post_splitted = post.split(" ")
+        post_id = post_splitted[0]
+        words_post = [x for x in post_splitted[1:] if x != '']
+        post_dict[post_id] = words_post
+        words |= set(words_post)
+    return post_dict, words
 
 
 def sort_logic(k):
