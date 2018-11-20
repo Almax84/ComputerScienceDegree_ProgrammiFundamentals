@@ -9,14 +9,13 @@ def es1(ftesto):
         diagramma = list(map(lambda x: ''.join(list(map(lambda word: word, x))), diagramma_n))
 
         # controllo parole su righe da dx e sx
-        lista_coordinate = find_parole_in_righe(diagramma, lista_coordinate, lista_parole)
+        lista_coordinate = find_parole_in_list_of_string(diagramma, lista_coordinate, lista_parole, False)
 
         # controllo parola su colonna
         lista_colonne = find_colonne(diagramma)
-        lista_coordinate = find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole)
+        lista_coordinate = find_parole_in_list_of_string(lista_colonne, lista_coordinate, lista_parole, True)
 
         # cerco nelle diagonali ed anti diagonali
-        lista_coordinate += search_diagonally(diagramma, lista_parole)
         lista_coordinate += search_diagonally(diagramma, lista_parole)
 
         return_string = ''
@@ -34,19 +33,32 @@ def coordinate_i_j(diagramma_n):
             yield char, tuple((i, j))
 
 
-def find_parole_in_colonne(lista_colonne, lista_coordinate, lista_parole):
-    for j, colonna_diagramma in enumerate(lista_colonne):
+def find_parole_in_list_of_string(list_of_strings, lista_coordinate, lista_parole, isColonna):
+    for j, diagram_string in enumerate(list_of_strings):
         for parola in lista_parole:
-            count = colonna_diagramma.count(parola)
-            lista_coordinate = find_in_i_j(colonna_diagramma, count, j, lista_coordinate,
-                                           parola, True)
+            if parola in diagram_string:
+                lista_coordinate = find_in_i_j(diagram_string, diagram_string.count(parola), j, lista_coordinate,
+                                           parola, isColonna)
             parola_reversed = parola[::-1]
-            count = colonna_diagramma.count(parola_reversed)
-            lista_coordinate = find_in_i_j(colonna_diagramma, count, j, lista_coordinate,
-                                           parola_reversed, True)
+            if parola_reversed in diagram_string:
+                lista_coordinate = find_in_i_j(diagram_string, diagram_string.count(parola_reversed), j, lista_coordinate,
+                                           parola_reversed, isColonna)
 
     return lista_coordinate
 
+
+def find_colonne(diagramma_upper):
+    lista_colonne = []
+    n_colonne = len(diagramma_upper[0])
+    n_righe = len(diagramma_upper)
+    for j in range(n_colonne):
+        colonna = []
+        colonna_string = ''
+        for i in range(n_righe):
+                colonna.append(diagramma_upper[i][j])
+                colonna_string = ''.join(colonna)
+        lista_colonne.append(colonna_string)
+    return lista_colonne
 
 def find_in_i_j(stringa, count, m, lista_coordinate, parola, isColonna):
     end_index_first_word = 0
@@ -62,28 +74,12 @@ def find_in_i_j(stringa, count, m, lista_coordinate, parola, isColonna):
     return lista_coordinate
 
 
-def find_parole_in_righe(diagramma, lista_coordinate, lista_parole):
-    for i, riga_diagramma in enumerate(diagramma):
-
-        for parola in lista_parole:
-
-            count = riga_diagramma.count(parola)
-            lista_coordinate = find_in_i_j(riga_diagramma, count, i, lista_coordinate,
-                                           parola, False)
-            parola_reversed = parola[::-1]
-            count = riga_diagramma.count(parola_reversed)
-            lista_coordinate = find_in_i_j(riga_diagramma, count, i, lista_coordinate,
-                                           parola_reversed, False)
-
-    return lista_coordinate
-
-
 # da alto a sinistra in giu
 def search_diagonally(diagramma, lista_parole):
-    return_list = get_diagonals_indexes(diagramma)
+    diagonal_indexes = get_diagonals_indexes(diagramma)
     range_list = []
 
-    for sub in return_list:
+    for sub in diagonal_indexes:
         diagonal_word = ''
         temp_list = []
         for tupl in sub:
@@ -93,6 +89,8 @@ def search_diagonally(diagramma, lista_parole):
                 diagonal_word += diagramma[i][j]
             except:
                 pass
+                #print("ioe",(i,j,))
+
         word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
         if word_in_list:
             range_list += [xy for xy in indexes]
@@ -109,14 +107,14 @@ def is_word_in_list(diagonal_string, list_words, index_list):
     for w in list_words:
 
         lenght_word = len(w)
-        count = diagonal_string.count(w)
-
-        found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w,
+        if w in diagonal_string:
+            count = diagonal_string.count(w)
+            found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word, w,
                                                             word_index)
-
         word_reversed = w[::-1]
-        count = diagonal_string.count(word_reversed)
-        found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word,
+        if word_reversed in diagonal_string:
+            count = diagonal_string.count(word_reversed)
+            found, word_index = find_word_in_generic_string(count, diagonal_string, found, index_list, lenght_word,
                                                                 word_reversed,
                                                                 word_index)
     return found, word_index
@@ -132,21 +130,7 @@ def find_word_in_generic_string(count, diagonal_string, found, index_list, lengh
     return found, word_index
 
 
-def find_colonne(diagramma_upper):
-    lista_colonne = []
-    n_colonne = len(diagramma_upper[0])
-    n_righe = len(diagramma_upper)
-    for j in range(n_colonne):
-        colonna = []
-        colonna_string = ''
-        for i in range(n_righe):
-            try:
-                colonna.append(diagramma_upper[i][j])
-                colonna_string = ''.join(colonna)
-            except Exception as e:
-                pass
-        lista_colonne.append(colonna_string)
-    return lista_colonne
+
 
 
 
@@ -158,6 +142,7 @@ def get_diagonals_indexes(mat):
         # "/"
         i_list_fw = [i for i in range(j + 1)]
         j_list_fw = [n for n in reversed(range(j + 1))]
+        #unisco in tuple gli indici i e j
         list1 = list(zip(i_list_fw, j_list_fw))
         return_list.append(list1)
         # "\"
@@ -170,6 +155,7 @@ def get_diagonals_indexes(mat):
 
         i_list_fw = [i for i in range(i, height)]
         j_list_fw = [n for n in reversed(range(width))]
+        # unisco in tuple gli indici i e j
         list3 = list(zip(i_list_fw, j_list_fw))
         return_list.append(list3)
 
@@ -179,5 +165,3 @@ def get_diagonals_indexes(mat):
         return_list.append(list4)
 
     return return_list
-
-
