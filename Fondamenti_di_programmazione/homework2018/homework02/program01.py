@@ -86,8 +86,8 @@ def search_diagonally(diagramma, lista_parole):
             try:
                 diagonal_word += diagramma[i][j]
             except:
-                pass
-                #print("ioe",(i,j,))
+                break
+
 
         word_in_list, indexes = is_word_in_list(diagonal_word, lista_parole, temp_list)
         if word_in_list:

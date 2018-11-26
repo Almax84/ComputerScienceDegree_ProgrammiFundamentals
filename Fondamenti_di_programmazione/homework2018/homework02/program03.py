@@ -4,14 +4,16 @@ def es3(fmappa):
 
         p1 = []
         p2 = []
+
+        
+        p1 = get_percorso_robottino(file_lines, p1)
+        p2 = get_percorso_robottino(file_lines, p2)
+        
         insieme_I = dict()
 
         tuples_string = ''.join(file_lines).strip()
 
         get_tuple_dict(insieme_I, tuples_string)
-
-        p1 = get_percorso_robottino(file_lines, p1)
-        p2 = get_percorso_robottino(file_lines, p2)
 
 
         spostamento_p1 = get_spostamento_robottino(p1,insieme_I)
@@ -46,17 +48,16 @@ def get_contatore_circoscritti(insieme_I, spostamento_p1, spostamento_p2):
 def get_spostamento_robottino(percorso_primo_robottino,insieme_I):
     x = 1
     y = 1
-    mappa_spostamenti_robottino = {1:[1]}  # key will be column x, value list of y
+    mappa_spostamenti_robottino = dict()  # key will be column x, value list of y
     for spostamento in percorso_primo_robottino:
         if spostamento > 0:
-            y = get_mappa_spostamenti(mappa_spostamenti_robottino, spostamento, x, y)
-        elif spostamento < 0:
-            x = get_mappa_spostamenti_neg(mappa_spostamenti_robottino, spostamento, x, y)
+            y = build_mappa_spostamenti(mappa_spostamenti_robottino, spostamento, x, y)
+        else:
+            x = build_mappa_spostamenti_negativi(mappa_spostamenti_robottino, spostamento*-1, x, y)
     return mappa_spostamenti_robottino
 
 
-def get_mappa_spostamenti_neg(mappa_spostamenti_robottino, spostamento, x, y):
-    spostamento = spostamento * -1
+def build_mappa_spostamenti_negativi(mappa_spostamenti_robottino, spostamento, x, y):
     for i in range(1, spostamento + 1):
         x += 1
         if x in mappa_spostamenti_robottino:
@@ -66,7 +67,7 @@ def get_mappa_spostamenti_neg(mappa_spostamenti_robottino, spostamento, x, y):
     return x
 
 
-def get_mappa_spostamenti(mappa_spostamenti_robottino, spostamento, x, y):
+def build_mappa_spostamenti(mappa_spostamenti_robottino, spostamento, x, y):
     for i in range(1, spostamento + 1):
         y += 1
         if x in mappa_spostamenti_robottino:
@@ -77,29 +78,15 @@ def get_mappa_spostamenti(mappa_spostamenti_robottino, spostamento, x, y):
 
 
 def get_tuple_dict(dict_I, tuples_string):
-    while len(tuples_string) > 0:
-        first_par_index = tuples_string.find("(")
-        second_par_index = tuples_string.find(")")
-        try:
-            index_ = tuples_string[first_par_index:second_par_index + 1]
-            tuple = eval(index_)
-            x, y = tuple
-
-            find_next_par = build_dict_I(dict_I, second_par_index, tuples_string, x, y)
-            if find_next_par < 0:
-                break
-            tuples_string = tuples_string[find_next_par:]
-        except:
-            break
-
-
-def build_dict_I(dict_I, second_par_index, tuples_string, x, y):
-    if x in dict_I:
-        dict_I[x] += [y]
-    else:
-        dict_I[x] = [y]
-    find_next_par = tuples_string.find("(", second_par_index)
-    return find_next_par
+    tuple_list = tuples_string.replace("),",");").split(";")
+    
+    for tuple_str in tuple_list:
+        x, y = eval(tuple_str)
+        if x in dict_I:
+            dict_I[x] += [y]
+        else:
+            dict_I[x] = [y]
+        
 
 
 def get_percorso_robottino(file_lines, percorso_rotottino):
@@ -115,3 +102,5 @@ def get_percorso_robottino(file_lines, percorso_rotottino):
         i += 1
     return percorso_rotottino
 
+if __name__ == "__main__":
+    print(es3("mp3.txt"))
