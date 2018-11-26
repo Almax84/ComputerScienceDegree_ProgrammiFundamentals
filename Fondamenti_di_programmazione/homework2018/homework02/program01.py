@@ -3,10 +3,9 @@ def es1(ftesto):
     lista_coordinate = []
     with open(ftesto, 'r', encoding='utf-8') as file:
         testo = file.read().splitlines()
-
-        diagramma_n = list(map(lambda el: el.split("\t"), list(filter(lambda line: '\t' in line, testo))))
+        diagramma = list(map(lambda el: ''.join(el.split("\t")), list(filter(lambda line: '\t' in line, testo))))
         lista_parole = list(filter(lambda line: '\t' not in line and len(line) > 0, testo))
-        diagramma = list(map(lambda x: ''.join(list(map(lambda word: word, x))), diagramma_n))
+
 
         # controllo parole su righe da dx e sx
         lista_coordinate = find_parole_in_list_of_string(diagramma, lista_coordinate, lista_parole, False)
@@ -19,8 +18,7 @@ def es1(ftesto):
         lista_coordinate += search_diagonally(diagramma, lista_parole)
 
         return_string = ''
-        coordinate = coordinate_i_j(diagramma_n)
-        for coordinata in coordinate:
+        for coordinata in coordinate_i_j(diagramma):
             if coordinata[1] not in lista_coordinate:
                 return_string += coordinata[0]
 
@@ -165,3 +163,6 @@ def get_diagonals_indexes(mat):
         return_list.append(list4)
 
     return return_list
+
+if __name__== "__main__":
+    print(es1("cp2_Animali.txt"))
