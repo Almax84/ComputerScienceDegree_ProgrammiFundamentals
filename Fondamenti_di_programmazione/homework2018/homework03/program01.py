@@ -29,7 +29,7 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 ATTENZIONE: non sono permesse altre librerie.
 '''
 
-import immagini
+import immagini as im
 
 def es1(fimg, fimg1):
     '''scova in fimg i rettangoli da evidenziale, crea una copia dell'immagine 
@@ -37,4 +37,19 @@ def es1(fimg, fimg1):
     interno  rosso) salva l'immagine in fimg1 e restituisce il numero di rettangoli
     evidenziati. '''
     # inserite qui il vostro codice
+    original_image = im.load(fimg)
+    height = len(original_image)
+    width = len(origianl_image[0]) 
+    black_tuple = (0,0,0)
+    white_tuple = (255,255,255)
+    
+    counter_rectangles = 0
+    
+    for y in range(1,h//3+1):
+        sub_row = original_image[y][]
+        for x in range(1,w//3+1):
+            
+            
+            
+ 
 
