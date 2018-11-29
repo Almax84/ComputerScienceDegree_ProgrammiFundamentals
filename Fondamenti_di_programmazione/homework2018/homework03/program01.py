@@ -29,27 +29,188 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 ATTENZIONE: non sono permesse altre librerie.
 '''
 
-import immagini as im
+import immagini
 
 def es1(fimg, fimg1):
-    '''scova in fimg i rettangoli da evidenziale, crea una copia dell'immagine 
-    in cui questi rettangoli risultano evidenziati (vale a dire hanno bordo  verde e
-    interno  rosso) salva l'immagine in fimg1 e restituisce il numero di rettangoli
-    evidenziati. '''
-    # inserite qui il vostro codice
-    original_image = im.load(fimg)
-    height = len(original_image)
-    width = len(origianl_image[0]) 
-    black_tuple = (0,0,0)
-    white_tuple = (255,255,255)
+
+    fimgAsArray = immagini.load(fimg)
+    lunghezza = len(fimgAsArray)
+    altezza = len(fimgAsArray[0])
+    finalSolution = []
     
-    counter_rectangles = 0
     
-    for y in range(1,h//3+1):
-        sub_row = original_image[y][]
-        for x in range(1,w//3+1):
+    for r in range(lunghezza):
+        for c in range(altezza):
+            currentPixel = fimgAsArray[r][c]
+
+            if(isWhite(currentPixel)):
+                canStartARectFromHere(r, c, fimgAsArray, lunghezza, altezza, finalSolution)
             
+    for rect in finalSolution:
+        writeGreen(rect, fimgAsArray)
+        writeRed(rect, fimgAsArray)
+
+    immagini.save(fimgAsArray, fimg1)
+    return len(finalSolution)
+
+
+def writeGreen(rect, fimgAsArray):
+    GREEN = (0, 255, 0)
+
+    leftUpCorner = rect[0]
+    rightUpCorner = rect[1]
+    leftDownCorner = rect[2]
+    rightDownCorner = rect[3]
+    
+    # lato sopra
+    for c in range(leftUpCorner[1], rightUpCorner[1] + 1):
+        fimgAsArray[leftUpCorner[0]][c] = GREEN
+    
+    # lato sotto
+    for c in range(leftDownCorner[1], rightDownCorner[1] + 1):
+        fimgAsArray[leftDownCorner[0]][c] = GREEN
+    
+    # LATO SINISTRO
+    for r in range(leftUpCorner[0], leftDownCorner[0] + 1):
+        fimgAsArray[r][leftUpCorner[1]] = GREEN
+    
+    # LATO DESTRO
+    for r in range(rightUpCorner[0], rightDownCorner[0] + 1):
+        fimgAsArray[r][rightUpCorner[1]] = GREEN
+
+    
+def writeRed(rect, fimgAsArray):
+
+     RED = (255, 0, 0)
+     leftUpCorner = rect[0]
+     rightUpCorner = rect[1]
+     leftDownCorner = rect[2]
+
+     for c in range(leftUpCorner[1]+1, rightUpCorner[1]):
+         for r in range(leftUpCorner[0]+1, leftDownCorner[0]):
+             #SCRIVO COLONNE
+             fimgAsArray[r][c] = RED
+     
+    
+def canStartARectFromHere(r, c, fimgAsArray, lunghezza, altezza, finalSolution):
+    MIN_LENGTH = 3
+    # andiamo a destra fino a che troviamo un nero o finisce l'immagine
+    # contemporaneamente cerchiamo se nella riga di sotto ci sono pixel bianchi, se si ci fermiamo
+    leftUpCorner = (r, c)
+    rightUpCorner = -1
+    leftDownCorner = -1
+    rightDownCorner = -1
+    # scorro verso destra, quindi il range e' da leftUpCorner.LEFT+1 fino alla fine della riga
+
+    for y in range(leftUpCorner[1] + 1, lunghezza):
+        currentPixel = fimgAsArray[leftUpCorner[0]][y]
+        # bottomSideCurrentPixel = fimgAsArray[leftUpCorner[0] + 1][r]
+        # se nero o alla fine dell'immagine allora OK
+        # Se e l'ultima riga verifico se e' bianco o nero
+        if y == (lunghezza - 1):
+            if isBlack(currentPixel):
+                # era la colonna precedente il corner
+                rightUpCorner = (leftUpCorner[0], y - 1)
+                break
+            elif isWhite(currentPixel):
+                # questa colonna e' l'ultima
+                rightUpCorner = (leftUpCorner[0], y)
+                break
             
-            
- 
+        if isBlack(currentPixel):
+            rightUpCorner = (leftUpCorner[0], y - 1)
+            break
+        # se il pixel nell'ultima colonna e' bianco quindi la riga continua verifichiamo se sotto e' bianco in tal caso e' un angolo in alto a destra e ci fermiamo
+        elif isWhite(currentPixel) and (leftUpCorner[0] + 1) < altezza and isWhite(fimgAsArray[leftUpCorner[0] + 1][y]):
+            rightUpCorner = (leftUpCorner[0], y)
+            break
+        
+    if rightUpCorner == -1:
+        return False
+    
+    # confrontiamo le colonne per capire la lunghezza
+    if rightUpCorner[1] - leftUpCorner[1] + 1 < MIN_LENGTH :
+        # print("Rettangolo troppo poco lungo")
+        # TOO SMALL
+        return False
+    
+    # LETS GO DOWN NOW
+    
+    # scoperta la base di sopra scendiamo a destra e a sinistra verticalmente fino a che non troviamo 
+    # un nero o la fine dell'immagine, se anche dall'altra parte e' nero allora abbiamo trovato i lati
+    for y in range(leftUpCorner[0] + 1, altezza):
+        leftPixel = fimgAsArray[y][leftUpCorner[1]]
+        rightPixel = fimgAsArray[y][rightUpCorner[1]]
+
+        if y == (altezza - 1):
+            # se proprio l ultima riga e' bianca almeno negli inner allora puo essere un rettangolo
+            if isWhite(leftPixel) and isWhite(rightPixel):
+                leftPixelInner = fimgAsArray[r][leftUpCorner[1] + 1]
+                rightPixelInner = fimgAsArray[r][leftUpCorner[1] - 1]
+                if isWhite(leftPixelInner) and isWhite(rightPixelInner):
+                    # e' una possibile riga bianca quindi e' la base del rett
+                    leftDownCorner = (y, leftUpCorner[1])
+                    rightDownCorner = (y, rightUpCorner[1])
+                    break
+                break
+            else:
+                # se non sono entrambi bianchi e siamo arrivati alla fine allora non e' un rettangolo, manca la base
+                return False
+          
+        if isWhite(leftPixel) and isWhite(rightPixel):
+            # se sono entrambi bianchi allora va bene, controlliamo solo che non sia una potenziale riga bianca
+            leftPixelInner = fimgAsArray[y][leftUpCorner[1] + 1]
+            rightPixelInner = fimgAsArray[y][rightUpCorner[1] - 1]
+            if isWhite(leftPixelInner) and isWhite(rightPixelInner):
+                # e' una possibile riga bianca quindi e' la base del rett
+                leftDownCorner = (y, leftUpCorner[1])
+                rightDownCorner = (y, rightUpCorner[1])
+                break
+            elif isBlack(leftPixelInner) and isBlack(rightPixelInner):
+                # se gli inner sono entrambi neri allora dobbiamo proseguire
+                continue
+            else:
+                # se sono uno bianco e uno nero allora non va bene
+                return False
+        else:
+            # se sono entrambi neri o uno bianco e uno nero allora non puo' essere un rettangolo
+            return False
+        
+    if leftUpCorner == -1 or rightUpCorner == -1 or leftDownCorner == -1 or rightDownCorner == -1:
+        print("Qualcosa non va!!!")
+        return False
+    
+    if leftDownCorner[0] - leftUpCorner[0] + 1 < MIN_LENGTH:
+        # print("Rettangolo troppo poco alto")
+        return False
+    
+    # controlliamo la base sia interamente bianca
+    for i in range(leftDownCorner[1], rightDownCorner[1] + 1):
+        currentPixel = fimgAsArray[leftDownCorner[0]][i]
+        if isBlack(currentPixel):
+            return False
+    
+    # OK e' un rettangolo, manca solo da controllare che sia tutto nero all'interno
+    for r in range(leftUpCorner[0] + 1, leftDownCorner[0]):
+        for c in range(leftUpCorner[1] + 1, rightUpCorner[1]):
+            currentPixel = fimgAsArray[r][c]
+            if isWhite(currentPixel):
+                return False
+    
+    finalSolution.append([leftUpCorner, rightUpCorner, leftDownCorner, rightDownCorner])
+    return True
+    
+    
+def isBlack(tupla):
+    BLACK = (0, 0, 0)
+    return tupla == BLACK
+
+
+def isWhite(tupla):
+    WHITE = (255, 255, 255)
+    return tupla == WHITE
+
+
+if __name__ == '__main__':
+    es1('e1_f7.png', 'test7.png')
 
