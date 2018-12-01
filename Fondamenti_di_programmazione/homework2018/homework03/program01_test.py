@@ -1,6 +1,5 @@
 import immagini
 
-#THIS IS CURRENTLY THE COMMITTED FILE!
 
 def es1(fimg, fimg1):
     image = immagini.load(fimg)
@@ -12,19 +11,19 @@ def es1(fimg, fimg1):
         c = 0
         image_row = image[r]
         while c < altezza:
-            if c + 3 < lunghezza and isBlack(image_row[c]) and isBlack(image_row[c + 3]):
+            image_row_column = image_row[c]
+            if c + 3 < lunghezza and is_black(image_row_column) and is_black(image_row[c + 3]):
                 c += 4
                 continue
 
-            currentPixel = image_row[c]
-            if (isWhite(currentPixel)):
+            if is_white(image_row_column):
                 rect_corners = []
-                canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_corners)
+                get_rectangle_from_pixel(r, c, image, lunghezza, altezza, final_solution, rect_corners)
                 if not len(rect_corners) == 0:
                     c = rect_corners[0][1]
                     continue
 
-            c = c + 1
+            c += 1
 
     for rect in final_solution:
         writeGreen(rect, image)
@@ -75,7 +74,7 @@ def writeRed(rect, image):
             image[r][c] = RED
 
 
-def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_corners):
+def get_rectangle_from_pixel(r, c, image, lunghezza, altezza, final_solution, rect_corners):
     # andiamo a destra fino a che troviamo un nero o finisce l'immagine
     # contemporaneamente cerchiamo se nella riga di sotto ci sono pixel bianchi, se si ci fermiamo
     min_length = 3
@@ -87,27 +86,15 @@ def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_
     # scorro verso destra, quindi il range e' da left_up_corner.LEFT+1 fino alla fine della riga
     left_up_corner_y = left_up_corner[1]
     left_up_corner_x = left_up_corner[0]
-    for r in range(left_up_corner_y + 1, lunghezza):
-        current_pixel = image[left_up_corner_x][r]
-        # bottomSideCurrentPixel = fimgAsArray[left_up_corner[0] + 1][r]
-        # se nero o alla fine dell'immagine allora OK
-        # Se e l'ultima colonna verifico se e' bianco o nero
-        if r == (lunghezza - 1):
-            if isBlack(current_pixel):
-                # se all'ultima colonna troviamo nero e ancora non abbiamo individuato un angolo allora non e' un rettangolo
-                return False
-            elif isWhite(current_pixel):
-                # questa colonna e' l'ultima
-                right_up_corner = (left_up_corner_x, r)
-                rect_corners.append(right_up_corner)
-                return False
-        # se e' nero e al passo precedente non abbiamo trovato un angolo allora non puo' essere un angolo
-        if isBlack(current_pixel):
+
+    for y in range(left_up_corner_y + 1, lunghezza):
+        current_pixel = image[left_up_corner_x][y]
+        if is_black(current_pixel):
             return False
         # se il pixel nell'ultima colonna e' bianco quindi la riga continua verifichiamo se sotto e' bianco in tal caso e' un angolo in alto a destra e ci fermiamo
         # (left_up_corner[0] + 1) < altezza controlla che sotto sia presente una riga
-        elif isWhite(current_pixel) and (left_up_corner_x + 1) < altezza and isWhite(image[left_up_corner_x + 1][r]):
-            right_up_corner = (left_up_corner_x, r)
+        elif is_white(current_pixel) and (left_up_corner_x + 1) < altezza and is_white(image[left_up_corner_x + 1][y]):
+            right_up_corner = (left_up_corner_x, y)
             rect_corners.append(right_up_corner)
             break
 
@@ -115,49 +102,34 @@ def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_
         return False
 
     right_up_corner_y = right_up_corner[1]
-    rectLength = right_up_corner_y - left_up_corner_y + 1
+    rect_length = right_up_corner_y - left_up_corner_y + 1
     # confrontiamo le colonne per capire la lunghezza
-    if rectLength < min_length:
+    if rect_length < min_length:
         # TOO SMALL
         return False
 
-    # LETS GOING DOWN NOW
+    # LETS GO DOWN NOW
 
-    # scoperta la base di sopra scendiamo a destra e a sinistra verticalmente fino a che non troviamo
+    # scoperta la base di sopra scendiamo a destra e a sinistra verticalmente fino a che non troviamo 
     # un nero o la fine dell'immagine, se anche dall'altra parte e' nero allora abbiamo trovato i lati
-    for r in range(left_up_corner_x + 1, altezza):
-        left_pixel = image[r][left_up_corner_y]
-        right_pixel = image[r][right_up_corner_y]
+    for x in range(left_up_corner_x + 1, altezza):
+        left_pixel = image[x][left_up_corner_y]
+        right_pixel = image[x][right_up_corner_y]
 
-        if r == (altezza - 1):
-            # se proprio l ultima riga e' bianca almeno negli inner allora puo essere un rettangolo
-            if isWhite(left_pixel) and isWhite(right_pixel):
-                left_pixel_inner = image[r][left_up_corner_y + 1]
-                right_pixel_inner = image[r][left_up_corner_y - 1]
-                if isWhite(left_pixel_inner) and isWhite(right_pixel_inner):
-                    # e' una possibile riga bianca quindi e' la base del rett
-                    left_down_corner = (r, left_up_corner_y)
-                    right_down_corner = (r, right_up_corner_y)
-                    break
-                else:
-                    return False
-            else:
-                # se non sono entrambi bianchi e siamo arrivati alla fine allora non e' un rettangolo, manca la base
-                return False
-        elif isWhite(left_pixel) and isWhite(right_pixel):
+        if is_white(left_pixel) and is_white(right_pixel):
             # se sono entrambi bianchi allora va bene, controlliamo solo che non sia una potenziale riga bianca
-            left_pixel_inner = image[r][left_up_corner_y + 1]
-            right_pixel_inner = image[r][right_up_corner_y - 1]
-            if isWhite(left_pixel_inner) and isWhite(right_pixel_inner):
+            left_pixel_inner = image[x][left_up_corner_y + 1]
+            right_pixel_inner = image[x][right_up_corner_y - 1]
+            if is_white(left_pixel_inner) and is_white(right_pixel_inner):
                 # e' una possibile riga bianca quindi e' la base del rett
-                left_down_corner = (r, left_up_corner_y)
-                right_down_corner = (r, right_up_corner_y)
+                left_down_corner = (x, left_up_corner_y)
+                right_down_corner = (x, right_up_corner_y)
                 break
-            elif isBlack(left_pixel_inner) and isBlack(right_pixel_inner):
+            elif is_black(left_pixel_inner) and is_black(right_pixel_inner):
                 # se gli inner sono entrambi neri allora dobbiamo proseguire, prima pero' controlliamo che la riga sia nera
-                if not rectLength == min_length:
-                    for ir in range(left_up_corner_y + 2, right_up_corner_y - 1):
-                        if isWhite(image[r][ir]):
+                #if not rect_length == min_length:
+                    for y in range(left_up_corner_y + 2, right_up_corner_y - 1):
+                        if is_white(image[x][y]):
                             return False
                         else:
                             continue
@@ -168,8 +140,8 @@ def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_
             # se sono entrambi neri o uno bianco e uno nero allora non puo' essere un rettangolo
             return False
 
-    if left_up_corner == -1 or right_up_corner == -1 or left_down_corner == -1 or right_down_corner == -1:
-        return False
+    # if left_up_corner == -1 or right_up_corner == -1 or left_down_corner == -1 or right_down_corner == -1:
+    #     return False
 
     if left_down_corner[0] - left_up_corner_x + 1 < min_length:
         # print("Rettangolo troppo poco alto")
@@ -178,20 +150,19 @@ def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_
     # controlliamo la base sia interamente bianca
     for i in range(left_down_corner[1], right_down_corner[1] + 1):
         current_pixel = image[left_down_corner[0]][i]
-        if isBlack(current_pixel):
+        if is_black(current_pixel):
             return False
 
-    # print("RETTANGOLO!!!")
     final_solution.append([left_up_corner, right_up_corner, left_down_corner, right_down_corner])
     return True
 
 
-def isBlack(tupla):
+def is_black(tupla):
     BLACK = (0, 0, 0)
     return tupla == BLACK
 
 
-def isWhite(tupla):
+def is_white(tupla):
     WHITE = (255, 255, 255)
     return tupla == WHITE
 

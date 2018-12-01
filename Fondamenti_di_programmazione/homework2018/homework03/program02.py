@@ -68,59 +68,197 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 
 '''
 
-import immagini 
+
 
 ################################################################################
 
+import immagini
+
+
 class Colore:
+
+
+    '''
+
+    - __init__(self,r=0,g=0,b=0)  che inizializza un colore con la terna RGB (r,g,b) valida.
+    - utilizzo(self, sk) dove sk e' un oggetto di tipo Skyline. Il metodo ritorna  il numero di occorrenze
+      di rettangoli con il colore self presenti nello skyline sk
+      (ricorda che in uno skyline uno stesso rettangolo puo' comparire piu' volte in diverse posizioni)
+    - to_tuple(self) che torna la terna (r, g, b)
+    '''
+
     def __init__(self,r=0,g=0,b=0):
-        # inserisci qui il tuo codice
+       self.r, self.g, self.b = r, g, b
 
     def utilizzo(self, sk):
-        # inserisci qui il tuo codice
+
+        self_color = self.color
+        sfondo = sk.sfondo
+
 
     def to_tuple(self):
-        # inserisci qui il tuo codice
+        return self.r, self.g, self.b
     
         
 ################################################################################
 
 class Rettangolo:
+    '''
+    La classe Rettangolo deve implementare i seguenti metodi:
+- __init__(base, altezza, colore) Base ed altezza sono due interi positivi e
+  rappresentano la lunghezza della base e dell'altezza del rettangolo, colore e' un oggetto
+  della classe Colore.
+- cancella(self) cancella le occorrenze del rettangolo da tutti gli skyline in cui e' presente.
+- to_tuple(self) che torna la terna (base, altezza, colore)
+
+    '''
+
     def __init__(self, base, altezza, colore):
-        # inserisci qui il tuo codice
+        self.colore_rettangolo = colore.r, colore.g, colore.b
+        self.altezza = altezza
+        self.base = base
 
     def cancella(self):
-        # inserisci qui il tuo codice
+        return
+
 
     def to_tuple(self):
-        # inserisci qui il tuo codice
+        return self.colore_rettangolo[0], self.colore_rettangolo[1], self.colore_rettangolo[2]
 
 ################################################################################
 
 class Skyline:
+
+    '''
+La classe Skyline deve implementare i seguenti metodi:
+- __init__(self, sfondo) dove sfondo e' un oggetto di tipo Colore.
+  definisce uno skyline vuoto con colore di sfondo uguale a 'sfondo'.
+- aggiungi(self, ret, x) l' oggetto ret di tipo Rettangolo viene aggiunto
+  allo skyline a partire dall'ascissa x, l'aggiunta avviene solo se non vengono violate le regole 1), 2) e 3)
+  dello skyline.
+- fondi(self, other) con argomento other di tipo Skyline, che inserisce nello skyline self tutte le occorrenze
+  di rettangoli dello skyline other. I rettangoli vanno inseriti nelle stesse posizioni che occupavano in other
+  e l'inserimento di ciascun rettangolo avviene solo se non viola le regole degli skyline
+  (ricorda che in uno skyline non e' possibile inserire rettangoli che hanno lo stesso colore dello sfondo
+  ne' rettangoli da posizionare ad una ascissa gia' occupata).
+- salva(self, fimg)   salva  l'immagine dello skyline sotto forma di file PNG all'indirizzo fimg.
+- larghezza(self) restituisce la larghezza dello skyline (vale a dire il valore massimo di x+base,
+  dove base e' la base del rettangolo inserito alla posizione x).
+  Uno skyline vuoto ha per convenzione larghezza zero.
+- altezza(self) restituisce l'altezza dello skyline (vale a dire l'altezza massima tra quelle dei
+  rettangoli presenti nello skyline). Uno skyline vuoto ha per convenzione altezza zero.
+- edifici(self) restituisce il numero di rettangoli presenti nello skyline.
+- to_tuple(self) che torna la tupla (sfondo,)
+    '''
+
+
     def __init__(self, sfondo):
-        # inserisci qui il tuo codice
+        self.colore_sfondo = sfondo
+        self.skyline_image = []
 
     def aggiungi(self, rettangolo, x):
-        # inserisci qui il tuo codice
- 
+        altezza_rettangolo = rettangolo.altezza
+        base_rettangolo = rettangolo.base
+        colore_rettangolo = rettangolo.colore_rettangolo
+
+        #rule n.1, if x is contained in the already existing skylin
+        # and the old skyline has height > 0
+        altezza_skyline_original = self.altezza()
+        larghezza_skyling_original = self.larghezza()
+        if x < larghezza_skyling_original and altezza_skyline_original > 0:
+            #if the preceding pixel and the x's pixel have different color
+            #this is the start of a pre-existing building.
+            if self.skyline_image[altezza_skyline_original - 1][x] != self.skyline_image[altezza_skyline_original - 1][x - 1]:
+                return
+        if x == 0 and larghezza_skyling_original > 0:
+            return # if larghezza_skyline_original>0 it means that a rectangle was already created starting from 0, and that that
+            #would be it's lower left corner
+
+
+        #rule n.2
+        if colore_rettangolo == self.colore_sfondo:
+            return
+
+        #if length of skyline_image is 0, create a skyline image as big as the passed rectangle
+        if altezza_skyline_original == 0:
+            self.skyline_image = [[colore_rettangolo for _ in range(base_rettangolo)] for _ in range(altezza_rettangolo)]
+        else:
+            for i in range(altezza_rettangolo):
+                self.check_if_needs_to_add_top_line_and_draw_horizontal_ones(base_rettangolo, colore_rettangolo, i,
+                                                                             larghezza_skyling_original, x)
+
+                self.draw_horizontally(altezza_skyline_original, base_rettangolo, colore_rettangolo, i, x)
+
+    def draw_horizontally(self, altezza_skyline_original, base_rettangolo, colore_rettangolo, i, x):
+        for j in range(x, base_rettangolo + 1):  # todo +1?
+            current_pixel = self.skyline_image[i][j]
+
+            if sum(current_pixel) > sum(colore_rettangolo):  # preexisting color is more luminous
+                # TODO possibilità di skippare questi pixel e passare direttamente a quelli successivi?
+                continue
+            self.skyline_image[altezza_skyline_original - i - 1][j] = colore_rettangolo
+
+    def check_if_needs_to_add_top_line_and_draw_horizontal_ones(self, base_rettangolo, colore_rettangolo, i,
+                                                                larghezza_skyling_original, x):
+        if i > self.altezza() - 1:
+            self.skyline_image.insert(0, [self.colore_sfondo.to_tuple() for _ in range(larghezza_skyling_original)])
+        # because in the previous line we added one more line, we need to draw the "top" of the building on top of the background color
+        for j in range(x, base_rettangolo + 1):
+            self.skyline_image[0][j] = colore_rettangolo
+
     def fondi(self, other):
-        # inserisci qui il tuo codice
+        return
+        '''
+            - fondi(self, other) con argomento other di tipo Skyline, che inserisce nello skyline self tutte le occorrenze
+              di rettangoli dello skyline other. I rettangoli vanno inseriti nelle stesse posizioni che occupavano in other
+              e l'inserimento di ciascun rettangolo avviene solo se non viola le regole degli skyline
+              (ricorda che in uno skyline non e' possibile inserire rettangoli che hanno lo stesso colore dello sfondo
+              ne' rettangoli da posizionare ad una ascissa gia' occupata).
+        '''
 
     def salva(self, fimg):
-        # inserisci qui il tuo codice
+        immagini.save(self.skyline_image,fimg)
 
     def larghezza(self):
-        # inserisci qui il tuo codice
+        if self.altezza() > 0:
+            return len(self.skyline_image[0])
+        return 0
+
 
     def altezza(self):
-        # inserisci qui il tuo codice
+        return len(self.skyline_image)
 
     def edifici(self):
-        # inserisci qui il tuo codice
+        #logic: count the colors in the image except for the background color?
+        color_set = set()
+        for i in range(self.altezza()):
+            row_set = set(self.skyline_image[i])
+            for pixel in row_set:
+                if pixel != self.colore_sfondo.to_tuple():
+                    color_set.add(pixel)
+        return len(color_set)
+
 
     def to_tuple(self):
-        # inserisci qui il tuo codice
+        return self.colore_sfondo,
 
 
 ################################################################################
+if __name__ == "__main__":
+
+    colore_sfondo = Colore(255, 255, 255)
+    colore_rettangolo = Colore(21, 32, 98)
+    skyline = Skyline(colore_sfondo)
+    rettangolo = Rettangolo(10, 10, colore_rettangolo)
+
+    skyline.aggiungi(rettangolo,0)
+
+    colore_rettangolo = Colore(100, 100, 100)
+    rettangolo = Rettangolo(2,12, colore_rettangolo)
+
+    skyline.aggiungi(rettangolo, 2)
+
+    print(skyline.skyline_image)
+    immagini.save(skyline.skyline_image,"test_davide.png")
+
+    print(skyline.edifici())

@@ -1,0 +1,8 @@
+- Scorro la matrice dell'immagine caricata da destra a sinistra
+- se il pixel è bianco allora è un potenziale vertice sinistro di un rettangolo
+- continuo a scorrere verso destra controllando che ogni pixel sia bianco
+- al primo pixel nero ho trovato un potenziale vertice in alto a destra
+- avendo a disposizione sia il vertice in alto a sinistra che in alto a destra posso scendere lungo le loro colonne e:
+    - verificare che nella linea tra loro compresa non vi siano pixel bianchi
+    - verificare che il primo pixel nero corrisponda alla stessa altezza per entrambi (in questo caso avrei quindi un rettangolo
+- coloro l'immagine come indicato e la salvo
