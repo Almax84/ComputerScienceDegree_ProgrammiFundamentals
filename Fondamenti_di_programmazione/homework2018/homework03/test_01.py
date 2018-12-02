@@ -24,14 +24,14 @@ class Test(testlib.TestCase):
         return 1
 
     @data(  ('figura100x100', 'e1_f1.png', 'e1_r1.png',   3,'e1_Risf1.png'),
-            ('figura100X100', 'e1_f2.png', 'e1_r2.png',  50,'e1_Risf2.png'),
+            ('figura402X402', 'e1_f2.png', 'e1_r2.png',  50,'e1_Risf2.png'),
             ('figura100X100', 'e1_f3.png', 'e1_r3.png',   1,'e1_Risf3.png'),
-            ('figura100X100', 'e1_f4.png', 'e1_r4.png',   1,'e1_Risf4.png'),
-            ('figura100X100', 'e1_f5.png', 'e1_r5.png',   8,'e1_Risf5.png'),
-            ('figura150X150', 'e1_f6.png', 'e1_r6.png',  81,'e1_Risf6.png'),
-            ('figura200X200', 'e1_f7.png', 'e1_r7.png', 129,'e1_Risf7.png'),
-            ('figura200X200', 'e1_f8.png', 'e1_r8.png',  47,'e1_Risf8.png'),
-            ('figura300X300', 'e1_f9.png', 'e1_r9.png', 147,'e1_Risf9.png')
+            ('figura101X101', 'e1_f4.png', 'e1_r4.png',   1,'e1_Risf4.png'),
+            ('figura101X101', 'e1_f5.png', 'e1_r5.png',   8,'e1_Risf5.png'),
+            ('figura151X151', 'e1_f6.png', 'e1_r6.png',  81,'e1_Risf6.png'),
+            ('figura201X201', 'e1_f7.png', 'e1_r7.png', 129,'e1_Risf7.png'),
+            ('figura201X201', 'e1_f8.png', 'e1_r8.png',  47,'e1_Risf8.png'),
+            ('figura301X301', 'e1_f9.png', 'e1_r9.png', 147,'e1_Risf9.png')
             )
     @unpack
     def test(self, descrizione, file1, file2, Nexpected, fileExpected):
