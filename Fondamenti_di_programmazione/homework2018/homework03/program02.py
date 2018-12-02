@@ -168,7 +168,7 @@ La classe Skyline deve implementare i seguenti metodi:
         if x < larghezza_skyling_original and altezza_skyline_original > 0:
             #if the preceding pixel and the x's pixel have different color
             #this is the start of a pre-existing building.
-            if self.skyline_image[altezza_skyline_original - 1][x] != self.skyline_image[altezza_skyline_original - 1][x - 1]:
+            if self.skyline_image[0][x] != self.skyline_image[0][x - 1]:
                 return
         if x == 0 and larghezza_skyling_original > 0:
             return # if larghezza_skyline_original>0 it means that a rectangle was already created starting from 0, and that that
@@ -186,24 +186,25 @@ La classe Skyline deve implementare i seguenti metodi:
             for i in range(altezza_rettangolo):
                 self.check_if_needs_to_add_top_line_and_draw_horizontal_ones(base_rettangolo, colore_rettangolo, i,
                                                                              larghezza_skyling_original, x)
-
                 self.draw_horizontally(altezza_skyline_original, base_rettangolo, colore_rettangolo, i, x)
 
     def draw_horizontally(self, altezza_skyline_original, base_rettangolo, colore_rettangolo, i, x):
-        for j in range(x, base_rettangolo + 1):  # todo +1?
-            current_pixel = self.skyline_image[i][j]
+        for j in range(x, base_rettangolo + x):  # todo +1?
+            # line_to_color = altezza_skyline_original - i - 1
+            current_pixel_color = self.skyline_image[i][j]
 
-            if sum(current_pixel) > sum(colore_rettangolo):  # preexisting color is more luminous
+            if current_pixel_color != colore_sfondo.to_tuple() and sum(current_pixel_color) > sum(colore_rettangolo):  # preexisting color is more luminous
                 # TODO possibilità di skippare questi pixel e passare direttamente a quelli successivi?
                 continue
-            self.skyline_image[altezza_skyline_original - i - 1][j] = colore_rettangolo
+
+            self.skyline_image[i][j] = colore_rettangolo
 
     def check_if_needs_to_add_top_line_and_draw_horizontal_ones(self, base_rettangolo, colore_rettangolo, i,
                                                                 larghezza_skyling_original, x):
         if i > self.altezza() - 1:
             self.skyline_image.insert(0, [self.colore_sfondo.to_tuple() for _ in range(larghezza_skyling_original)])
         # because in the previous line we added one more line, we need to draw the "top" of the building on top of the background color
-        for j in range(x, base_rettangolo + 1):
+        for j in range(x, base_rettangolo + x):
             self.skyline_image[0][j] = colore_rettangolo
 
     def fondi(self, other):
@@ -253,10 +254,17 @@ if __name__ == "__main__":
 
     skyline.aggiungi(rettangolo,0)
 
+    #rettangolo più alto
     colore_rettangolo = Colore(100, 100, 100)
     rettangolo = Rettangolo(2,12, colore_rettangolo)
 
     skyline.aggiungi(rettangolo, 2)
+
+    #rettangolo più largo
+    colore_rettangolo = Colore(150, 150, 100)
+    rettangolo = Rettangolo(5, 12, colore_rettangolo)
+
+    skyline.aggiungi(rettangolo, 3)
 
     print(skyline.skyline_image)
     immagini.save(skyline.skyline_image,"test_davide.png")
