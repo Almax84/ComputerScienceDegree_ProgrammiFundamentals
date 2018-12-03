@@ -20,7 +20,7 @@ def es1(fimg, fimg1):
             currentPixel = image_row[c]
             if (isWhite(currentPixel)):
                 rect_corners = []
-                canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_corners)
+                can_start_rect_from_here(r, c, image, lunghezza, altezza, final_solution, rect_corners)
                 if not len(rect_corners) == 0:
                     c = rect_corners[0][1]
                     continue
@@ -76,7 +76,7 @@ def writeRed(rect, image):
             image[r][c] = RED
 
 
-def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_corners):
+def can_start_rect_from_here(r, c, image, lunghezza, altezza, final_solution, rect_corners):
     # andiamo a destra fino a che troviamo un nero o finisce l'immagine
     # contemporaneamente cerchiamo se nella riga di sotto ci sono pixel bianchi, se si ci fermiamo
     min_length = 3
@@ -122,7 +122,7 @@ def canStartARectFromHere(r, c, image, lunghezza, altezza, final_solution, rect_
         # TOO SMALL
         return False
 
-    # LETS GOING DOWN NOW
+    # LETS GO DOWN NOW
 
     # scoperta la base di sopra scendiamo a destra e a sinistra verticalmente fino a che non troviamo
     # un nero o la fine dell'immagine, se anche dall'altra parte e' nero allora abbiamo trovato i lati
