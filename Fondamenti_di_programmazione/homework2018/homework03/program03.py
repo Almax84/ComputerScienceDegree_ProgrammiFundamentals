@@ -160,6 +160,10 @@ def leggi_archivio_attori(archivio_attori_json):
         come argomento il dizionario (letto dal file json) che contiene le informazioni dell'attore.
     '''
     # inserite qui il vosto codice
+    with open(archivio_attori_json, encoding="utf-8") as f:
+        
+
+
 
 def leggi_archivio_film(archivio_film_json, catalogo_attori):
     '''- leggi_archivio_film(file_json, catalogo_attori)
@@ -438,3 +442,4 @@ class Regista:
 
 if __name__ == '__main__':
     # inserite qui il vosto codice personale di test
+    leggi_archivio_attori("actors.json")
