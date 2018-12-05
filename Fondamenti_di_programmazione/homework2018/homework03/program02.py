@@ -81,8 +81,8 @@ class Colore:
         if not isinstance(sk, Skyline):
             raise ValueError("Skylines non valido")
         counter = 0;
-        if sk.toDraw == True:
-            sk.disegna()
+        #if sk.toDraw == True:
+            #sk.disegna()
 
         for position, rect in sk.rectMap.items():
             if self == rect.colore:

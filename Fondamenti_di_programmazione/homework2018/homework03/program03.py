@@ -160,7 +160,23 @@ def leggi_archivio_attori(archivio_attori_json):
         come argomento il dizionario (letto dal file json) che contiene le informazioni dell'attore.
     '''
     # inserite qui il vosto codice
-    with open(archivio_attori_json, encoding="utf-8") as f:
+    with open(archivio_attori_json,"r", encoding="utf-8") as f:
+        
+        #[^\x00-\x7F]
+        my_json = json.load(f)
+        regex = re.compile("[^\x00-\x7F]")
+        
+        
+        #find_result = regex.findall("[^\x00-\x7F]",my_json)
+        #print(find_result)
+        print(my_json)
+        for key, value in my_json.items():
+            #print(key)
+            pass
+        
+        
+        #print(my_json)
+        
         
 
 
