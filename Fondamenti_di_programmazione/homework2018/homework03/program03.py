@@ -163,16 +163,30 @@ def leggi_archivio_attori(archivio_attori_json):
     with open(archivio_attori_json,"r", encoding="utf-8") as f:
         
         #[^\x00-\x7F]
-        my_json = json.load(f)
-        regex = re.compile("[^\x00-\x7F]")
+        actors_json = json.load(f)
+
+        regex = r'[^A-Za-z0-9\s]'
         
+        catalogo_attori = dict()
         
         #find_result = regex.findall("[^\x00-\x7F]",my_json)
         #print(find_result)
-        print(my_json)
-        for key, value in my_json.items():
-            #print(key)
-            pass
+        #print(my_json)
+        #for key, value in my_json.items():
+            #escaped_chars = re.findall(regex, key)
+            #for escaped_char in escaped_chars:
+                #print(escaped_char, " diventa", escaped_char.encode("unicode-escape").decode())
+               #print(escaped_char)
+               
+        for nome, dati in actors_json.items():
+            attore = Attore(dati)
+            catalogo_attori[nome] = Attore(dati)
+            attore.eta()
+
+        
+        return catalogo_attori
+            
+            
         
         
         #print(my_json)
@@ -234,6 +248,7 @@ def leggi_archivio_film(archivio_film_json, catalogo_attori):
 # },
 
 class Attore():
+    
     '''
     La classe Attore rappresenta la scheda di un attore.
     Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
@@ -246,19 +261,40 @@ class Attore():
         Il dizionario passato come argomento contiene le informazioni relative ad un solo attore.
         Il costruttore assegna agli attributi tutti i valori possibili a partire dal dizionario json passato.
         '''
-        # inserite qui il vosto codice
+        regex_anno = "[1-9][0-9][0-9][0-9]"
+        for key,value in data.items():
+            if key == "NAME":
+                self.name = value
+            elif key == "LASTFIRST":
+                self.last_first = value
+            elif key == "REALNAME":
+                self.real_name = value
+            elif key == "NICKNAMES":
+                self.nick_names = value
+            elif key == "GENDER":
+                self.gender = value
+            elif key == "BIRTH":
+                if len(value) > 0 and re.match(regex_anno, value[0]):
+                    self.birth = value[0]
+                else:
+                    self.birth = None
+            elif key == "DIED":
+                if len(value) > 0 and re.match(regex_anno, value[0]):
+                    self.died = value[0]
+                else:
+                    self.died = None
 
     def nome(self):
         '''restituisce il nome'''
-        # inserite qui il vosto codice
+        return self.name
 
     def genere(self):
         '''restituisce il genere'''
-        # inserite qui il vosto codice
+        return self.gender
 
     def vero_nome(self):
         '''restituisce il vero nome'''
-        # inserite qui il vosto codice
+        return self.real_name
 
     def eta(self):
         '''restituisce un intero che indica l'età dell'attore in anni:
@@ -270,6 +306,22 @@ class Attore():
               avete il permesso di usare la libreria re per le espressioni regolari.
         '''
         # inserite qui il vosto codice
+        regex_anno = "[1-9][0-9][0-9][0-9]"
+        if self.birth == None or self.birth == '':
+            return None
+        if self.died == None or self.died == '':
+            try:
+                anno_nascita = int(re.findall(regex_anno, self.birth)[0])
+            except:
+                print(self.birth)
+            return 2018 - anno_nascita
+            #cioè se non è morto usa il 2018 come anno corrente
+        else:
+            
+            anno_morte = int(re.findall(regex_anno, self.died)[0])
+            anno_nascita = int(re.findall(regex_anno, self.birth)[0])
+            return anno_morte - anno_nascita
+            #conteggio anni vissuti
 
     def films(self):
         '''restituisce il set di film in cui ha lavorato'''
