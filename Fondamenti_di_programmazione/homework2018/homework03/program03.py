@@ -322,12 +322,12 @@ class Attore():
                 else:
                     self.gender = ""
             elif key == "BIRTH":
-                if len(value) > 0 and re.match(regex_anno, value[0]):
+                if len(value) > 0:
                     self.birth = ''.join(value)
                 else:
                     self.birth = ""
             elif key == "DIED":
-                if len(value) > 0 and re.match(regex_anno, value[0]):
+                if len(value) > 0:
                     self.died = ''.join(value)
                 else:
                     self.died = ""
@@ -369,7 +369,7 @@ class Attore():
             
             anno_morte = int(re.findall(regex_anno, self.died)[0])
             anno_nascita = int(re.findall(regex_anno, self.birth)[0])
-            return anno_morte - anno_nascita
+            return anno_morte - anno_nascita+1
 
     def films(self):
         '''restituisce il set di film in cui ha lavorato'''
@@ -392,18 +392,18 @@ class Attore():
         con cui l'attore ha girato almeno un film.'''
         registi_con_cui_ha_lavorato = set()
         registi_occurrences = dict()
-        for regista in self.catalogo_registi:
-            for film in self.catalogo_film:
+        for regista_nome, regista_value in self.catalogo_registi.items():
+            for film_nome, film in self.catalogo_film.items():
                 #se l'attore non compare nel film skippare
-                if self not in film.attori():
+                if regista_nome not in film.directors:
                     continue
                 
-                registi_con_cui_ha_lavorato.add(regista)
+                registi_con_cui_ha_lavorato.add(regista_nome)
 
-                if regista in registi_occurrences:
-                    registi_occurrences[regista] = registi_occurrences[regista] +1
+                if regista_nome in registi_occurrences:
+                    registi_occurrences[regista_nome] = registi_occurrences[regista_nome] +1
                 else:
-                    registi_occurrences[regista] = 1
+                    registi_occurrences[regista_nome] = 1
 
 
         self.registi_occurrences = registi_occurrences
@@ -440,11 +440,11 @@ class Attore():
         che rappresentano tutti gli attori con cui l'attore self ha girato almeno un film.
         '''
         attori_coprotagonisti = set()
-        for film in self.catalogo_film:
+        for film_nome, film in self.catalogo_film.items():
             attori = film.attori()
             for attore in attori:
                 if attore.nome() == self.name:
-                    attori_coprotagonisti += attori
+                    attori_coprotagonisti = attori_coprotagonisti | attori
 
         attori_coprotagonisti.remove(self)
 
@@ -575,11 +575,17 @@ class Regista:
         '''Il costruttore assegna il nome.'''
         self.name = nome
         self.attori_dict = None
+        self.catalogo_film = None
 
     def films(self):
         '''torna l'insieme delle istanze dei Film in cui il regista ha lavorato'''
         films_set = set()
-        for film in self.catalogo_film:
+
+        if self.catalogo_film == None:
+            return set()
+
+
+        for film_name, film in self.catalogo_film.items():
             registi_film = film.registi()
             for regista in registi_film:
                 if regista.nome() == self.name:
@@ -672,12 +678,12 @@ class Regista:
 
     def anni_di_lavoro(self):
         set_anni = set()
-        for film in self.catalogo_film():
+        for film_name, film in self.catalogo_film.items():
             lista_registi = film.registi()
             for regista in lista_registi:
                 if regista.nome() == self.name:
                     set_anni.add(film.anno())
-        return max(set_anni)-min(set_anni)
+        return max(set_anni)-min(set_anni)+1
 
 
     def catalogo_attori(self, catalogo_attori):
@@ -694,9 +700,9 @@ if __name__ == '__main__':
     catalogo_attori = leggi_archivio_attori("actors.json")
     catalogo_film, catalogo_registi = leggi_archivio_film("films.json",catalogo_attori)
     
-    stephen_spielberg = catalogo_registi["Steven Spielberg"]
+    kidman = catalogo_attori["Nicole Kidman"]
     
-    print(stephen_spielberg.attore_preferito().nome())
+    print(kidman.coprotagonisti())
     
     
     ##attore preferito
