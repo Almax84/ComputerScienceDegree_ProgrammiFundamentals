@@ -299,7 +299,7 @@ class Attore():
         Il dizionario passato come argomento contiene le informazioni relative ad un solo attore.
         Il costruttore assegna agli attributi tutti i valori possibili a partire dal dizionario json passato.
         '''
-        regex_anno = "[1-9][0-9][0-9][0-9]"
+        self.catalogo_film = None
         for key,value in data.items():
             if key == "NAME":
                 if len(value) > 0:
@@ -373,6 +373,10 @@ class Attore():
 
     def films(self):
         '''restituisce il set di film in cui ha lavorato'''
+        if self.catalogo_film == None:
+            return set()
+
+
         film_s = set()
         for film_name, film in self.catalogo_film.items():
             attori_film = film.attori()
@@ -549,7 +553,7 @@ class Film():
         for runtime in runtimes:
             runtime_total += int(runtime)
         
-        return runtime
+        return runtime_total
         
 
     def titolo(self):

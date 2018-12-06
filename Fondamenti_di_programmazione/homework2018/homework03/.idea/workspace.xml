@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ddd27bfe-aca8-4783-8eaa-c30cda5f9e76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/program03.py" beforeDir="false" afterPath="$PROJECT_DIR$/program03.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,12 +32,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1924" />
+          <entry key="py" value="1988" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1924" />
+          <entry key="Python" value="1988" />
         </counts>
       </usages-collector>
     </session>
@@ -57,11 +56,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/program03.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="371" column="46" selection-start-line="371" selection-start-column="46" selection-end-line="371" selection-end-column="46" />
+            <state relative-caret-position="204">
+              <caret line="301" column="26" selection-start-line="301" selection-start-column="26" selection-end-line="301" selection-end-column="26" />
               <folding>
-                <marker date="1544115622913" expanded="true" signature="28745:29641" ph="..." />
-                <marker date="1544115622913" expanded="true" signature="29974:29981" ph="..." />
+                <marker date="1544115967378" expanded="true" signature="28807:29703" ph="..." />
+                <marker date="1544115967378" expanded="true" signature="30036:30043" ph="..." />
               </folding>
             </state>
           </provider>
@@ -70,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_03.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="126" column="37" lean-forward="true" selection-start-line="126" selection-start-column="37" selection-end-line="126" selection-end-column="37" />
+            <state relative-caret-position="197">
+              <caret line="144" column="34" selection-start-line="144" selection-start-column="34" selection-end-line="144" selection-end-column="34" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -108,6 +107,7 @@
       <find>anni</find>
       <find>eta</find>
       <find>regista_from</find>
+      <find>new_attore</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -282,7 +282,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3283859" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39888683" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39888683" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -295,7 +295,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24960254" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.24960254" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -324,16 +324,6 @@
           <url>file://$PROJECT_DIR$/test_03.py</url>
           <line>451</line>
           <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/program03.py</url>
-          <line>359</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_03.py</url>
-          <line>127</line>
-          <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -388,13 +378,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/program01.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="91" column="50" lean-forward="true" selection-start-line="91" selection-start-column="50" selection-end-line="91" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Program Files/Python/Lib/site-packages/ddt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
@@ -411,21 +394,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_03.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="126" column="37" lean-forward="true" selection-start-line="126" selection-start-column="37" selection-end-line="126" selection-end-column="37" />
+        <state relative-caret-position="197">
+          <caret line="144" column="34" selection-start-line="144" selection-start-column="34" selection-end-line="144" selection-end-column="34" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/program01.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="91" column="50" lean-forward="true" selection-start-line="91" selection-start-column="50" selection-end-line="91" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/program03.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="371" column="46" selection-start-line="371" selection-start-column="46" selection-end-line="371" selection-end-column="46" />
+        <state relative-caret-position="204">
+          <caret line="301" column="26" selection-start-line="301" selection-start-column="26" selection-end-line="301" selection-end-column="26" />
           <folding>
-            <marker date="1544115622913" expanded="true" signature="28745:29641" ph="..." />
-            <marker date="1544115622913" expanded="true" signature="29974:29981" ph="..." />
+            <marker date="1544115967378" expanded="true" signature="28807:29703" ph="..." />
+            <marker date="1544115967378" expanded="true" signature="30036:30043" ph="..." />
           </folding>
         </state>
       </provider>
