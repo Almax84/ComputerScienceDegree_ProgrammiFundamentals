@@ -1,164 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-NOTA: La descrizione è lunga ma il compito non è difficile, è solo lungo da spiegare con precisione.
 
-
-Bisogna definire tre Classi (Attore, Film e Regista) con i relativi attributi e
-metodi per realizzare una videoteca di film, i cui dati sono memorizzati in file
-di tipo json che hanno la struttura come nei file di esempio "actors.json" e
-"films.json". Le specifiche delle tre classi sono illustrate più avanti.
-Bisogna implementare inoltre due funzioni che leggono i file json ed istanziano gli Attori, Film e Registi.
-
-FUNZIONI DA IMPLEMENTARE
-
-Per costruire l'elenco delle istanza di Attore, Film e Regista a partire dai due file
-"actors.json" e "films.json" dovete realizzare le seguente due funzioni.
-Le classi da realizzare sono descritte dopo.
-
-- leggi_archivio_attori(file_json)
-    che legge l'archivio json fornito in input che descrive tutti gli attori
-    (con lo stesso formato del file di esempio actors.json)
-    e torna un dizionario catalogo_attori { nome -> oggetto di tipo Attore } in cui:
-    - le chiavi sono i nomi degli attori
-        (prese dal campo "NAME" del dizionario presente per ogni attore nel file json)
-    - i valori sono le corrispondenti istanze di tipo Attore create col costruttore passando
-        come argomento il dizionario (letto dal file json) che contiene le informazioni dell'attore.
-
-- leggi_archivio_film(file_json, catalogo_attori)
-    - che legge dal file json fornito in input che descrive tutti i film
-    (con lo stesso formato del file di esempio films.json)
-    - ed inoltre riceve il dizionario catalogo_attori { nome->Attore } prodotto con la funzione precedente
-    e torna come risultato una coppia di dizionari ( catalogo_film, catalogo_registi )
-    Il catalogo_film deve essere un dizionario { titolo -> oggetto di tipo Film } in cui:
-        - le chiavi sono i titoli dei film
-            (preso dal campo "TITLE" del dizionario presente per ogni film nel file json)
-        - i valori sono le corrispondenti istanze di tipo Film create col costruttore passando
-            come argomento il dizionario (letto dal file json) che contiene le informazioni del Film.
-    Il catalogo_registi deve essere un dizionario { nome -> oggetto di tipo Regista } in cui:
-        - le chiavi sono i nomi dei registi
-            ( presi dal campo "DIRECTORS" dei dizionari json che descrivono i film presi dal file json)
-        - i valori sono istanze del tipo Regista (di cui vedete la definizione più sotto)
-
-    La funzione leggi_archivio_film deve fare in modo che:
-    - all'interno di ciascun oggetto Film siano inseriti gli oggetti Attore in modo che:
-        - ogni Film contenga gli Attori che ci hanno lavorato
-        - ogni Attore contenga i Film in cui è comparso
-    - all'interno di ciascun oggetto Film siano contenuti gli oggetti di tipo Regista in modo che:
-        - ogni Film contenga i Registi che l'hanno diretto
-        - ogni Regista contenga i Film che ha diretto
-
-    NOTA: le istanze che rappresentano ciascun Attore, Film e Regista devono essere uniche.
-        (a tal proposito sfruttate i dizionari catalogo_attori, catalogo_film e catalogo_registi
-        che avete costruito / state costruendo)
-
-CLASSI DA IMPLEMENTARE
-
-La classe Attore rappresenta la scheda di un attore.
-Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
-per realizzare i metodi seguenti a partire dalle informazioni json ottenute dal file actors.json
-allegato (o da file json simile).
-
-    Implementate i metodi di istanza:
-
-    - Il costruttore della classe riceve un dizionario ottenuto dal file json actors.json (o file simile).
-        Il dizionario passato come argomento contiene le informazioni relative ad un solo attore.
-        Il costruttore assegna agli attributi tutti i valori necessari a partire dal dizionario json passato.
-    - nome(self)        che ne torna il nome
-    - vero_nome(self)   che ne torna il vero nome
-    - films(self)       che torna l'insieme di oggetti Film in cui l'attore ha partecipato
-    - registi(self)     che torna un set contenente le istanze di oggetti di tipo
-      Regista, con cui l'attore ha girato almeno un film.
-    - regista_preferito(self), che restituisce un'istanza di un oggetto Regista,
-      che rappresenta il regista con cui l'attore self ha girato più film.
-      In caso di pareggio, viene preso il regista il cui nome viene prima in ordine alfabetico.
-    - coprotagonisti(self), che restituisce un set contenente le istanze di oggetti
-      di tipo Attore, che rappresentano tutti gli attori con cui l'attore self ha girato
-      almeno un film.
-    - in_coppia(self, partner=None), che restituisce:
-      Se il parametro partner (stringa) NON viene specificato:
-        - un set di tuple: ogni tupla è del tipo (a_f, a_m, n_f),
-        dove a_f e a_m sono due istanze di oggetto di tipo Attore
-        (di cui una rappresenta l'attore self), di genere diverso (campo "GENDER" dei dati json)
-        (a_f è femmina e a_m è maschio) ed n_f è il numero di film in cui self e il suo partner
-        hanno fatto coppia (ovvero hanno girato PIU' DI UN film assieme).
-      Se il parametro partner VIENE specificato (di tipo stringa), viene restituito invece
-        - il set di tutti i Film (che può essere vuoto) in cui l'attore self e l'attore partner che ha quel nome
-        hanno fatto coppia (ovvero hanno girato ALMENO quel film assieme).
-    - luogo_preferito(self), che restituisce la stringa con il paese in cui l'attore
-      self ha girato più film.
-      In caso di pareggio, viene restituito il luogo che viene prima in ordine alfabetico.
-      Se non esiste si torna None
-    - film_durata(self, inf=0, sup=None), che restituiscela lista delle istanze
-      degli oggetti di tipo Film, dei film in cui l'attore self ha recitato e che
-      durano almeno inf minuti e, se sup è specificato, massimo sup minuti. La
-      lista deve essere ordinata per durata dei film in ordine crescente.
-      In caso di parità per titolo crescente in ordine alfabetico.
-      Se nel file json sono specificate più durate per lo stesso film, usate la durata minore.
-      Se nei dati json la durata non è indicata ignorate quel film.
-      NOTA: per estrarre la durata dalla proprieta' "RUNTIME" dei dati json che descrivono un film
-            avete il permesso di usare la libreria re per le espressioni regolari.
-    - eta(self), che restituisce un intero che indica l'età dell'attore:
-        - se l'anno di nascita NON è presente tornate None (e ignorate questo attore nel metodo Regista.attore_preferito)
-        - se l'anno di morte NON è presente usate il 2018 come anno di riferimento
-        - altrimenti tornate il numero di anni vissuti
-            Es. nato: 1950 oggi: 2018 -> 69
-      NOTA: per estrarre l'anno dalle proprieta' "BIRTH" e "DIED" dei dati json che descrivono un attore
-            avete il permesso di usare la libreria re per le espressioni regolari.
-
-    - tutti gli altri metodi che ritenete utili
-
-La classe Film rappresenta la scheda di un film, costruita a partire dalle informazioni json.
-Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
-all'implementazione dei metodi descritti.
-
-    Implementate i metodi di istanza:
-    - Il costruttore riceve come argomento un dizionario ricavato dal file films.json (o file json simile)
-        che rappresenta un solo film
-        ed assegna tutti i valori possibili agli attributi di istanza a partire dal dizionario json passato.
-    - titolo(self)  torna il titolo del film
-    - attori(self)  torna l'insieme di istanze di tipo Attore che hanno lavorato al film
-    - registi(self) torna l'insieme di istanze di tipo Regista che hanno diretto il film
-    - luoghi(self)  torna l'insieme di luoghi in cui è stato fatto il film (campo "COUNTRY" dei dati json)
-    - durata(self)  torna la durata minima in minuti (intero) del film (campo "RUNTIME" dei dati json)
-    - anno(self)    torna l'anno di produzione del film (dal campo "TITLE" dei dati json)
-
-    - tutti gli altri metodi che ritenete utili
-
-La classe Regista rappresenta la scheda di un regista.
-Gli attributi di istanza della classe Regista sono quelli necessari ad implementare i seguenti metodi.
-
-    Implementate i metodi di istanza:
-    - Il costruttore della classe assegna il nome.
-    - nome(self)    che torna il nome del regista
-    - films(self)   che torna l'insieme delle istanze dei Film in cui il regista ha lavorato
-    - attore_preferito(self)    che torna l'istanza di tipo Attore che ha lavorato più volte col regista
-        In caso di parità si torni l'attore più giovane (vedi metodo Attore.eta())
-        In caso di parità si torni l'attore di genere femminile
-        In caso di parità quello col vero nome (campo "REALNAME") che viene prima in ordine alfabetico.
-        Se il campo REALNAME nel dizionario json non è presente o non contiene un valore usate il campo NAME.
-    - anni_di_lavoro(self)    che torna per quanti anni ha lavorato il regista
-        a partire dal primo film prodotto all'ultimo compresi (vedi Film.anno())
-
-    - tutti gli altri metodi che ritenete utili
-
-GESTIONE DEGLI ERRORI
-I test NON proporranno dati errati per cui ci aspettiamo che NON vengano mai generate eccezioni
-e quindi non è necessario che controlliate la validità delle informazioni fornite ai metodi.
-
-"""
-
-##################################################################################################
 import json, re
 
 def leggi_archivio_attori(archivio_attori_json):
-    '''legge l'archivio json fornito in input che descrive tutti gli attori
-    (con lo stesso formato del file di esempio actors.json)
-    e torna un dizionario catalogo_attori { nome -> oggetto di tipo Attore } in cui:
-    - le chiavi sono i nomi degli attori
-        (prese dal campo "NAME" del dizionario presente per ogni attore nel file json)
-    - i valori sono le corrispondenti istanze di tipo Attore create col costruttore passando
-        come argomento il dizionario (letto dal file json) che contiene le informazioni dell'attore.
-    '''
     # inserite qui il vosto codice
     with open(archivio_attori_json,"r", encoding="utf-8") as f:
        
@@ -179,29 +23,6 @@ def leggi_archivio_attori(archivio_attori_json):
 
 
 def leggi_archivio_film(archivio_film_json, catalogo_attori):
-    '''- leggi_archivio_film(file_json, catalogo_attori)
-    - che legge dal file json fornito in input che descrive tutti i film
-    (con lo stesso formato del file di esempio films.json)
-    - ed inoltre riceve il dizionario catalogo_attori { nome->Attore } prodotto con la funzione precedente
-    e torna come risultato una coppia di dizionari ( catalogo_film, catalogo_registi )
-    Il catalogo_film deve essere un dizionario { titolo -> oggetto di tipo Film } in cui:
-        - le chiavi sono i titoli dei film
-            (preso dal campo "TITLE" del dizionario presente per ogni film nel file json)
-        - i valori sono le corrispondenti istanze di tipo Film create col costruttore passando
-            come argomento il dizionario (letto dal file json) che contiene le informazioni del Film.
-    Il catalogo_registi deve essere un dizionario { nome -> oggetto di tipo Regista } in cui:
-        - le chiavi sono i nomi dei registi
-            ( presi dal campo "DIRECTORS" dei dizionari json che descrivono i film presi dal file json)
-        - i valori sono istanze del tipo Regista (di cui vedete la definizione più sotto)
-
-    La funzione leggi_archivio_film deve fare in modo che:
-    - all'interno di ciascun oggetto Film siano inseriti gli oggetti Attore in modo che:
-        - ogni Attore contenga i Film in cui è comparso
-        - ogni Film contenga gli Attori che ci hanno lavorato
-    - all'interno di ciascun oggetto Film siano contenuti gli oggetti di tipo Regista in modo che:
-        - ogni Film contenga i Registi che l'hanno diretto
-        - ogni Regista contenga i Film che ha diretto
-    '''
     # inserite qui il vosto codice
     catalogo_film = dict()
     catalogo_registi = dict()
@@ -256,18 +77,8 @@ def leggi_archivio_film(archivio_film_json, catalogo_attori):
 
 class Attore():
     
-    '''
-    La classe Attore rappresenta la scheda di un attore.
-    Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
-    per realizzare i metodi seguenti a partire dalle informazioni json ottenute dal file actors.json
-    allegato (o da file json simile).
-    '''
 
     def __init__(self, data):
-        '''riceve un dizionario ottenuto dal file json actors.json (o file simile).
-        Il dizionario passato come argomento contiene le informazioni relative ad un solo attore.
-        Il costruttore assegna agli attributi tutti i valori possibili a partire dal dizionario json passato.
-        '''
         self.lista_film = set()
         self.directors_catalogue = None
         self.attori_coprotagonisti_dict = None
@@ -306,26 +117,15 @@ class Attore():
             self.registi_occurrences = None
 
     def nome(self):
-        '''restituisce il nome'''
         return self.name
 
     def genere(self):
-        '''restituisce il genere'''
         return self.gender
 
     def vero_nome(self):
-        '''restituisce il vero nome'''
         return self.real_name
 
     def eta(self):
-        '''restituisce un intero che indica l'età dell'attore in anni:
-        - se l'anno di nascita NON è presente tornate None (e ignorate questo attore nel metodo Regista.attore_preferito)
-        - se l'anno di morte NON è presente usate il 2018 come anno di riferimento
-        - altrimenti tornate il numero di anni vissuti
-            Es. nato: 1950 oggi: 2018 -> 69
-        NOTA: per estrarre l'anno dalle proprieta' "BIRTH" e "DIED" dei dati json che descrivono un attore
-              avete il permesso di usare la libreria re per le espressioni regolari.
-        '''
         # inserite qui il vosto codice
         regex_anno = "[1-9][0-9][0-9][0-9]"
         if self.birth == None or self.birth == '':
@@ -340,12 +140,9 @@ class Attore():
             return anno_morte - anno_nascita+1
 
     def films(self):
-        '''restituisce il set di film in cui ha lavorato'''
         return self.lista_film
 
     def registi(self):
-        '''restituisce un set contenente le istanze di oggetti di tipo Regista,
-        con cui l'attore ha girato almeno un film.'''
         registi_con_cui_ha_lavorato = set()
         registi_occurrences = dict()
         for regista_nome, regista_value in self.directors_catalogue.items():
@@ -372,10 +169,6 @@ class Attore():
             
 
     def regista_preferito(self):
-        '''restituisce un'istanza di un oggetto Regista, che rappresenta il regista con cui l'attore
-        ha girato più film.
-        In caso di pareggio, viene preso il regista il cui nome viene prima in ordine alfabetico.
-        '''
         if self.registi_occurrences == None:
             # this sets the attori_dict if it's none
             self.registi()
@@ -393,10 +186,6 @@ class Attore():
 
 
     def coprotagonisti(self):
-        '''
-        restituisce un set contenente le istanze di oggetti di tipo Attore,
-        che rappresentano tutti gli attori con cui l'attore self ha girato almeno un film.
-        '''
         attori_coprotagonisti_dict = dict()
         attori_coprotagonisti = set()
         for film in self.lista_film:
@@ -404,7 +193,7 @@ class Attore():
             for attore in attori:
                 if attore.nome() == self.name:
                     attori_coprotagonisti = attori_coprotagonisti | attori
-                    for attore_cop in attori_coprotagonisti:
+                    for attore_cop in attori:
                         if attore_cop in attori_coprotagonisti_dict:
                             attori_coprotagonisti_dict[attore_cop]+=1
                         else:
@@ -419,17 +208,6 @@ class Attore():
 
 
     def in_coppia(self, partner=None):
-        '''restituisce:
-          Se il parametro partner (stringa) NON viene specificato:
-            - un set di tuple: ogni tupla è del tipo (a_f, a_m, n_f),
-            dove a_f e a_m sono due istanze di oggetto di tipo Attore
-            (di cui una rappresenta l'attore self), di genere diverso (campo "GENDER" dei dati json)
-            (a_f è femmina e a_m è maschio) ed n_f è il numero di film in cui self e il suo partner
-            hanno fatto coppia (ovvero hanno girato PIU' DI UN film assieme).
-          Se il parametro partner VIENE specificato (di tipo stringa), viene restituito invece
-            - il set di tutti i Film (che può essere vuoto) in cui l'attore self e l'attore partner che ha quel nome
-            hanno fatto coppia (ovvero hanno girato ALMENO quel film assieme).
-        '''
         if self.attori_coprotagonisti_dict == None:
             self.coprotagonisti()
 
@@ -474,24 +252,25 @@ class Attore():
         return a_f, a_m, n_f
 
     def luogo_preferito(self):
-        '''restituisce la stringa con il paese in cui l'attore self ha girato più film.
-        In caso di pareggio, viene restituito il luogo che viene prima in ordine alfabetico.
-        Se non esiste si torna None
-        '''
-        # inserite qui il vosto codice
+        country_dict = dict()
+        for film in self.lista_film:
+            lista_luoghi = film.luoghi()
+            for luogo in lista_luoghi:
+                if luogo in country_dict:
+                    country_dict[luogo]+=1
+                else:
+                    country_dict[luogo] = 1
+
+        if len(country_dict) == 0:
+            return None
+
+        luogo_preferito = sorted(country_dict, key= lambda x: tuple((-country_dict[x], x)) ,reverse=False)
+
+        return luogo_preferito[0]
+
+
 
     def film_durata(self, inf=0, sup=None):
-        '''
-        - film_durata(self, inf=0, sup=None), che restituiscela lista delle istanze
-          degli oggetti di tipo Film, dei film in cui l'attore self ha recitato e che
-          durano almeno inf minuti e, se sup è specificato, massimo sup minuti. La
-          lista deve essere ordinata per durata dei film in ordine crescente.
-          In caso di parità per titolo crescente in ordine alfabetico.
-          Se nel file json sono specificate più durate per lo stesso film, usate la durata minore.
-          Se nei dati json la durata non è indicata ignorate quel film.
-          NOTA: per estrarre la durata dalla proprieta' "RUNTIME" dei dati json che descrivono un film
-                avete il permesso di usare la libreria re per le espressioni regolari.
-        '''
         lista_film_attore = self.lista_film
         return_list = list()
         for film in lista_film_attore:
@@ -515,21 +294,12 @@ class Attore():
 
 
 class Film():
-    '''
-    La classe Film rappresenta la scheda di un film, costruita a partire dalle informazioni json.
-    Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
-    all'implementazione dei metodi descritti.
-    '''
     def __init__(self, data):
-        '''riceve come argomento un dizionario ricavato dal file films.json (o file json simile)
-            che rappresenta un solo film
-            ed assegna tutti i valori possibili agli attributi di istanza a partire dal dizionario json passato.
-        '''
 
         if "LISTA_ATTORI" in data:
             self.lista_attori = data["LISTA_ATTORI"]
         else:
-            self.lista_attori = None
+            self.lista_attori = set()
         self.lista_registi = set()
         self.actors = data["ACTORS"] #TYPE LIST - VIVA JAVA!
         self.directors = data["DIRECTORS"] #TYPE LIST - VIVA JAVA!
@@ -550,7 +320,6 @@ class Film():
         
 
     def attori(self):
-        '''torna l'insieme di istanze di tipo Attore che hanno lavorato al film'''
 
         return self.lista_attori
         
@@ -560,11 +329,9 @@ class Film():
         return self.lista_registi
 
     def luoghi(self):
-        '''torna l'insieme di luoghi in cui è stato fatto il film (campo "COUNTRY" dei dati json)'''
-        return set(self.countries)
+        return self.countries #lista di stringhe
 
     def durata(self):
-        '''torna la durata minima in minuti (intero) del film (campo "RUNTIME" dei dati json)'''
         regex = "[0-9]+"
         runtime_string = self.runtime
         runtimes = re.findall(regex, runtime_string)
@@ -578,7 +345,6 @@ class Film():
         
 
     def anno(self):
-        '''torna l'anno di produzione del film (dal campo "TITLE" dei dati json)'''
         return int(self.year)
     def catalogo_attori(self, catalogo_attori):
         self.catalogo_attori = catalogo_attori
@@ -588,39 +354,22 @@ class Film():
 ##################################################################################################
 
 class Regista:
-    '''
-    La classe Regista rappresenta la scheda di un regista.
-    Gli attributi di istanza della classe Regista sono quelli necessari ad implementare i seguenti metodi.
-    '''
     def __init__(self, nome):
-        '''Il costruttore assegna il nome.'''
         self.lista_film = set()
         self.name = nome
         self.attori_dict = None
         self.catalogo_film = None
 
     def films(self):
-        '''torna l'insieme delle istanze dei Film in cui il regista ha lavorato'''
-        films_set = set()
-
-        if self.catalogo_film == None:
-            return set()
-
-
-        for  film in self.lista_film:
-            registi_film = film.registi()
-            for regista in registi_film:
-                if regista.nome() == self.name:
-                    films_set.add(film)
+        films_set = self.lista_film
         return films_set
-                    
+
+
 
     def nome(self):
-        '''torna il nome del regista'''
         return self.name
 
     def attori(self):
-        '''torna l'insieme di attori che hanno lavorato col regista'''
         attori_set = set()
         attori_dict = dict()
         for  film_value in self.lista_film:
@@ -711,37 +460,6 @@ class Regista:
         self.catalogo_film = catalogo_film
 
 
-##################################################################################################
 
-
-if __name__ == '__main__':
-    # inserite qui il vosto codice personale di test
-    catalogo_attori = leggi_archivio_attori("actors.json")
-    catalogo_film, catalogo_registi = leggi_archivio_film("films.json",catalogo_attori)
-
-    merilyn = catalogo_attori["Marilyn Monroe"]
-
-    stanley = catalogo_registi["Stanley Kubrick"]
-    #print(stanley.attore_preferito().nome())
-
-    #print(catalogo_film["Underground"].durata())
-
-
-    antonioni = catalogo_registi["Michelangelo Antonioni"]
-    preferito = antonioni.attore_preferito()
-    print(preferito.nome())
-    print(preferito.eta())
-    print(preferito.genere())
-
-
-    #print(merilyn.regista_preferito().nome())
-   # print(merilyn.registi())
-    # kidman = catalogo_attori["Nicole Kidman"]
-    #
-    # print(kidman.coprotagonisti())
-    #
-    #
-    # ##attore preferito
-    #TODO  - vedi Andy Serkis, in_coppia, perchè scarlet johansson ci ha girato 10 f ilm insieme??
     
         
