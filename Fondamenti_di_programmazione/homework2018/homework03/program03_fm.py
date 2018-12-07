@@ -88,7 +88,7 @@ allegato (o da file json simile).
       self ha girato più film.
       In caso di pareggio, viene restituito il luogo che viene prima in ordine alfabetico.
       Se non esiste si torna None
-    - film_durata(self, inf=0, sup=None), che restituiscela lista delle istanze
+    - film_durata(self, inf=0, sup=None), che restituisce la lista delle istanze
       degli oggetti di tipo Film, dei film in cui l'attore self ha recitato e che
       durano almeno inf minuti e, se sup è specificato, massimo sup minuti. La
       lista deve essere ordinata per durata dei film in ordine crescente.
@@ -150,6 +150,24 @@ e quindi non è necessario che controlliate la validità delle informazioni forn
 ##################################################################################################
 import json, re
 
+patternDigit = re.compile(r'\d+')
+
+
+def getFirstElement(lst):
+    if not lst:
+        return ''
+    else:
+        return lst[0]
+
+
+def takeSecond(elem):
+        return elem[1][1]
+
+
+def takeFirst(elem):
+        return elem[0]
+
+    
 def leggi_archivio_attori(archivio_attori_json):
     '''legge l'archivio json fornito in input che descrive tutti gli attori
     (con lo stesso formato del file di esempio actors.json)
@@ -159,24 +177,16 @@ def leggi_archivio_attori(archivio_attori_json):
     - i valori sono le corrispondenti istanze di tipo Attore create col costruttore passando
         come argomento il dizionario (letto dal file json) che contiene le informazioni dell'attore.
     '''
+    dizionarioAttori = {}
     # inserite qui il vosto codice
-    with open(archivio_attori_json,"r", encoding="utf-8") as f:
-       
-        actors_json = json.load(f)
-
-
-        catalogo_attori = dict()
-
-        for nome, dati in actors_json.items():
-            attore = Attore(dati)
-            name_attore = ''.join(dati["NAME"])
-            catalogo_attori[name_attore] = attore
-            
-        
-        return catalogo_attori
-
-
-
+    with open(archivio_attori_json) as f:
+        data = json.load(f)
+    for key, value in data.items():
+        nome = value['NAME'][0]
+        dizionarioAttori[nome] = Attore(value)
+    
+    return dizionarioAttori
+    
 
 def leggi_archivio_film(archivio_film_json, catalogo_attori):
     '''- leggi_archivio_film(file_json, catalogo_attori)
@@ -202,60 +212,110 @@ def leggi_archivio_film(archivio_film_json, catalogo_attori):
         - ogni Film contenga i Registi che l'hanno diretto
         - ogni Regista contenga i Film che ha diretto
     '''
-    # inserite qui il vosto codice
-    catalogo_film = dict()
-    catalogo_registi = dict()
-    with  open(archivio_film_json, "r", encoding = "utf-8") as f:
-        film_json = json.load(f)
+    catalogo_film = {}
+    catalogo_registi = {}
+    with open(archivio_film_json) as f:
+        data = json.load(f)
+    for key, value in data.items():
         
+        titolo = value['TITLE'][0]
+        currentFilm = Film(value)
+        catalogo_film[titolo] = currentFilm
         
-        for nome_film, dati_film in film_json.items():
+        # Attori
+        listaAttori = value['ACTORS']
+        creaBiiezioneAttoreFilm(currentFilm, listaAttori, catalogo_attori)
+        
+        # Directors
+        registiList = value['DIRECTORS']
+        for nomeRegista in registiList:
+            if nomeRegista in catalogo_registi:
+                registaObj = catalogo_registi[nomeRegista]
+            else:
+                registaObj = Regista(nomeRegista)
+            catalogo_registi[nomeRegista] = registaObj
+            creaBiiezioneRegistaFilm(currentFilm, nomeRegista, registaObj)
+
+    return (catalogo_film, catalogo_registi)
+
+
+def creaBiiezioneAttoreFilm(film, listaAttori, catalogoAttori):
+    for nomeAttore in listaAttori:
+        # cerco attore dal catalogo
+        attoreObj = catalogoAttori[nomeAttore]
+        # assegno l'attore al film
+        film.dizionarioAttori[attoreObj.name] = attoreObj
+        
+    # faccio 2 cicli per i coprotagonisti
+    for nomeAttore, attore in film.dizionarioAttori.items():
+        # assegno il film all'attore
+        attore.aggiungiFilm(film)
+        
+    return
+
+
+def creaBiiezioneRegistaFilm(film, nomeRegista, registaObj):
+    # associo regista al film
+    film.dizionarioRegistri[nomeRegista] = registaObj
+    # assegno film al regista
+    registaObj.aggiungiFilm(film)
+    
+    # assegno ad ogni attore del film il regista
+    for nome, attoreObj in film.dizionarioAttori.items():
+        attoreObj.aggiungiRegista(registaObj)
+    return
+
+
+def calcolaAge(birth, died):
+    birthYear = extractYear(birth)
+    diedYear = extractYear(died)
+     
+    if not birthYear:
+        return None
+    if not diedYear:
+        diedYear = 2018
+    
+    return diedYear - birthYear + 1
+
             
-        #trova i nomi degli attori nel film
-            actor_names_in_film = dati_film["ACTORS"]
-            #crea una lista di attori da mettere nella classe film
-            lista_attori = {catalogo_attori[actor_name] for actor_name in actor_names_in_film}
-            dati_film["LISTA_ATTORI"] = lista_attori
-            film = Film(dati_film)
-
-
-
-            #genero l'oggetto regista
-            directors = dati_film["DIRECTORS"]
-            film_directors = set()
-            for director in directors:
-                # ogni regista deve avere i suoi film
-                if director in catalogo_registi:
-                    regista = catalogo_registi[director]
-                    regista.lista_film.add(film)
-                    film_directors.add(regista)
-                    film.lista_registi |= film_directors
-                else:
-                    #se il regista non è già stato creato, lo creo
-                    regista = Regista(director)
-                    catalogo_registi[director] = regista
-                    regista.lista_film.add(film)
-                    film_directors.add(regista)
-                    #ogni oggetto film deve avere i suoi registi
-                    film.lista_registi |= film_directors
-
-
-
-        # aggiungi il film all'attore
-            for attore in lista_attori:
-                attore.lista_film.add(film)
-            nome_film = dati_film["TITLE"]
-            catalogo_film[nome_film[0]] = film
-
-        for attore_name, attore_obj in catalogo_attori.items():
-            attore_obj.directors_catalogue = catalogo_registi
-
-    return catalogo_film, catalogo_registi
+def extractYear(date):
+    if date:
+        # pattern = re.compile(r'\d+')
+        patternMatch = patternDigit.findall(date)
+        if len(patternMatch) == 1:
+            return int(patternMatch[0])
+        elif len(patternMatch) == 2:
+            return int(patternMatch[1])
         
-        
+    return None
+##################################################################################################
+# Esempio di voce json che descrive un film estratta dal file films.json
+##################################################################################################
+# Esempio di blocco dati json
+# "'Baby' Paul Cullen": {
+#     "NAME": [
+#         "'Baby' Paul Cullen"
+#     ],
+#     "LASTFIRST": [
+#         "Cullen, 'Baby' Paul"
+#     ],
+#     "REALNAME": [
+#         "Paul Michael Cullen"
+#     ],
+#     "NICKNAMES": [],
+#     "GENDER": [
+#         "M"
+#     ],
+#     "BIRTH": [
+#         "1962, Ireland"
+#     ],
+#     "DIED": [
+#         "21 July 2009, Los Angeles, California, USA"
+#     ]
+# },
+
 
 class Attore():
-    
     '''
     La classe Attore rappresenta la scheda di un attore.
     Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
@@ -268,54 +328,34 @@ class Attore():
         Il dizionario passato come argomento contiene le informazioni relative ad un solo attore.
         Il costruttore assegna agli attributi tutti i valori possibili a partire dal dizionario json passato.
         '''
-        self.lista_film = set()
-        self.directors_catalogue = None
-        self.attori_coprotagonisti_dict = None
-        for key,value in data.items():
-            if key == "NAME":
-                if len(value) > 0:
-                    self.name = value[0]
-                else:
-                    self.name = ""
-                    
-            elif key == "LASTFIRST":
-                self.last_first = value
-            elif key == "REALNAME":
-                if len(value) > 0:
-                    self.real_name = value[0]
-                else:
-                    self.real_name = ""
-            elif key == "NICKNAMES":
-                self.nick_names = value
-            elif key == "GENDER":
-                if len(value) > 0:
-                    self.gender = value[0]
-                else:
-                    self.gender = ""
-            elif key == "BIRTH":
-                if len(value) > 0:
-                    self.birth = ''.join(value)
-                else:
-                    self.birth = ""
-            elif key == "DIED":
-                if len(value) > 0:
-                    self.died = ''.join(value)
-                else:
-                    self.died = ""
-
-            self.registi_occurrences = None
-
+        # inserite qui il vosto codice
+        self.name = getFirstElement(data['NAME'])
+        self.surname = getFirstElement(data['LASTFIRST'])
+        self.realName = getFirstElement(data['REALNAME'])
+        # self.nickname = getFirstElement(data['NICKNAMES'])
+        self.gender = getFirstElement(data['GENDER'])
+        self.birth = getFirstElement(data['BIRTH'])
+        self.died = getFirstElement(data['DIED'])
+        self.dizionarioFilm = {}
+        self.dizionarioRegisti = {}
+        self.dizionarioRegistiContatore = {}
+        self.dizionarioCoprotagonisti = {}
+        self.age = calcolaAge(self.birth, self.died)
+        
     def nome(self):
         '''restituisce il nome'''
+        # inserite qui il vosto codice
         return self.name
 
     def genere(self):
         '''restituisce il genere'''
+        # inserite qui il vosto codice
         return self.gender
 
     def vero_nome(self):
         '''restituisce il vero nome'''
-        return self.real_name
+        # inserite qui il vosto codice
+        return self.realName
 
     def eta(self):
         '''restituisce un intero che indica l'età dell'attore in anni:
@@ -327,96 +367,66 @@ class Attore():
               avete il permesso di usare la libreria re per le espressioni regolari.
         '''
         # inserite qui il vosto codice
-        regex_anno = "[1-9][0-9][0-9][0-9]"
-        if self.birth == None or self.birth == '':
-            return None
-        if self.died == None or self.died == '':
-                anno_nascita = int(re.findall(regex_anno, self.birth)[0])
-                return 2018 - anno_nascita +1
-        else:
-            
-            anno_morte = int(re.findall(regex_anno, self.died)[0])
-            anno_nascita = int(re.findall(regex_anno, self.birth)[0])
-            return anno_morte - anno_nascita+1
+        return self.age
 
     def films(self):
         '''restituisce il set di film in cui ha lavorato'''
-        return self.lista_film
+        # inserite qui il vosto codice
+        return set(self.dizionarioFilm.values())
 
+    def aggiungiFilm(self, film):
+        # aggiungi film 
+        self.dizionarioFilm[film.title] = film
+        # aggiungo attori Coprotagonisti
+        for nome, attore in film.dizionarioAttori.items():
+            if(nome != self.name):
+                if nome not in self.dizionarioCoprotagonisti:
+                    self.dizionarioCoprotagonisti[nome] = (attore, 1)
+                else:
+                    partecipazioni = self.dizionarioCoprotagonisti[nome][1]
+                    self.dizionarioCoprotagonisti[nome] = (attore, partecipazioni + 1)
+        
+    def aggiungiRegista(self, regista):
+        self.dizionarioRegisti[regista.name] = regista
+        if regista.name in self.dizionarioRegistiContatore:
+            self.dizionarioRegistiContatore[regista.name] = (regista, self.dizionarioRegistiContatore[regista.name][1] + 1)
+        else :
+            self.dizionarioRegistiContatore[regista.name] = (regista, 1)
+        
     def registi(self):
         '''restituisce un set contenente le istanze di oggetti di tipo Regista,
         con cui l'attore ha girato almeno un film.'''
-        registi_con_cui_ha_lavorato = set()
-        registi_occurrences = dict()
-        for regista_nome, regista_value in self.directors_catalogue.items():
-            for film in self.lista_film:
-                #se l'attore non compare nel film skippare
-                if regista_nome not in film.directors:
-                    continue
-                
-                registi_con_cui_ha_lavorato.add(regista_nome)
-
-                if regista_nome in registi_occurrences:
-                    registi_occurrences[regista_nome] = registi_occurrences[regista_nome] +1
-                else:
-                    registi_occurrences[regista_nome] = 1
-
-
-        self.registi_occurrences = registi_occurrences
-
-        return_list = {self.directors_catalogue[regista] for regista in registi_con_cui_ha_lavorato}
-
-
-
-        return return_list
-            
+        # inserite qui il vosto codice
+        return set(self.dizionarioRegisti.values())
 
     def regista_preferito(self):
         '''restituisce un'istanza di un oggetto Regista, che rappresenta il regista con cui l'attore
         ha girato più film.
         In caso di pareggio, viene preso il regista il cui nome viene prima in ordine alfabetico.
         '''
-        if self.registi_occurrences == None:
-            # this sets the attori_dict if it's none
-            self.registi()
-
-        max_value = self.registi_occurrences[max(self.registi_occurrences, key=self.registi_occurrences.get)]
-
-        max_registi = [k for k, v in self.registi_occurrences.items() if v == max_value]
-
-        if len(max_registi) > 1:
-            return self.directors_catalogue[min(max_registi)]
-        elif len(max_registi) == 1:
-            return self.directors_catalogue[max_registi[0]]
-        else:
+        # inserite qui il vosto codice
+        orderedList = list(self.dizionarioRegistiContatore.items())
+        
+        if not orderedList:
             return None
-
-
+        orderedList.sort(reverse=True, key=takeSecond)
+        maxValue = orderedList[0][1][1]
+        registiPreferiti = []
+        for regNum in orderedList:
+            if regNum[1][1] == maxValue:
+                registiPreferiti.append(regNum)
+            else:
+                break
+        registiPreferiti.sort()
+        return registiPreferiti[0][1][0]
+    
     def coprotagonisti(self):
         '''
         restituisce un set contenente le istanze di oggetti di tipo Attore,
         che rappresentano tutti gli attori con cui l'attore self ha girato almeno un film.
         '''
-        attori_coprotagonisti_dict = dict()
-        attori_coprotagonisti = set()
-        for film in self.lista_film:
-            attori = film.attori()
-            for attore in attori:
-                if attore.nome() == self.name:
-                    attori_coprotagonisti = attori_coprotagonisti | attori
-                    for attore_cop in attori_coprotagonisti:
-                        if attore_cop in attori_coprotagonisti_dict:
-                            attori_coprotagonisti_dict[attore_cop]+=1
-                        else:
-                            attori_coprotagonisti_dict[attore_cop]=1
-
-
-        attori_coprotagonisti.remove(self)
-        self.attori_coprotagonisti_dict = attori_coprotagonisti_dict
-        return attori_coprotagonisti
-
-
-
+        # inserite qui il vosto codice
+        return set(map(lambda x: x[0], set(self.dizionarioCoprotagonisti.values())))
 
     def in_coppia(self, partner=None):
         '''restituisce:
@@ -430,88 +440,139 @@ class Attore():
             - il set di tutti i Film (che può essere vuoto) in cui l'attore self e l'attore partner che ha quel nome
             hanno fatto coppia (ovvero hanno girato ALMENO quel film assieme).
         '''
-        if self.attori_coprotagonisti_dict == None:
-            self.coprotagonisti()
-
-        self_gender = self.genere()
-        return_set = set()
-        attori_coprotagonisti = self.attori_coprotagonisti_dict
-        if partner == None:
-            for attore, numero_film in attori_coprotagonisti.items():
-                if self_gender == attore.genere() or numero_film <= 1 or self_gender == '' or attore.genere() == '':
-                    continue
-
-                a_f, a_m, n_f = self.build_tuple(attore, numero_film, self_gender)
-
-                return_set.add(tuple((a_m, a_f, n_f)))
+        # inserite qui il vosto codice
+        if partner is None:
+            if self.gender == 'M':
+                a_m = self
+                partnerList = self.lookingForGenderPartner('F')
+                if not partnerList:
+                    return set([])
+                return set(map(lambda x: (a_m, x[0], x[1]), partnerList))
+            else:
+                a_f = self
+                partnerList = self.lookingForGenderPartner('M')
+                if not partnerList:
+                    return set([])
+                return set(map(lambda x: (x[0], a_f, x[1]), partnerList))
         else:
-            for attore, numero_film in attori_coprotagonisti.items():
-
-                if self_gender == attore.genere() or self_gender == '' or attore.genere() == '':
-                    continue
-
-
-
-                for film in self.lista_film:
-                    for attore in film.attori():
-                        if attore.nome() == partner: #ok hanno fatto lo stesso film insieme
-                            return_set.add(film)
-
-        return return_set
-
-
-
-
-    def build_tuple(self, attore, numero_film, self_gender):
-
-        if self_gender == "M":
-            a_m = self
-            a_f = attore
-        elif self_gender == "F":
-            a_m = attore
-            a_f = self
-        n_f = numero_film
-        return a_f, a_m, n_f
-
+            if partner in self.dizionarioCoprotagonisti:
+                # se il partner ha lavorto insieme a self
+                partnerFilmList = self.dizionarioCoprotagonisti[partner][0].dizionarioFilm
+                if not partnerFilmList:
+                    return set([])
+                else:
+                    selfList = list(self.dizionarioFilm.items())
+                    if not partnerFilmList:
+                        return set([])
+                    partnerFilmListFiltered = list(filter(lambda x: x[0] in partnerFilmList, selfList))
+                    return set(map(lambda x: x[1], partnerFilmListFiltered))
+            else:
+                return set([])
+                
+    def lookingForGenderPartner(self, gender):
+        partnerList = []
+        for nome, coprotagonistaTupla in self.dizionarioCoprotagonisti.items():
+            if coprotagonistaTupla[0].gender == gender and coprotagonistaTupla[1] > 1:
+                partnerList.append(coprotagonistaTupla)
+        
+        return partnerList
+        
     def luogo_preferito(self):
         '''restituisce la stringa con il paese in cui l'attore self ha girato più film.
         In caso di pareggio, viene restituito il luogo che viene prima in ordine alfabetico.
         Se non esiste si torna None
         '''
+        countryDic = {}
+        maxCountryPresence = 0
+        for film in self.dizionarioFilm.values():
+            for country in film.country:
+                presence = 0
+                if country in countryDic:
+                    presence = countryDic[country]
+                countryDic[country] = presence + 1
+                if presence + 1 > maxCountryPresence:
+                    maxCountryPresence = presence + 1
+        
+        countryList = countryDic.items()
+        if not countryList or len(countryList) == 0:
+            return None
+        # revert, chiave l'occorrenza e valore il nome del luogo, in questo modo sfruttiamo l'ordine naturale delle tuple
+        countryList = list(filter(lambda x: x [1] == maxCountryPresence, countryList))
+        countryList.sort()
+        return countryList[0][0]
+            
         # inserite qui il vosto codice
 
     def film_durata(self, inf=0, sup=None):
-        '''
-        - film_durata(self, inf=0, sup=None), che restituiscela lista delle istanze
-          degli oggetti di tipo Film, dei film in cui l'attore self ha recitato e che
-          durano almeno inf minuti e, se sup è specificato, massimo sup minuti. La
-          lista deve essere ordinata per durata dei film in ordine crescente.
-          In caso di parità per titolo crescente in ordine alfabetico.
-          Se nel file json sono specificate più durate per lo stesso film, usate la durata minore.
-          Se nei dati json la durata non è indicata ignorate quel film.
+        '''restituisce la lista delle istanze degli oggetti di tipo Film,
+        dei film in cui l'attore self ha recitato e che durano almeno inf minuti e,
+        se sup è specificato, massimo sup minuti.
+        La lista deve essere ordinata per durata dei film in ordine crescente.
+        In caso di parità per titolo crescente in ordine alfabetico.
+        Se nel file json sono specificate più durate per lo stesso film, usate la durata minore.
+        Se nei dati json la durata non è indicata ignorate quel film.
           NOTA: per estrarre la durata dalla proprieta' "RUNTIME" dei dati json che descrivono un film
                 avete il permesso di usare la libreria re per le espressioni regolari.
         '''
-        lista_film_attore = self.lista_film
-        return_list = list()
-        for film in lista_film_attore:
-            durata_film = film.durata()
-            if durata_film == None or durata_film == 0:
+        # inserite qui il vosto codice
+        outputList = []
+        for name, film in self.dizionarioFilm.items():
+            if not film.runtimeMin or film.runtimeMin < inf:
                 continue
+            
+            if not sup or film.runtimeMin <= sup:
+                outputList.append(film)
 
-            if sup != None :
-                if durata_film >= inf and durata_film <= sup:
-                    return_list.append(film)
-            elif durata_film >= inf:
-                    return_list.append(film)
-        return sorted(return_list, key=lambda x: (x.durata(), x.titolo()))
+        # sort di una tupla(durata, titolo), ordina in automatico per durata e poi per titolo
+        outputList.sort(key=lambda film: (film.runtimeMin, film.title))
+        return outputList;
 
-
-
-    def catalogo_registi(self, catalogo_registi):
-        self.directors_catalogue = catalogo_registi
-
-
+##################################################################################################
+# Esempio di voce json che descrive un film estratta dal file films.json
+##################################################################################################
+# "10 Things I Hate About You;1999": {
+#     "TITLE": [
+#         "10 Things I Hate About You",
+#         "1999"
+#     ],
+#     "ACTORS": [
+#         "Heath Ledger",
+#         "Julia Stiles",
+#         "Joseph Gordon-Levitt",
+#         "Larisa Oleynik",
+#         "David Krumholtz",
+#         "Andrew Keegan",
+#         "Susan May Pratt",
+#         "Gabrielle Union",
+#         "Larry Miller",
+#         "Daryl Mitchell",
+#         "Allison Janney",
+#         "David Leisure",
+#         "Greg Jackson",
+#         "Kyle Cease",
+#         "Terence Heuston"
+#     ],
+#     "DIRECTORS": [
+#         "Gil Junger"
+#     ],
+#     "WRITERS": [
+#         "Karen McCullah Lutz",
+#         "Kirsten Smith",
+#         "and 1 more credit"
+#     ],
+#     "GENRES": [
+#         "Comedy",
+#         "Romance"
+#     ],
+#     "COUNTRY": ["USA"],
+#     "LANGUAGE": [
+#         "English",
+#         "French"
+#     ],
+#     "RUNTIME": ["97 min"],
+#     "IMDB_URL": ["http://www.imdb.com/title/tt0147800/"],
+#     "POSTER": [ "http://ia.media-imdb.com/images/M/MV5BMTI4MzU5OTc2MF5BMl5BanBnXkFtZTYwNzQxMjc5._V1._SY317_CR4,0,214,317_.jpg"]
+# },
 
 
 class Film():
@@ -520,228 +581,188 @@ class Film():
     Al suo interno devono essere definiti tutti gli attributi di istanza che ritenete necessari
     all'implementazione dei metodi descritti.
     '''
+
     def __init__(self, data):
         '''riceve come argomento un dizionario ricavato dal file films.json (o file json simile)
             che rappresenta un solo film
             ed assegna tutti i valori possibili agli attributi di istanza a partire dal dizionario json passato.
         '''
-
-        if "LISTA_ATTORI" in data:
-            self.lista_attori = data["LISTA_ATTORI"]
-        else:
-            self.lista_attori = None
-        self.lista_registi = set()
-        self.actors = data["ACTORS"] #TYPE LIST - VIVA JAVA!
-        self.directors = data["DIRECTORS"] #TYPE LIST - VIVA JAVA!
-        self.countries = data["COUNTRY"]
-        self.runtime = ' '.join(data["RUNTIME"])
-
+        # inserite qui il vosto codice
+        self.dizionarioAttori = {}
+        self.dizionarioRegistri = {}
+        self.country = data['COUNTRY']
+        minMaxRuntime = self.calcolaDurataMinimaMassima(data['RUNTIME'])
+        self.runtimeMin = None if not minMaxRuntime else minMaxRuntime[0]
+        self.runtimeMax = None if not minMaxRuntime else minMaxRuntime[1]
+        self.title = data['TITLE'][0]
+        self.year = data['TITLE'][1]
         
-        title_data = data["TITLE"]
+    def calcolaDurataMinimaMassima(self, runTimeAsList):
+        if not runTimeAsList or len(runTimeAsList) == 0:
+            return None
+            # raise ValueError('RunTime non presente')
+        minRuntime = None
+        maxRuntime = None
+        for item in runTimeAsList:
+            patternMatch = patternDigit.findall(item)
+            if len(patternMatch) >= 1:
+                time = int(patternMatch[0])
+                if minRuntime is None or time < minRuntime:
+                    minRuntime = time
+                if maxRuntime is None or time > maxRuntime:
+                    maxRuntime = time
         
-        if len(title_data) > 0:
-            self.title = data["TITLE"][0]
-        else: 
-            self.title = ""
-        if len(title_data) >= 1:
-            self.year = data["TITLE"][1]
-        else:
-            self.year = ""
-        
-
+        return (minRuntime, maxRuntime)
+    
     def attori(self):
         '''torna l'insieme di istanze di tipo Attore che hanno lavorato al film'''
-
-        return self.lista_attori
-        
+        # inserite qui il vosto codice
+        return set(self.dizionarioAttori.values())
 
     def registi(self):
-
-        return self.lista_registi
+        '''torna l'insieme di istanze di tipo Regista che hanno diretto il film'''
+        # inserite qui il vosto codice
+        return set(self.dizionarioRegistri.values())
 
     def luoghi(self):
         '''torna l'insieme di luoghi in cui è stato fatto il film (campo "COUNTRY" dei dati json)'''
-        return set(self.countries)
+        # inserite qui il vosto codice
+        return self.country
 
     def durata(self):
         '''torna la durata minima in minuti (intero) del film (campo "RUNTIME" dei dati json)'''
-        regex = "[0-9]+"
-        runtime_string = self.runtime
-        runtimes = re.findall(regex, runtime_string)
-        runtimes_int_list = list(map(lambda x: int(x), runtimes))
-
-        return min(runtimes_int_list)
-        
+        # inserite qui il vosto codice
+        return self.runtimeMin
 
     def titolo(self):
+        '''torna il titolo del film'''
+        # inserite qui il vosto codice
         return self.title
-        
 
     def anno(self):
         '''torna l'anno di produzione del film (dal campo "TITLE" dei dati json)'''
-        return int(self.year)
-    def catalogo_attori(self, catalogo_attori):
-        self.catalogo_attori = catalogo_attori
-    def catalogo_registi(self, catalogo_registi):
-        self.catalogo_registi = catalogo_registi
+        # inserite qui il vosto codice
+        return None if not self.year else int(self.year)
 
 ##################################################################################################
+
 
 class Regista:
     '''
     La classe Regista rappresenta la scheda di un regista.
     Gli attributi di istanza della classe Regista sono quelli necessari ad implementare i seguenti metodi.
     '''
+
     def __init__(self, nome):
         '''Il costruttore assegna il nome.'''
-        self.lista_film = set()
+        # inserite qui il vosto codice
         self.name = nome
-        self.attori_dict = None
-        self.catalogo_film = None
+        self.dizionarioFilm = {}
+        self.dizionarioAttori = {}
 
+    def aggiungiFilm(self, film):
+        self.dizionarioFilm[film.title] = film
+        for nome, attore in film.dizionarioAttori.items():
+            if nome in self.dizionarioAttori:
+                presenze = self.dizionarioAttori[nome][1]
+                self.dizionarioAttori[nome] = (attore, presenze + 1)
+            else:
+                self.dizionarioAttori[nome] = (attore, 1)
+        
     def films(self):
         '''torna l'insieme delle istanze dei Film in cui il regista ha lavorato'''
-        films_set = set()
-
-        if self.catalogo_film == None:
-            return set()
-
-
-        for  film in self.lista_film:
-            registi_film = film.registi()
-            for regista in registi_film:
-                if regista.nome() == self.name:
-                    films_set.add(film)
-        return films_set
-                    
+        # inserite qui il vosto codice
+        return set(self.dizionarioFilm.values())
 
     def nome(self):
         '''torna il nome del regista'''
+        # inserite qui il vosto codice
         return self.name
 
     def attori(self):
         '''torna l'insieme di attori che hanno lavorato col regista'''
-        attori_set = set()
-        attori_dict = dict()
-        for  film_value in self.lista_film:
-            registi_film = film_value.registi()
-            for regista in registi_film:
-                if regista.nome() == self.name:
-                    film_attori = film_value.attori()
-                    for attore in film_attori:
-                        attori_set.add(attore)
-                        if attore.birth != "":
-                            if attore in attori_dict:
-                                attori_dict[attore] = attori_dict[attore] + 1
-                            else:
-                                attori_dict[attore] = 1
-        #mappa necessaria per attore preferito
-        self.attori_dict = attori_dict
-        return attori_set
-
+        # inserite qui il vosto codice
+        return set(map(lambda x : x[0], self.dizionarioAttori.values()))
 
     def attore_preferito(self):
-
-        
-        if self.attori_dict == None:
-            # this sets the attori_dict if it's none
-            self.attori()
-
-        max_value = self.attori_dict[max(self.attori_dict, key=self.attori_dict.get)]
-
-        max_actors = [k for k,v in self.attori_dict.items() if v == max_value]
-
-        attore_da_tornare = max_actors[0]
-        if attore_da_tornare.vero_nome == "":
-            attore_da_tornare.vero_nome = attore_da_tornare.nome()
-
-        if len(max_actors) > 1:
-            return sorted(max_actors, key=self.max_attore_preferito)[0]
-        elif len(max_actors) == 1:
-            return max_actors[0]
-        else:
+        '''torna l'istanza di tipo Attore che ha lavorato più volte col regista
+            In caso di parità si torni l'attore più giovane (vedi metodo Attore.eta())
+            In caso di parità si torni l'attore di genere femminile
+            In caso di parità quello col vero nome (campo "REALNAME") che viene prima in ordine alfabetico.
+            Se il campo REALNAME nel dizionario json non è presente o non contiene un valore usate il campo NAME.
+        '''
+        # inserite qui il vosto codice
+        # for nome, attore in self.dizionarioAttori:
+        if not self.dizionarioAttori:
             return None
-
-
-    def max_attore_preferito(self,attore):
-        eta_attore = attore.eta()
-        gender_attore = attore.genere()
-        vero_nome_attore = attore.vero_nome()
-        if vero_nome_attore == "":
-            vero_nome_attore = attore.nome()
-
-        if eta_attore != None and gender_attore != None and vero_nome_attore != None:
-            return  eta_attore, gender_attore, vero_nome_attore
-        if eta_attore != None and gender_attore != None:
-            return -eta_attore, -ord(gender_attore)
-        if eta_attore != None and vero_nome_attore != None:
-            return -eta_attore, vero_nome_attore
-        if gender_attore != None and vero_nome_attore != None:
-            return gender_attore, vero_nome_attore
-
-        if eta_attore != None:
-            return -eta_attore
-        if gender_attore != None:
-            return ord(gender_attore)
-        if vero_nome_attore != None:
-            return vero_nome_attore
-
-
-
-
-
-        return eta_attore, -ord(gender_attore), vero_nome_attore
-
-
-
+        
+        attoriList = list(map(lambda x: (x[1], x[0]), self.dizionarioAttori.values()))
+        attoriList.sort(key=takeFirst, reverse=True)
+        
+        papabile = attoriList[0]
+        for attore in attoriList:
+            if attore[0] < papabile[0]:
+                break
+            if attore[0] > papabile[0]:
+                papabile = attore
+            if attore[0] == papabile[0]:
+                if attore[1].eta() < papabile[1].eta():
+                    papabile = attore
+                    continue
+                elif attore[1].genere() == 'F' and papabile[1].genere() == 'M':
+                    papabile = attore
+                    continue
+                elif not papabile[1].vero_nome() and attore[1].vero_nome():
+                    papabile = attore
+                    continue
+                elif attore[1].vero_nome() and attore[1].vero_nome() < papabile[1].vero_nome():
+                    papabile = attore
+                    continue
+                elif attore[1].nome() < papabile[1].nome():
+                    papabile = attore
+                    continue
+        return papabile[1]
 
     def anni_di_lavoro(self):
-        set_anni = set()
-        for film in self.lista_film:
-            lista_registi = film.registi()
-            for regista in lista_registi:
-                if regista.nome() == self.name:
-                    set_anni.add(film.anno())
-        return max(set_anni)-min(set_anni)+1
-
-
-    def catalogo_attori(self, catalogo_attori):
-        self.catalogo_attori = catalogo_attori
-    def catalogo_film(self, catalogo_film):
-        self.catalogo_film = catalogo_film
-
+        '''torna per quanti anni ha lavorato il regista a partire dal primo film prodotto all'ultimo
+        compresi (vedi Film.anno())
+        '''
+        # inserite qui il vosto codice
+        primoFilm = None
+        ultimoFilm = None
+        for nome, film in self.dizionarioFilm.items():
+            if primoFilm is None:
+                primoFilm = film
+                continue
+            if ultimoFilm is None:
+                ultimoFilm = film
+                continue
+            if  film.anno() < primoFilm.anno():
+                primoFilm = film
+                continue
+            if film.anno() > ultimoFilm.anno():
+                ultimoFilm = film
+                continue
+        return ultimoFilm.anno() - primoFilm.anno() +1
+            
 
 ##################################################################################################
 
 
 if __name__ == '__main__':
     # inserite qui il vosto codice personale di test
-    catalogo_attori = leggi_archivio_attori("actors.json")
-    catalogo_film, catalogo_registi = leggi_archivio_film("films.json",catalogo_attori)
-
-    merilyn = catalogo_attori["Marilyn Monroe"]
-
-    stanley = catalogo_registi["Stanley Kubrick"]
-    #print(stanley.attore_preferito().nome())
-
-    #print(catalogo_film["Underground"].durata())
-
-
-    antonioni = catalogo_registi["Michelangelo Antonioni"]
-    preferito = antonioni.attore_preferito()
-    print(preferito.nome())
-    print(preferito.eta())
-    print(preferito.genere())
-
-
-    #print(merilyn.regista_preferito().nome())
-   # print(merilyn.registi())
-    # kidman = catalogo_attori["Nicole Kidman"]
-    #
-    # print(kidman.coprotagonisti())
-    #
-    #
-    # ##attore preferito
-    #TODO  - vedi Andy Serkis, in_coppia, perchè scarlet johansson ci ha girato 10 f ilm insieme??
+    catalogo_attori = leggi_archivio_attori('actors.json')
+    catologhi = leggi_archivio_film('films.json', catalogo_attori)
+    catalogo_film = catologhi[0]
+    catalogo_registi = catologhi[1]
     
-        
+    print(catalogo_attori['Marilyn Monroe'].regista_preferito())
+    print(catalogo_attori['Ada May'].coprotagonisti())
+    output = catalogo_attori['Scarlett Johansson'].film_durata(90, 120)
+    inCoppiaList = catalogo_attori['Marilyn Monroe'].in_coppia('Cary Grant')
+    print(inCoppiaList)
+    
+    print(catalogo_attori['Marcello Mastroianni'].luogo_preferito())
+    
+    print(catalogo_registi['Michelangelo Antonioni'].attore_preferito().nome())
+    

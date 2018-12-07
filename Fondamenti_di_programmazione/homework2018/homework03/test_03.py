@@ -474,8 +474,8 @@ class Test(testlib.TestCase):
 
     @data(
         # regista                   attore preferito
-        ['Michelangelo Antonioni',  'Mark Frechette'],
-        ['Woody Allen',             'Clifford Lee Dickson'],
+        ['Michelangelo Antonioni',  'Monica Vitti'],
+        ['Woody Allen',             'Woody Allen'],
     )
     @unpack
     def test_31_Regista_attore_preferito(self, nome, AP):
