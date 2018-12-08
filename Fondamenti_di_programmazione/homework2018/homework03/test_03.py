@@ -338,6 +338,7 @@ class Test(testlib.TestCase):
 
     def do_check_Film_dati_base(self, film, titolo, durata, anno, posti):
         '''Verifica che i dati di base del film ci siano'''
+        posti = set(posti)
         self.assertEqual(type(film),    Film,       f"{film} non è una istanza di Film")
         self.assertEqual(film.titolo(), titolo,     f"Il titolo del Film non è {titolo}")
         self.assertEqual(film.durata(), durata,     f"Il film {titolo} dovrebbe durare {durata} minuti")

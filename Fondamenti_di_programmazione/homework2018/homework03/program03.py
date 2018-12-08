@@ -82,39 +82,44 @@ class Attore():
         self.lista_film = set()
         self.directors_catalogue = None
         self.attori_coprotagonisti_dict = None
-        for key,value in data.items():
-            if key == "NAME":
-                if len(value) > 0:
-                    self.name = value[0]
-                else:
-                    self.name = ""
-                    
-            elif key == "LASTFIRST":
-                self.last_first = value
-            elif key == "REALNAME":
-                if len(value) > 0:
-                    self.real_name = value[0]
-                else:
-                    self.real_name = ""
-            elif key == "NICKNAMES":
-                self.nick_names = value
-            elif key == "GENDER":
-                if len(value) > 0:
-                    self.gender = value[0]
-                else:
-                    self.gender = ""
-            elif key == "BIRTH":
-                if len(value) > 0:
-                    self.birth = ''.join(value)
-                else:
-                    self.birth = ""
-            elif key == "DIED":
-                if len(value) > 0:
-                    self.died = ''.join(value)
-                else:
-                    self.died = ""
+        
+        value = data["NAME"]
+        if len(value) > 0:
+            self.name = value[0]
+        else:
+            self.name = ""        
+        
+        self.last_first = data["LASTFIRST"]
+        
+        value = data["REALNAME"]
+        if len(value) > 0:
+            self.real_name = value[0]
+        else:
+            self.real_name = ""
+            
+            
+        self.nick_names = data["NICKNAMES"]
+        
+        value = data["GENDER"]
+        if len(value) > 0:
+            self.gender = value[0]
+        else:
+            self.gender = ""
+        
+        value = data["BIRTH"]
+        if len(value) > 0:
+            self.birth = value[0]
+        else:
+            self.birth = ""
+            
+        value = data["DIED"]
+        if len(value) > 0:
+            self.died = value[0]
+        else:
+            self.died = ""
+        
 
-            self.registi_occurrences = None
+        self.registi_occurrences = None
 
     def nome(self):
         return self.name
@@ -145,6 +150,7 @@ class Attore():
     def registi(self):
         registi_con_cui_ha_lavorato = set()
         registi_occurrences = dict()
+        #TODO OTTIMIZZARE
         for regista_nome, regista_value in self.directors_catalogue.items():
             for film in self.lista_film:
                 #se l'attore non compare nel film skippare
@@ -153,10 +159,7 @@ class Attore():
                 
                 registi_con_cui_ha_lavorato.add(regista_nome)
 
-                if regista_nome in registi_occurrences:
-                    registi_occurrences[regista_nome] = registi_occurrences[regista_nome] +1
-                else:
-                    registi_occurrences[regista_nome] = 1
+                self.buid_registi_occurrences(regista_nome, registi_occurrences)
 
 
         self.registi_occurrences = registi_occurrences
@@ -166,7 +169,12 @@ class Attore():
 
 
         return return_list
-            
+
+    def buid_registi_occurrences(self, regista_nome, registi_occurrences):
+        if regista_nome in registi_occurrences:
+            registi_occurrences[regista_nome] = registi_occurrences[regista_nome] + 1
+        else:
+            registi_occurrences[regista_nome] = 1
 
     def regista_preferito(self):
         if self.registi_occurrences == None:
@@ -215,21 +223,12 @@ class Attore():
         return_set = set()
         attori_coprotagonisti = self.attori_coprotagonisti_dict
         if partner == None:
-            for attore, numero_film in attori_coprotagonisti.items():
-                if self_gender == attore.genere() or numero_film <= 1 or self_gender == '' or attore.genere() == '':
-                    continue
-
-                a_f, a_m, n_f = self.build_tuple(attore, numero_film, self_gender)
-
-                return_set.add(tuple((a_m, a_f, n_f)))
+            self.find_all_coppie(attori_coprotagonisti, return_set, self_gender)
         else:
             for attore, numero_film in attori_coprotagonisti.items():
 
                 if self_gender == attore.genere() or self_gender == '' or attore.genere() == '':
                     continue
-
-
-
                 for film in self.lista_film:
                     for attore in film.attori():
                         if attore.nome() == partner: #ok hanno fatto lo stesso film insieme
@@ -237,8 +236,14 @@ class Attore():
 
         return return_set
 
+    def find_all_coppie(self, attori_coprotagonisti, return_set, self_gender):
+        for attore, numero_film in attori_coprotagonisti.items():
+            if self_gender == attore.genere() or numero_film <= 1 or self_gender == '' or attore.genere() == '':
+                continue
 
+            a_f, a_m, n_f = self.build_tuple(attore, numero_film, self_gender)
 
+            return_set.add(tuple((a_m, a_f, n_f)))
 
     def build_tuple(self, attore, numero_film, self_gender):
 
@@ -329,7 +334,7 @@ class Film():
         return self.lista_registi
 
     def luoghi(self):
-        return self.countries #lista di stringhe
+        return set(self.countries) #lista di stringhe
 
     def durata(self):
         regex = "[0-9]+"
@@ -379,15 +384,17 @@ class Regista:
                     film_attori = film_value.attori()
                     for attore in film_attori:
                         attori_set.add(attore)
-                        if attore.birth != "":
-                            if attore in attori_dict:
-                                attori_dict[attore] = attori_dict[attore] + 1
-                            else:
-                                attori_dict[attore] = 1
+                        self.build_attori_dict(attore, attori_dict)
         #mappa necessaria per attore preferito
         self.attori_dict = attori_dict
         return attori_set
 
+    def build_attori_dict(self, attore, attori_dict):
+        if attore.birth != "":
+            if attore in attori_dict:
+                attori_dict[attore] = attori_dict[attore] + 1
+            else:
+                attori_dict[attore] = 1
 
     def attore_preferito(self):
 
@@ -400,9 +407,6 @@ class Regista:
 
         max_actors = [k for k,v in self.attori_dict.items() if v == max_value]
 
-        attore_da_tornare = max_actors[0]
-        if attore_da_tornare.vero_nome == "":
-            attore_da_tornare.vero_nome = attore_da_tornare.nome()
 
         if len(max_actors) > 1:
             return sorted(max_actors, key=self.max_attore_preferito)[0]
@@ -421,12 +425,12 @@ class Regista:
 
         if eta_attore != None and gender_attore != None and vero_nome_attore != None:
             return  eta_attore, gender_attore, vero_nome_attore
-        if eta_attore != None and gender_attore != None:
-            return -eta_attore, -ord(gender_attore)
-        if eta_attore != None and vero_nome_attore != None:
-            return -eta_attore, vero_nome_attore
-        if gender_attore != None and vero_nome_attore != None:
-            return gender_attore, vero_nome_attore
+        # if eta_attore != None and gender_attore != None:
+        #     return -eta_attore, -ord(gender_attore)
+        # if eta_attore != None and vero_nome_attore != None:
+        #     return -eta_attore, vero_nome_attore
+        # if gender_attore != None and vero_nome_attore != None:
+        #     return gender_attore, vero_nome_attore
 
         if eta_attore != None:
             return -eta_attore
@@ -436,21 +440,13 @@ class Regista:
             return vero_nome_attore
 
 
-
-
-
         return eta_attore, -ord(gender_attore), vero_nome_attore
 
 
 
 
     def anni_di_lavoro(self):
-        set_anni = set()
-        for film in self.lista_film:
-            lista_registi = film.registi()
-            for regista in lista_registi:
-                if regista.nome() == self.name:
-                    set_anni.add(film.anno())
+        set_anni = {film.anno() for film in self.lista_film for regista in film.registi() if regista.nome() == self.name}
         return max(set_anni)-min(set_anni)+1
 
 

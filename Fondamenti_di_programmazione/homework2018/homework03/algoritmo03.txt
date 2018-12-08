@@ -1,26 +1,89 @@
 #ALGORITMO DASCRIVERE. INTANTO VOGLIO VEDERE I TEST DELLA VM :D
 
 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+NOTA: tralascio la descrizione dei metodi banali: es. def nome(self) return.nome
+
+-leggi_archivio_attori
+- apro il file in utf8 e carico il json
+- mi viene restituito un dizionario nome attore, dati
+- ciclo gli elementi del dizionario e mi costruirsco il catalogo costruendo
+un dizionario con chiave il nome dell'attore e valore l'oggetto attore
+
+- leggi_archivio_film
+- apro il file in utf8 e carico il json
+- ciclo il dizionario restituitomi
+- istanzio dapprima l'oggetto Film
+- mi prendo i registi del film
+- se il regista era già stato istanziato aggiungo il regista in un set dedicato all'oggetto film corrispondente
+- se il regista non era già stato istanziato, lo istanzio e lo aggiungo all'oggetto film
+- avendo ora il catalogo dei film, lo ciclo per aggiungere il film ad un set dedicato nell'oggetto attore
+
+
+classe Attore:
+- il costruttore prende il campo data, (ovvero un dict), e va a cercare le chiavi per istanziare le sue proprietà
+- def eta(self) - età attore
+    - utilizzo una regex che cerca quattro digits in cui il primo inizi almeno con l'1
+    - se l'attore non ha il campo nascita istanziato ritorno None
+    - altrimenti ritorno 2018 - regex + 1 
+
+- def registi(self) - registi con cui ha lavorato
+    - in leggi_archivio_film ho inserito ad ogni istanza di attore il catalogo_registi
+    - ciclo il catalogo regista
+    - ciclo i film in cui ha partecipato l'attore
+    - aggiungo al set di ritorno solo il regista che compare nei film dell'attore
+    - servendomi successivamente, costruisco contestualmente una mappa dove la chiave è il regista e il valore il numero di volte in cui ci ha lavorato
+- def regista_preferito
+    - prendo la mappa costruita precedentemente
+    - mi trovo il max val 
+    -  mi prendo tutti i registi con questo max val
+    - ritorno il regista trovato, se più di uno, faccio il min(registi)
+    
+- coprotagonisti:
+    - ciclo i film in cui ha partecipato l'attore
+    - ciclo gli attori nei film
+    - li aggiungo al set di ritorno
+    - contestualmente mi costruisco una mappa da mettere tra le proprietà d'istanza
+    con chiave = attore valore= numero di volte che è comparso
+    
+- in_coppia:
+    - se il partner non è specificato dalla mappa precedente mi prendo tutti i coprotagonisti
+    con genere diverso e costruisco la terna di risposta
+    - se il partner è specificato controllo che nella lista film in cui ha partecipato l'attore self
+    ci sia anche l'attore partner, e aggiungo il film al set di ritorno
+    
+- luogo_preferito:
+     - ciclo i film in cui ha partecipato
+     - prendo il campo country
+     - costruisco mappa dove chiave coutry valore numero volte in cui è comparsa
+     - mi trovo il massimo
+     - lo ritorno
+     
+- film_durata:
+    - se il sup non è specificato trovo tutti i film con durata superiore ad inv
+    - se è specificato trovo tutti i film che sono nel range
+    - ordino la lista con la tupla nella prima posizione durata neella seconda titolo
+    
+classe Film:
+ - durata:
+      - utilizzo la regex per trovare nella stringa i digits da 0 a 9
+      - li casto in int
+      - ne prendo il minimo
+classe Regista:
+- attori
+    - parso tutti i film in cui ha partecipato il regista
+    - mi prendo i relativi attori
+    - li aggiungo al set di ritorno
+    - constestualmente costruisco la mappa attore, n_volte con cui ci ha lavorato
+    
+- attore_preferito:
+    - dalla mappa costruita al punto precedente mi prendo il max value
+    - mi prendo poi gli attori relativi a quel max value
+    - se è solo uno lo torno
+    - se sono più di uno li ordino secondo la tupla (eta, genere, vero_nome). 
+    se il vero_nome non è settato lo setto uguale a nome
+    
+- anni_di_lavoro:
+    - mi ciclo tutti i film, e metto in un set l'anno di produzione
+    - prendo il massimo di questo set, lo sottraggo al minimo e aggiungo uno
+    - ritorno il valore
+    
