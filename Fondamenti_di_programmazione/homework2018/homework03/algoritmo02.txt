@@ -1,26 +1,44 @@
-#ALGORITMO DASCRIVERE. INTANTO VOGLIO VEDERE I TEST DELLA VM :D
+class Colore:
+- def __init__ 
+-verifico che i valori passati siano corretti e se lo sono istanzio la classe
 
+def utilizzo:
+    - definisco un counter = 0
+    - nello skyline in ingresso ho una proprietà di classe rect_map che indica i rettangoli
+    presenti nello sk, ovvero una mappa con chiave = posizione del rettangolo e valore = il rettangolo
+    il rettangolo ha a sua volta la proprietà colore
+    se colore == self counter += 1
 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+class Rettangolo:
+     - def __init__
+          - verifico che i valori passati siano corretti ed in caso istanzio
+          
+    - def cancella
+        - la classe Rettangolo ha una proprietà skyline_ref che indica dove 
+        la sua istanza si trova all'interno dello skyline.
+        Allo stesso tempo lo skyline ha la proprietà rect_map
+        se la posizionne di se stesso è nella rect_map, cancello il rettangolo dalla rect_map
+        
+        - in questo caso devo ricalcolare la massima altezza e larghezza dello skyline e settarne le relative proprietà
+    
+class Skyline
+    - def __init__
+        - come sopra
+    - def aggiungi
+        - valido l'input
+        - aggiungo il rettangolo passato nel self.rect_map
+        - ricalcolo max altezza e larghezza e ne setto le proprietà
+        
+    -def fondi
+        - ciclo la rect_map dell'altro skyline
+        - chiamo il metodo aggiungi del rettangolo alla relativa posizione
+        
+    -def  salva
+        - solo a questo punto disegno il rettangolo (per maggiore efficienta)
+        - salvo l'immagine col metodo della libreria importata, save
+    - def disegna
+        - ciclo la mappa rect_map (chiave posizione, valore istanza rettangolo)
+        - ciclo sulla base ed altezza del rettangolo corrente
+        - se in un punto il colore è lo sfondo, setto quel punto col colore del rettangolo
+        - se in quel punto la luminosità è maggiore, setto quel punto col colore del rettangolo
+        
