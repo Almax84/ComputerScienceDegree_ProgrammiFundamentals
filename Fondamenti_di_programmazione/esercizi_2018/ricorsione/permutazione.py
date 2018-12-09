@@ -11,8 +11,12 @@
 ################################################################################
 import os
 import rtrace
+import unittest
 def countf(path):
-    listdir = os.listdir(path)
+    if os.path.isdir(path):
+        listdir = os.listdir(path)
+    else:
+        return 1
     count = 0
     for name in listdir:
         pathname = os.path.join(path, name)
@@ -24,22 +28,32 @@ def countf(path):
             count+=1
     return count
 
+import permutazione
+class TestPrimooEsercizio(unittest.TestCase):
+    def test_informatica(self):
+        countf = rtrace.trace(permutazione.countf)
+        self.assertEqual(countf("Informatica"),27)
+    def test_informatica_software(self):
+        countf = rtrace.trace(permutazione.countf)
+        self.assertEqual(countf("Informatica/Software"),19)
 
-
-
-
-
+    def test_informatica_software_cache(self):
+        countf = rtrace.trace(permutazione.countf)
+        self.assertEqual(countf('Informatica/Hardware/Architetture/cache.txt'),1)
 
 
 if __name__ == "__main__":
-    countf = rtrace.trace(countf)
-    countf.trace("Informatica")
+    unittest.main()
+
+
+
 
 '''
 
 
 
-2. maxlev(path) che preso in input il percorso path di un file o directory ritorna il massimo livello
+2. maxlev(path) che preso in input il percorso path di un file o directory ritorna
+ il massimo livello
    dell'albero dei file e directory contenute nella directory (se è una directory). 
    Esempi
 
@@ -48,6 +62,11 @@ if __name__ == "__main__":
 >>> maxlev('Informatica/Hardware')				ritorna 6
 >>> maxlev('Informatica/Software/SistemiOperativi/Linux.txt')	ritorna 1
 
+'''
+
+
+
+'''
 ################################################################################
 
 3. permute_d(seq) ritorna una lista di tutte le permutazioni della sequenza seq , senza duplicati. 
