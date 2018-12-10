@@ -54,8 +54,8 @@ if __name__ == "__main__":
 
 2. maxlev(path) che preso in input il percorso path di un file o directory ritorna
  il massimo livello
-   dell'albero dei file e directory contenute nella directory (se è una directory). 
-   Esempi
+ dell'albero dei file e directory contenute nella directory (se è una directory). 
+ Esempi
 
 >>> maxlev('Informatica')					ritorna 7
 >>> maxlev('Informatica/Teoria')				ritorna 0	(non esiste)
@@ -63,8 +63,44 @@ if __name__ == "__main__":
 >>> maxlev('Informatica/Software/SistemiOperativi/Linux.txt')	ritorna 1
 
 '''
+def maxlev(path):
+    count = 1
+    pathname = os.path.join(path)
+    if not os.path.exists(pathname):
+        return 0
+    
 
+    
+    listdir = os.listdir(pathname)
+    
+    if len(listdir) == 0:
+        return 1
+    
+    for name in listdir:
+        path_ = os.path.join(path,name)
+        if os.path.isdir(path_):
+            count += maxlev(path_)  
+            
+        
+   
+    #count += 1
 
+        
+    return count
+    
+print("maxlev ",maxlev("Informatica_2"))
+class TestSecondoEsercizio(unittest.TestCase):
+    #def test_ritorno_0(self):
+        #self.assertEqual(maxlev("Informatica/Teoria"),0)
+        
+    def test_ritorno_7(self):
+        pass
+        #self.assertEqual(maxlev("Informatica"),7)
+        #print("maxlev ",maxlev("Informatica_2"))
+    
+    
+if __name__ == "__main__":
+    unittest.main()
 
 '''
 ################################################################################
