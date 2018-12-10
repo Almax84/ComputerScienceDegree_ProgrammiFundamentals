@@ -68,26 +68,38 @@ def maxlev(path):
     pathname = os.path.join(path)
     if not os.path.exists(pathname):
         return 0
-    
-
-    
-    listdir = os.listdir(pathname)
-    
-    if len(listdir) == 0:
+    if not os.path.isdir(path):
         return 1
-    
+
+    listdir = os.listdir(pathname)
+    profondita = []
     for name in listdir:
         path_ = os.path.join(path,name)
-        if os.path.isdir(path_):
-            count += maxlev(path_)  
-            
-        
-   
-    #count += 1
+        profondita.append( maxlev(path_))
 
-        
+    if profondita:
+        return 1 + max( profondita )
+    else:
+        return 1
+            
     return count
-    
+
+def maxlev_mio(path):
+    basename = os.path.basename(path)
+    if basename and basename[0] == '.' :	return 0	# se il path va ignorato
+    if not os.path.exists(path):		return 0	# se il path non esiste
+    if not os.path.isdir(path):			return 1	# se è un file
+    profondita = []
+    for filename in os.listdir(path):
+        profondita.append(maxlev(os.path.join(path,filename)))
+    #profondita = [ maxlev(os.path.join(path, filename)) for filename in os.listdir(path) ]
+    if profondita:
+        return 1 + max( profondita )
+    else:
+        return 1
+
+
+
 print("maxlev ",maxlev("Informatica_2"))
 class TestSecondoEsercizio(unittest.TestCase):
     #def test_ritorno_0(self):
