@@ -66,7 +66,22 @@ def leggi_archivio_film(archivio_film_json, catalogo_attori):
             for attore in lista_attori:
                 attore.lista_film.add(film)
             nome_film = dati_film["TITLE"]
+            #metti film nel catalogo, controlla remake, e metti in caso il più recente
+            if nome_film[0] in catalogo_film:
+                already_present_film = catalogo_film[nome_film[0]]
+                already_present_film_anno_produzione = already_present_film.anno()
+
+                current_film_anno_produzione = film.anno()
+
+                if current_film_anno_produzione > already_present_film_anno_produzione:
+                        catalogo_film[nome_film[0]] = film #metto il film corrente solo se è il più recente
+
+
             catalogo_film[nome_film[0]] = film
+
+
+
+
 
         for attore_name, attore_obj in catalogo_attori.items():
             attore_obj.directors_catalogue = catalogo_registi
@@ -137,7 +152,7 @@ class Attore():
             return None
         if self.died == None or self.died == '':
                 anno_nascita = int(re.findall(regex_anno, self.birth)[0])
-                return 2018 - anno_nascita +1
+                return 2018 - anno_nascita + 1
         else:
             
             anno_morte = int(re.findall(regex_anno, self.died)[0])
@@ -156,11 +171,10 @@ class Attore():
                 #se l'attore non compare nel film skippare
                 if regista_nome not in film.directors:
                     continue
-                
+
                 registi_con_cui_ha_lavorato.add(regista_nome)
 
                 self.buid_registi_occurrences(regista_nome, registi_occurrences)
-
 
         self.registi_occurrences = registi_occurrences
 
