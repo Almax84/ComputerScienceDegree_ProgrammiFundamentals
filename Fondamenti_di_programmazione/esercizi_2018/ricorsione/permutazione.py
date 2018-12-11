@@ -167,44 +167,49 @@ Suggerimento: conviene contare le combinazioni "generandole" con i valori ordina
 valore, poi quelle che iniziano con il secondo valore e così via.
 
 '''
+
+#arriva la lista di coins [1,3,5]
+# se sum(coins) == r ho trovato una combinazione
+# ciclo tutti i coins
+    # se sommaelementi=1 + coin ==  r torno 1 , e richiamo change con coins = coins - [elemento]
+    # altrimenti aggiungo un altro 1 nel coins 
+    #se non trovo alcun elemento esco
+
+
+
 def change(r, coins):
-
-    if len(coins) == 1:
-        return coins[0]
     coins.sort()
-
-    return_list = []
-    for i in range(len(coins)):
-        count = 0
-        X = coins[i]
-        while count < r:
-            count += X + change(r, [X])
-        if count == r:
-            return_list.append(1)
+    
+    if sum(coins) == r:
+        return 1
+    
+    count = 0
+    i = 0
+    while i < len(coins):
+        coin = coins[i]
+        if coin  == r:
+            return 1
+        elif coin + coins[0] == r and len(coins)>1:
+            #in questo caso rimuovo il coin e risetto lo zeresimo valore
+            # a uno. Il len>0 serve ad evitare che si sommi lo stesso elemento a se stesso
+            coins[0] = 1
+            count+=change(r, coins[:i]+coins[i+1:])
         else:
-            pass
+            #il primo elemento sarà sempre 1
+            coins[0]+=1
+            count+=change(r,coins)
+            coins[0] = 1
+            coins = coins[:i]+coins[i+1:]
+
+            
+    return count
+
+    
+    
 
 
 
-    for i in range(len(coins)):
-        count = 0
-        X = coins[i]
-        seq_remainder = coins[:i] + coins[i + 1:]
-        while count < r:
-            count += X + change(r, seq_remainder)
-        if count == r:
-            return_list.append(1)
-        else:
-            return 0
-
-
-
-
-    return len(return_list)
-
-
-
-print("change ", change(8, [1,5]))
+print("change ", change(15, [1,5,10]))
 
 
 
