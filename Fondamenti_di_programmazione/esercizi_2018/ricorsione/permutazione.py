@@ -167,45 +167,33 @@ Suggerimento: conviene contare le combinazioni "generandole" con i valori ordina
 valore, poi quelle che iniziano con il secondo valore e così via.
 
 '''
-
-#arriva la lista di coins [1,3,5]
-# se sum(coins) == r ho trovato una combinazione
-# ciclo tutti i coins
-    # se sommaelementi=1 + coin ==  r torno 1 , e richiamo change con coins = coins - [elemento]
-    # altrimenti aggiungo un altro 1 nel coins 
-    #se non trovo alcun elemento esco
-
-
-
+#change(8, [1, 5])
 def change(r, coins):
-    coins.sort()
-    
-    if sum(coins) == r:
-        return 1
-    
-    count = 0
-    i = 0
-    while i < len(coins):
-        coin = coins[i]
-        if coin  == r:
-            return 1
-        elif coin + coins[0] == r and len(coins)>1:
-            #in questo caso rimuovo il coin e risetto lo zeresimo valore
-            # a uno. Il len>0 serve ad evitare che si sommi lo stesso elemento a se stesso
-            coins[0] = 1
-            count+=change(r, coins[:i]+coins[i+1:])
+    ret = []
+    for coin in coins:
+        #uso il coin corrente
+        if coin < r:
+            ret.append(change_it(r-coin, coins))
+        elif coin == r:
+            ret.append(coin)
         else:
-            #il primo elemento sarà sempre 1
-            coins[0]+=1
-            count+=change(r,coins)
-            coins[0] = 1
-            coins = coins[:i]+coins[i+1:]
+            continue
+    return len(ret)
 
-            
-    return count
 
-    
-    
+#ci sono due evenienze
+# 1. non uso la moneta attuale 2 . la uso
+
+def change_it(r, coins):
+    addendum_list = []
+    if r  == 0:
+        return
+
+
+    for coin in coins:
+
+        addendum_list.append(change_it(r-coin, coins))
+
 
 
 
