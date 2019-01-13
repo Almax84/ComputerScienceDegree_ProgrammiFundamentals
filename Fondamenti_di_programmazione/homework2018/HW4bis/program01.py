@@ -67,9 +67,7 @@ def es1(s):
     
     
 def tree_builder(sequence, albero, player = "b"):
-
-    if sequence
-
+    ##ora, se funziona, se la sequence non ha childre hai trovato il vincitore!
     if player == "a":
         player = "b"
     else:
