@@ -57,7 +57,7 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 def es1(s):
     #sequence as string to integer list
     sequence = list(map(lambda x: int(x),s.split(" ")))
-    players = {"Alice": 0, "Bob": 0}
+
     albero = Albero(sequence)
     tree_builder(sequence, albero)
     print(albero)
@@ -66,8 +66,16 @@ def es1(s):
 
     
     
-def tree_builder(sequence, albero):
-    
+def tree_builder(sequence, albero, player = "b"):
+
+    if sequence
+
+    if player == "a":
+        player = "b"
+    else:
+        player = "a"
+
+
     if len(sequence) == 1:
         return sequence
     for i, el_a in enumerate(sequence):
@@ -80,7 +88,9 @@ def tree_builder(sequence, albero):
                 sequenza_appoggio.remove(el_b)
                 albero_ = Albero(sequenza_appoggio)
                 albero.append_child(albero_)
-                tree_builder(sequenza_appoggio, albero_)
+                albero_.player = player
+
+                tree_builder(sequenza_appoggio, albero_, player)
     return albero
     
 
@@ -90,6 +100,8 @@ class Albero:
         self.radice = radice
         self.children = None
         self.nodi = 0
+        self.player = ""
+        players = {"Alice": 0, "Bob": 0}
     def append_child(self, child):
         if not self.children:
             self.children = list()
@@ -97,32 +109,19 @@ class Albero:
         self.children.append(child)
 
     def __str__(self):
-            return ''.join(str(self.radice)) + " children:" + ''.join(str(self.children))
+        return self.player + ''.join(str(self.radice)) + " children:" + ''.join(str(self.children))
     def __repr__(self):
-            return ''.join(str(self.radice)) + " children:" + ''.join(str(self.children))
+        return"player: "+ self.player +"  " + ''.join(str(self.radice)) + " children:" + ''.join(str(self.children))
 
     def count_nodes(self, children):
         if not children:
             return 0
 
         count = 0
-        branch_depth_sum = 0
         for child in children:
             count += 1 + self.count_nodes(child.children)
-            branch_depth = self.branch_depth(child.children)
-            branch_depth_sum += branch_depth +1
-            #print("il ramo: ", child, " ha profondità: ", branch_depth)
-        print("la somma del branch depth è:", branch_depth_sum)
         return count
 
-    def branch_depth(self, branch):
-        if not branch:
-            return 0
-        count = 0
-        for child in branch:
-            count += 1 + self.branch_depth(child.children)
-
-        return count
 
 
 if __name__ == "__main__":
