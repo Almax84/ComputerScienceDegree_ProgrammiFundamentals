@@ -62,7 +62,8 @@ def es1(s):
     tree_builder(sequence, albero)
     print(albero)
     #TODO - RICORDA DI AGGIUNGERE UNO
-    print("nodi: ", albero.count_nodes(albero.children))
+    print("nodi: ", albero.count_nodes(albero.children)+1)
+    print("a:", albero.players["a"], "b", albero.players["b"])
 
     
     
@@ -98,8 +99,10 @@ class Albero:
         self.radice = radice
         self.children = None
         self.nodi = 0
+        self.player_min="";
+        self.player_max="";
         self.player = ""
-        players = {"Alice": 0, "Bob": 0}
+        self.players = {"a":0,"b":0}
     def append_child(self, child):
         if not self.children:
             self.children = list()
@@ -115,12 +118,32 @@ class Albero:
         if not children:
             return 0
 
-        count = 0
+        #count = 0
+        branch_depth_sum = 0
         for child in children:
-            count += 1 + self.count_nodes(child.children)
+            #if child.children == None:
+                #self.players[child.player]+=1
+                
+                
+            #count += 1 + self.count_nodes(child.children)
+            branch_depth = self.branch_depth(child.children)
+            print("b d is: ", branch_depth)
+            branch_depth_sum += branch_depth + 1
+        print("la somma del branch depth è:", branch_depth_sum)
+        #return count
+        return branch_depth_sum
+    
+
+    def branch_depth(self, branch):
+        if not branch:
+            return 0
+        count = 0
+        for child in branch:
+            if child.children == None:
+                self.players[child.player]+=1
+            count += 1 + self.branch_depth(child.children)
+
         return count
-
-
 
 if __name__ == "__main__":
     print(es1("19 -3 2 -10 -20"))
