@@ -60,11 +60,28 @@ def es1(s):
 
     albero = Albero(sequence)
     tree_builder(sequence, albero)
-    print(albero)
+    #print(albero)
     #TODO - RICORDA DI AGGIUNGERE UNO
-    print("nodi: ", albero.count_nodes(albero.children)+1)
-    print("a:", albero.players["a"], "b", albero.players["b"])
+    #print("nodi: ", albero.count_nodes(albero.children)+1)
+    #print("a:", albero.players["a"], "b", albero.players["b"])
+    print(min_max(albero))
 
+
+def min_max(node):
+    lista_di_profondita = {}
+    if node.children is None:
+        return 0
+    
+
+    for child in node.children:
+
+        depth =  min_max(child) +1
+        print("child:", child.radice, " depth=", depth)
+    return depth
+
+    
+    
+    
     
     
 def tree_builder(sequence, albero, player = "b"):
@@ -127,9 +144,9 @@ class Albero:
                 
             #count += 1 + self.count_nodes(child.children)
             branch_depth = self.branch_depth(child.children)
-            print("b d is: ", branch_depth)
+            ##print("b d is: ", branch_depth)
             branch_depth_sum += branch_depth + 1
-        print("la somma del branch depth è:", branch_depth_sum)
+        #print("la somma del branch depth è:", branch_depth_sum)
         #return count
         return branch_depth_sum
     
