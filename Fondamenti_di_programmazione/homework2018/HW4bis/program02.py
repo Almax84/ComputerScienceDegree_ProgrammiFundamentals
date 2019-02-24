@@ -3,19 +3,19 @@
     Considera alberi i cui nodi hanno come valore stringhe sempre composte da due caratteri. 
     Vogliamo costruire stringhe di testo che raffigurano questi alberi. Ad esempio:
 
-                                                      60                                    
-                                      ________________|________________                     
-                                     |                                 |                    
-                                     66                                25                   
-                 ____________________|_____________________        ____|_____               
-                |                            |             |      |          |              
-                56                           58            19     96         77             
-     ___________|____________           _____|_____      __|__         ______|______        
-    |            |           |         |       |   |    |     |       |   |         |       
-    36           33          55        67      66  5    54    50      52  42        72      
- ___|___    _____|_____     _|_     ___|___    |       _|_    |       |   |    _____|_____  
-|   |   |  |   |   |   |   |   |   |   |   |   57     |   |   84      3   89  |   |   |   | 
-70  99  5  28  52  80  84  79  66  48  80  16         28  86                  94  87  85  26
+                                                        60                                    
+                                        ________________|________________                     
+                                       |                                 |                    
+                                       66                                25                   
+                  _____________________|_____________________        ____|_____               
+                 |                            |              |      |          |              
+                 56                           58             19     96         77             
+     ____________|____________           _____|_____       __|__         ______|______        
+    |             |           |         |       |   |     |     |       |   |         |       
+    36            33          55        67      66  05    54    50      52  42        72      
+ ___|___     _____|_____     _|_     ___|___    |        _|_    |       |   |    _____|_____  
+|   |   |   |   |   |   |   |   |   |   |   |   57      |   |   84      03  89  |   |   |   | 
+70  99  05  28  52  80  84  79  66  48  80  16          28  86                  94  87  85  26
 
     Le stringhe di testo che rappresentano l'albero sono composte da un certo numero di righe tutte 
     con lo stesso numero di caratteri. Ne diamo di seguito la definizione ricorsiva 

@@ -52,44 +52,62 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 (ad esempio editatelo dentro Spyder o usate Notepad++)
 
 '''
-
+def getkey(x):
+    return len(x), x
 
 def es1(s):
-    #sequence as string to integer list
     sequence = list(map(lambda x: int(x),s.split(" ")))
 
     albero = Albero(sequence)
     tree_builder(sequence, albero)
-    #print(albero)
-    #TODO - RICORDA DI AGGIUNGERE UNO
-    #print("nodi: ", albero.count_nodes(albero.children)+1)
-    #print("a:", albero.players["a"], "b", albero.players["b"])
-    print(min_max(albero))
+    nodes = albero.count_nodes(albero.children) + 1
+    depth_dic = {}
+    nodes_list = list()
+    min_max(albero, 0, depth_dic, nodes_list)
+    player_min_height = min(depth_dic.items(), key= lambda x: x[1])[0].player
+    player_max_height = max(depth_dic.items(), key= lambda x: x[1])[0].player
+
+    nodes_list = sorted(nodes_list, key=getkey )
 
 
-def min_max(node):
-    lista_di_profondita = {}
+
+
+
+    return albero.players["Alice"], albero.players["Bob"], nodes, player_max_height, player_min_height, nodes_list
+
+
+
+
+
+
+def min_max(node, depth, depth_dict, nodes_list):
     if node.children is None:
         return 0
-    
+
+    t = tuple(node.radice)
+    if t not in nodes_list:
+        nodes_list.append(t)
 
     for child in node.children:
+        tuple_child = tuple(child.radice)
+        if tuple_child not in nodes_list:
+            nodes_list.append(tuple_child)
+        min_max(child, depth + 1, depth_dict, nodes_list)
+        if child.children is None:
+            depth_dict[child] = depth +1
+    return 0
 
-        depth =  min_max(child) +1
-        print("child:", child.radice, " depth=", depth)
-    return depth
-
     
     
     
     
     
-def tree_builder(sequence, albero, player = "b"):
+def tree_builder(sequence, albero, player = "Bob"):
     ##ora, se funziona, se la sequence non ha childre hai trovato il vincitore!
-    if player == "a":
-        player = "b"
+    if player == "Alice":
+        player = "Bob"
     else:
-        player = "a"
+        player = "Alice"
 
 
     if len(sequence) == 1:
@@ -119,7 +137,7 @@ class Albero:
         self.player_min="";
         self.player_max="";
         self.player = ""
-        self.players = {"a":0,"b":0}
+        self.players = {"Alice":0,"Bob":0}
     def append_child(self, child):
         if not self.children:
             self.children = list()
@@ -135,19 +153,11 @@ class Albero:
         if not children:
             return 0
 
-        #count = 0
         branch_depth_sum = 0
         for child in children:
-            #if child.children == None:
-                #self.players[child.player]+=1
-                
-                
-            #count += 1 + self.count_nodes(child.children)
+
             branch_depth = self.branch_depth(child.children)
-            ##print("b d is: ", branch_depth)
             branch_depth_sum += branch_depth + 1
-        #print("la somma del branch depth è:", branch_depth_sum)
-        #return count
         return branch_depth_sum
     
 
@@ -163,4 +173,4 @@ class Albero:
         return count
 
 if __name__ == "__main__":
-    print(es1("19 -3 2 -10 -20"))
+    print(es1("5 4 3 2 1"))
