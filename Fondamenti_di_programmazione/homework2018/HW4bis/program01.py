@@ -69,10 +69,6 @@ def es1(s):
 
     nodes_list = sorted(nodes_list, key=getkey )
 
-
-
-
-
     return albero.players["Alice"], albero.players["Bob"], nodes, player_max_height, player_min_height, nodes_list
 
 
@@ -119,7 +115,7 @@ def tree_builder(sequence, albero, player = "Bob"):
             if el_b < el_a:
                 sequenza_appoggio = sequence.copy()
                 sequenza_appoggio[i] = (el_a-el_b)
-                sequenza_appoggio.remove(el_b)
+                sequenza_appoggio.pop(i+1)
                 albero_ = Albero(sequenza_appoggio)
                 albero.append_child(albero_)
                 albero_.player = player
@@ -150,12 +146,16 @@ class Albero:
         return"player: "+ self.player +"  " + ''.join(str(self.radice)) + " children:" + ''.join(str(self.children))
 
     def count_nodes(self, children):
+        
         if not children:
             return 0
 
         branch_depth_sum = 0
         for child in children:
-
+            
+            if not child.children:
+                self.players[child.player]+=1
+            
             branch_depth = self.branch_depth(child.children)
             branch_depth_sum += branch_depth + 1
         return branch_depth_sum
@@ -173,4 +173,4 @@ class Albero:
         return count
 
 if __name__ == "__main__":
-    print(es1("5 4 3 2 1"))
+    print(es1("4 3 2 3 4"))
