@@ -74,10 +74,39 @@ ATTENZIONE: non sono permesse altre librerie oltre a quelle già importate.
     
 import albero
 
+
+
+
 def es2(r):
-    #inserisci qui il tuo codice
-    pass
-       
+
+
+    if len(r) == 1:
+        return r[0]
+
+    leaves = list()
+    build_t_strings(r, leaves)
+    print(leaves)
+
+def build_t_strings(r,leaves):
+    a = ['10', [['63', []], ['16', [['58', []]]], ['38', [['62', []], ['32', []], ['30', []]]]]]
+    if len(r) == 1:
+        leaves.append(r[0])
+
+
+    for index, el in enumerate(r):
+
+        if type(el) == str:
+            print(el)
+
+        #if type(el) == list and len(el) > index:
+            #build_t_strings(el[index], leaves)
+
+        if len(r) > index+1 and not len(r[1]) == 0:
+            for index2, el2 in enumerate(r[index+1]):
+                build_t_strings(el2,leaves)
+
+
+
 
 
 
@@ -86,5 +115,27 @@ def es2(r):
 
 
 if __name__ == '__main__':
-    # inserite qui le vostre istruzioni di test personali
-    pass
+
+   lista2=['36', [['05', [['63', [['91', [['03', []], ['51', []]]], ['10', [['63', []], ['16', [['58', []]]], 
+    ['38', [['62', []], ['32', []], ['30', []]]]]]]]]], ['67', [['34', [['61', []], ['77', [['72', []], ['24', [['84', []]]]]]]]]]]]
+   
+   r2=albero.fromLista1(lista2)
+   stringa2='''                   36                 
+         __________|___________       
+        |                      |      
+        05                     67     
+        |                      |      
+        63                     34     
+   _____|_____               __|__    
+  |           |             |     |   
+  91          10            61    77  
+ _|_     _____|_____             _|_  
+|   |   |   |       |           |   | 
+03  51  63  16      38          72  24
+            |    ___|___            | 
+            58  |   |   |           84
+                62  32  30            '''
+   print(es2(lista2))
+
+    
+    
