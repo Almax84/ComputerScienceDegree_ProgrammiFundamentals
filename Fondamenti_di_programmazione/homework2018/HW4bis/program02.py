@@ -74,38 +74,31 @@ ATTENZIONE: non sono permesse altre librerie oltre a quelle già importate.
     
 import albero
 
-
-
-
-def es2(r):
-
-
-    if len(r) == 1:
-        return r[0]
-
-    leaves = list()
-    build_t_strings(r, leaves)
-    print(leaves)
-
-def build_t_strings(r,leaves):
-    a = ['10', [['63', []], ['16', [['58', []]]], ['38', [['62', []], ['32', []], ['30', []]]]]]
-    if len(r) == 1:
-        leaves.append(r[0])
-
-
-    for index, el in enumerate(r):
-
-        if type(el) == str:
-            print(el)
-
-        #if type(el) == list and len(el) > index:
-            #build_t_strings(el[index], leaves)
-
-        if len(r) > index+1 and not len(r[1]) == 0:
-            for index2, el2 in enumerate(r[index+1]):
-                build_t_strings(el2,leaves)
-
-
+def es2(albero1):
+    return tree(albero1)
+    
+    
+    
+       
+def tree(albero1):
+    sottoalberi_t = []
+    if len(albero1.f) == 0:
+        stringa = albero1.id
+        return stringa
+    else:
+        foglie_sottoalbero_t = []
+        for foglia in albero1.f:
+           
+           stringa = tree(foglia)
+           #print('la stringa ritornata è: ' + str(stringa) + ' e il padre è ' + albero1.id)
+           if stringa is not None:
+               foglie_sottoalbero_t = foglie_sottoalbero_t + [stringa]
+        print(foglie_sottoalbero_t)
+        print(" con padre " + albero1.id)
+        
+               
+               
+        
 
 
 
@@ -115,27 +108,16 @@ def build_t_strings(r,leaves):
 
 
 if __name__ == '__main__':
-
-   lista2=['36', [['05', [['63', [['91', [['03', []], ['51', []]]], ['10', [['63', []], ['16', [['58', []]]], 
-    ['38', [['62', []], ['32', []], ['30', []]]]]]]]]], ['67', [['34', [['61', []], ['77', [['72', []], ['24', [['84', []]]]]]]]]]]]
-   
-   r2=albero.fromLista1(lista2)
-   stringa2='''                   36                 
-         __________|___________       
-        |                      |      
-        05                     67     
-        |                      |      
-        63                     34     
-   _____|_____               __|__    
-  |           |             |     |   
-  91          10            61    77  
- _|_     _____|_____             _|_  
-|   |   |   |       |           |   | 
-03  51  63  16      38          72  24
-            |    ___|___            | 
-            58  |   |   |           84
-                62  32  30            '''
-   print(es2(lista2))
-
-    
-    
+    lista1= ['05', [['02', [['01', []]]], ['04', [['01', []], ['02', [['03', []], ['06', []]]], ['09', []], ['08', []],['02', []]]],['06', []]]]
+    print(es2(albero.fromLista1(lista1)))
+    stringa1='''              05              
+ _____________|_____________  
+|             |             | 
+02            04            06
+|    _________|_________      
+01  |     |     |   |   |     
+    01    02    09  08  02    
+         _|_                  
+        |   |                 
+        03  06                '''
+ 
