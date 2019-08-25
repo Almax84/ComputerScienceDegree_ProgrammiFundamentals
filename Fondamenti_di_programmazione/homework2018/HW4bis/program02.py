@@ -96,18 +96,24 @@ def tree(albero1, sotto_alberi_della_radice):
     if len(albero1.f) == 0:
         return albero1.id
     else:
-        sottoalbero_foglia = ''
-        for i , foglie in enumerate(albero1.f):
-           foglia_sottoalbero = tree(foglie, sotto_alberi_della_radice) #RICORSIONE QUI!
+        indici_foglie_sottoableri = dict()
+        for i , foglia in enumerate(albero1.f):
+           foglia_sottoalbero = tree(foglia, sotto_alberi_della_radice) #RICORSIONE QUI!
 
             # se il dict non è vuoto allora la foglia ha un suo sottoalbero
 
            if foglia_sottoalbero is not None:
                foglie_sottoalbero_t.append(foglia_sottoalbero)
 
+           if len(foglia.f) > 0: # data la mappa sotto, prova a sostituire all'inindice la stringa del sottoalbero!
+               print("qui c'è un sotto albero!")
+               indici_foglie_sottoableri[len(foglie_sottoalbero_t)-1] = sotto_alberi_della_radice[-1]
 
 
-        radice = albero1.id  #prime due righe contenenti PIPE e radice albero
+
+
+
+        radice = albero1.id
 
         numero_di_foglie = len(foglie_sottoalbero_t)
         stringa_foglie = ''
