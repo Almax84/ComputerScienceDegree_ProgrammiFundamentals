@@ -81,20 +81,78 @@ def es2(albero1):
     
        
 def tree(albero1):
+    NEWLINE = '\n' 
+    PIPE = '|'
+    DUE_SPAZI = '  '
+    UNO_SPAZIO = ' '
+    SPAZI_TRA_PIPE = 4
     sottoalberi_t = []
+    
+    
+    #print("radice: " + albero1.id)
+    #print("figli: \n" + str(albero1.f))
+    
     if len(albero1.f) == 0:
-        stringa = albero1.id
-        return stringa
+        foglia_sottoalbero = albero1.id
+        return foglia_sottoalbero
     else:
         foglie_sottoalbero_t = []
-        for foglia in albero1.f:
+        for foglie in albero1.f:
            
-           stringa = tree(foglia)
-           #print('la stringa ritornata è: ' + str(stringa) + ' e il padre è ' + albero1.id)
-           if stringa is not None:
-               foglie_sottoalbero_t = foglie_sottoalbero_t + [stringa]
-        print(foglie_sottoalbero_t)
-        print(" con padre " + albero1.id)
+           foglia_sottoalbero = tree(foglie)
+
+           if foglia_sottoalbero is not None:
+               foglie_sottoalbero_t = foglie_sottoalbero_t + [foglia_sottoalbero]
+
+        radice = PIPE + UNO_SPAZIO + NEWLINE + albero1.id  #prime due righe contenenti PIPE e radice albero
+        
+        numero_di_foglie = len(foglie_sottoalbero_t)
+        stringa_foglie = ''
+        sottoalbero_t = ''
+        for i,  foglia_t in enumerate(foglie_sottoalbero_t): 
+            
+#step 1. le foglie devono essere concatenate e separate da due spazi
+#step 2. in testa alle foglie deve essere inserita una riga con | ogni 3 spazi seguito da uno \n"
+            if i < len(foglie_sottoalbero_t) - 1:
+              stringa_foglie += foglia_t + DUE_SPAZI
+            else:
+                stringa_foglie += foglia_t
+        lunghezza_massima_stringa = len(stringa_foglie)
+        prima_riga_stringa_foglie = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
+                
+        for i in range(0, numero_di_foglie):
+         prima_riga_stringa_foglie = prima_riga_stringa_foglie[:i*SPAZI_TRA_PIPE] + PIPE + prima_riga_stringa_foglie[i*SPAZI_TRA_PIPE+1:]
+        
+        stringa_foglie = prima_riga_stringa_foglie + NEWLINE + stringa_foglie
+         #una volta determinata la riga delle foglie aggiungere alla riga inferiore della radice una riga contenente _ di pari lunghezza
+        
+        lunghezza_riga_foglie = len(stringa_foglie)
+        
+        if numero_di_foglie > 1:
+            prima_riga_sottoalbero_t = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
+            prima_riga_sottoalbero_t = prima_riga_sottoalbero_t[:len(prima_riga_sottoalbero_t)//2-1] \
+            + albero1.id \
+            + prima_riga_sottoalbero_t[len(prima_riga_sottoalbero_t)//2:]
+            
+            
+            terza_riga_sottoalbero_t = ''.join(['_' for _ in range(lunghezza_massima_stringa)])
+            terza_riga_sottoalbero_t = terza_riga_sottoalbero_t[:len(terza_riga_sottoalbero_t)//2-1] \
+            + PIPE \
+            + terza_riga_sottoalbero_t[len(terza_riga_sottoalbero_t)//2:]
+            
+            terza_riga_sottoalbero_t = ' ' + terza_riga_sottoalbero_t[1:len(terza_riga_sottoalbero_t)-2] + ' '
+            
+            sottoalbero_t = prima_riga_sottoalbero_t + NEWLINE + terza_riga_sottoalbero_t + NEWLINE + stringa_foglie
+            
+            print(sottoalbero_t)
+        elif numero_di_foglie == 1:
+            sottoalbero_t = radice + NEWLINE + stringa_foglie
+        
+        print('-------------------------')
+        #print(radice)
+        #print(prima_riga_stringa_foglie + NEWLINE + stringa_foglie)
+        
+        #print( sottoalbero_t )
         
                
                
