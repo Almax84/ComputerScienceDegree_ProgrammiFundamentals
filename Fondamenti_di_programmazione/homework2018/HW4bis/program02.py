@@ -71,92 +71,120 @@ ATTENZIONE: quando consegnate il programma assicuratevi che sia nella codifica U
 ATTENZIONE: non sono permesse altre librerie oltre a quelle già importate.
     
 '''
-    
+
 import albero
 
 def es2(albero1):
-    return tree(albero1)
-    
-    
-    
-       
-def tree(albero1):
-    NEWLINE = '\n' 
+    sotto_alberi_della_radice = list()
+    tree(albero1, sotto_alberi_della_radice)
+    return sotto_alberi_della_radice
+
+
+
+def tree(albero1, sotto_alberi_della_radice):
+    NEWLINE = '\n'
     PIPE = '|'
     DUE_SPAZI = '  '
     UNO_SPAZIO = ' '
     SPAZI_TRA_PIPE = 4
-    sottoalberi_t = []
-    
-    
+    foglie_sottoalbero_t = []
+
     #print("radice: " + albero1.id)
+    #print("lista f.s.: " + str(foglie_sottoalbero_t))
     #print("figli: \n" + str(albero1.f))
-    
+
     if len(albero1.f) == 0:
-        foglia_sottoalbero = albero1.id
-        return foglia_sottoalbero
+        return albero1.id
     else:
-        foglie_sottoalbero_t = []
-        for foglie in albero1.f:
-           
-           foglia_sottoalbero = tree(foglie)
+        sottoalbero_foglia = ''
+        for i , foglie in enumerate(albero1.f):
+           foglia_sottoalbero = tree(foglie, sotto_alberi_della_radice) #RICORSIONE QUI!
+
+            # se il dict non è vuoto allora la foglia ha un suo sottoalbero
 
            if foglia_sottoalbero is not None:
-               foglie_sottoalbero_t = foglie_sottoalbero_t + [foglia_sottoalbero]
+               foglie_sottoalbero_t.append(foglia_sottoalbero)
 
-        radice = PIPE + UNO_SPAZIO + NEWLINE + albero1.id  #prime due righe contenenti PIPE e radice albero
-        
+
+
+        radice = albero1.id  #prime due righe contenenti PIPE e radice albero
+
         numero_di_foglie = len(foglie_sottoalbero_t)
         stringa_foglie = ''
-        sottoalbero_t = ''
-        for i,  foglia_t in enumerate(foglie_sottoalbero_t): 
-            
-#step 1. le foglie devono essere concatenate e separate da due spazi
-#step 2. in testa alle foglie deve essere inserita una riga con | ogni 3 spazi seguito da uno \n"
+        for i,  foglia_t in enumerate(foglie_sottoalbero_t):
+
             if i < len(foglie_sottoalbero_t) - 1:
               stringa_foglie += foglia_t + DUE_SPAZI
             else:
                 stringa_foglie += foglia_t
         lunghezza_massima_stringa = len(stringa_foglie)
-        prima_riga_stringa_foglie = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
-                
-        for i in range(0, numero_di_foglie):
-         prima_riga_stringa_foglie = prima_riga_stringa_foglie[:i*SPAZI_TRA_PIPE] + PIPE + prima_riga_stringa_foglie[i*SPAZI_TRA_PIPE+1:]
-        
-        stringa_foglie = prima_riga_stringa_foglie + NEWLINE + stringa_foglie
-         #una volta determinata la riga delle foglie aggiungere alla riga inferiore della radice una riga contenente _ di pari lunghezza
-        
-        lunghezza_riga_foglie = len(stringa_foglie)
-        
-        if numero_di_foglie > 1:
-            prima_riga_sottoalbero_t = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
-            prima_riga_sottoalbero_t = prima_riga_sottoalbero_t[:len(prima_riga_sottoalbero_t)//2-1] \
-            + albero1.id \
-            + prima_riga_sottoalbero_t[len(prima_riga_sottoalbero_t)//2:]
-            
-            
-            terza_riga_sottoalbero_t = ''.join(['_' for _ in range(lunghezza_massima_stringa)])
-            terza_riga_sottoalbero_t = terza_riga_sottoalbero_t[:len(terza_riga_sottoalbero_t)//2-1] \
-            + PIPE \
-            + terza_riga_sottoalbero_t[len(terza_riga_sottoalbero_t)//2:]
-            
-            terza_riga_sottoalbero_t = ' ' + terza_riga_sottoalbero_t[1:len(terza_riga_sottoalbero_t)-2] + ' '
-            
-            sottoalbero_t = prima_riga_sottoalbero_t + NEWLINE + terza_riga_sottoalbero_t + NEWLINE + stringa_foglie
-            
-            print(sottoalbero_t)
-        elif numero_di_foglie == 1:
-            sottoalbero_t = radice + NEWLINE + stringa_foglie
-        
-        print('-------------------------')
-        #print(radice)
-        #print(prima_riga_stringa_foglie + NEWLINE + stringa_foglie)
-        
-        #print( sottoalbero_t )
-        
-               
-               
-        
+
+
+        prima_riga_stringa_foglie = costruisci_prima_riga_foglie(PIPE, SPAZI_TRA_PIPE, UNO_SPAZIO,
+                                                                 lunghezza_massima_stringa, numero_di_foglie)
+
+        sottoalbero_t = costruisci_sottoalbero_t(NEWLINE, PIPE, UNO_SPAZIO, albero1, lunghezza_massima_stringa, numero_di_foglie,
+                                 prima_riga_stringa_foglie, radice, stringa_foglie)
+
+        sotto_alberi_della_radice.append(sottoalbero_t)
+        print(sottoalbero_t)
+
+
+
+        return albero1.id
+
+
+
+def costruisci_prima_riga_foglie(PIPE, SPAZI_TRA_PIPE, UNO_SPAZIO, lunghezza_massima_stringa, numero_di_foglie):
+    prima_riga_stringa_foglie = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
+    prima_riga_stringa_foglie = put_pipes_in_leaves(PIPE, SPAZI_TRA_PIPE, numero_di_foglie,
+                                                    prima_riga_stringa_foglie)
+    return prima_riga_stringa_foglie
+
+
+def costruisci_sottoalbero_t(NEWLINE, PIPE, UNO_SPAZIO, albero1, lunghezza_massima_stringa, numero_di_foglie,
+                             prima_riga_stringa_foglie, radice, stringa_foglie):
+    stringa_foglie = prima_riga_stringa_foglie + NEWLINE + stringa_foglie
+    if numero_di_foglie > 1:
+        prima_riga_sottoalbero_t = ''.join([UNO_SPAZIO for _ in range(lunghezza_massima_stringa)])
+        prima_riga_sottoalbero_t = prima_riga_sottoalbero_t[:len(prima_riga_sottoalbero_t) // 2 - 1] \
+                                   + albero1.id \
+                                   + prima_riga_sottoalbero_t[len(prima_riga_sottoalbero_t) // 2:]
+
+        terza_riga_sottoalbero_t = ''.join(['_' for _ in range(lunghezza_massima_stringa)])
+        terza_riga_sottoalbero_t = terza_riga_sottoalbero_t[:len(terza_riga_sottoalbero_t) // 2 - 1] \
+                                   + PIPE \
+                                   + terza_riga_sottoalbero_t[len(terza_riga_sottoalbero_t) // 2:]
+
+        terza_riga_sottoalbero_t = ' ' + terza_riga_sottoalbero_t[1:len(terza_riga_sottoalbero_t) - 2] + ' '
+
+        sottoalbero_t = prima_riga_sottoalbero_t + NEWLINE + terza_riga_sottoalbero_t + NEWLINE + stringa_foglie
+        return sottoalbero_t
+
+    elif numero_di_foglie == 1:
+        sottoalbero_t = radice + NEWLINE + stringa_foglie
+        return sottoalbero_t
+
+
+
+def put_pipes_in_leaves(PIPE, SPAZI_TRA_PIPE, numero_di_foglie, prima_riga_stringa_foglie):
+    for i in range(0, numero_di_foglie):
+        prima_riga_stringa_foglie = prima_riga_stringa_foglie[:i * SPAZI_TRA_PIPE] + PIPE + prima_riga_stringa_foglie[
+                                                                                            i * SPAZI_TRA_PIPE + 1:]
+    return prima_riga_stringa_foglie
+
+
+#'''              05
+ #_____________|_____________
+#|             |             |
+#02            04            06
+#|    _________|_________
+#01  |     |     |   |   |
+#    01    02    09  08  02    
+#         _|_
+#        |   |                 
+#        03  06                '''
+
 
 
 
@@ -178,4 +206,4 @@ if __name__ == '__main__':
          _|_                  
         |   |                 
         03  06                '''
- 
+
