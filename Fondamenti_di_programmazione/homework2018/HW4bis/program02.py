@@ -105,7 +105,8 @@ def tree(albero1, sotto_alberi_della_radice):
            if foglia_sottoalbero is not None:
                foglie_sottoalbero_t.append(foglia_sottoalbero)
 
-           if len(foglia.f) > 0: # data la mappa sotto, prova a sostituire all'inindice la stringa del sottoalbero!
+           if len(foglia.f) > 0: # data la mappa sotto, prova a sostituire all'inindice la stringa del sottoalbero!, dopo che hai costruito la stringa a partire dalla riga 116
+               # in questo modo puoi prendere la stringa sotto_alberi_della_radice[-1] e prima di sostituirla aggiungerci tutti gli spazi necessari affinche siano uguali in larghezza
                print("qui c'è un sotto albero!")
                indici_foglie_sottoableri[len(foglie_sottoalbero_t)-1] = sotto_alberi_della_radice[-1]
 
@@ -132,7 +133,12 @@ def tree(albero1, sotto_alberi_della_radice):
         sottoalbero_t = costruisci_sottoalbero_t(NEWLINE, PIPE, UNO_SPAZIO, albero1, lunghezza_massima_stringa, numero_di_foglie,
                                  prima_riga_stringa_foglie, radice, stringa_foglie)
 
+        #in questo caso la lista contiene la stringa del sottoalbero
         sotto_alberi_della_radice.append(sottoalbero_t)
+        #in questo caso la lista contiene una sotto lista di foglie
+        sotto_alberi_della_radice.append(foglie_sottoalbero_t)
+        
+        
         print(sottoalbero_t)
 
 
